@@ -11,6 +11,8 @@ import {
     TouchableOpacity
   } from 'react-native';
   import { Icon, Input, Button, Tab, TabView, Image } from '@rneui/themed';
+  import AntDesign from "react-native-vector-icons/AntDesign";
+  import Ionicons from "react-native-vector-icons/Ionicons";
 
   const DATA = [
     {
