@@ -16,7 +16,7 @@ import {
     } 
      from '@rneui/themed';
   
-const Login = ({ navigation, route  }) => {
+const Login = ({ navigation  }) => {
     return (
         <SafeAreaView>
             <ScrollView>
@@ -54,6 +54,7 @@ const Login = ({ navigation, route  }) => {
                     <View style={styles.btn_pw}> 
                         <Button
                         title="Login"
+                        // onPress={() => navigation.navigate("SalesHomepage")}
                         buttonStyle={{ 
                             backgroundColor: 'rgba(127, 220, 103, 1)', 
                         }}

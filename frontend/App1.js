@@ -1,49 +1,25 @@
-import * as React from 'react';
-import { View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 //Screens
-// import Login from './screens/Login/Login';
-// import SalesHomepage from './screens/Admin/SalesHomepage/SalesHomepage';
-// import SalesLiveOrder from './screens/Admin/SalesLiveOrder/SalesLiveOrder';
-// import Customers from './screens/Admin/Customers/Customers';
-// import ProcurementHomepage from './screens/Admin/ProcurementHomepage/ProcurementHomepage';
-// import ProductDetails from './screens/Admin/ProductDetails/ProductDetails';
-// import Suppliers from './screens/Admin/Suppliers/Suppliers';
+import Login from './screens/Login/Login';
+import SalesHomepage from './screens/Admin/SalesHomepage/SalesHomepage';
+import SalesLiveOrder from './screens/Admin/SalesLiveOrder/SalesLiveOrder';
+import Customers from './screens/Admin/Customers/Customers';
+import ProcurementHomepage from './screens/Admin/ProcurementHomepage/ProcurementHomepage';
+import ProductDetails from './screens/Admin/ProductDetails/ProductDetails';
+import Suppliers from './screens/Admin/Suppliers/Suppliers';
 //
-import { Icon } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-
-function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <DrawerItem
-        label="Close drawer"
-        onPress={() => props.navigation.closeDrawer()}
-      />
-      <DrawerItem
-        label="Toggle drawer"
-        onPress={() => props.navigation.toggleDrawer()}
-      />
-    </DrawerContentScrollView>
-  );
-}
 
 const Drawer = createDrawerNavigator();
 
-const MyDrawer = () => {
+function App() {
   return (
+    <NavigationContainer>
     <Drawer.Navigator
-      useLegacyImplementation
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    initialRouteName='Login'
     >
                 <Drawer.Screen
                   name="Login"
@@ -114,17 +90,18 @@ const MyDrawer = () => {
                   component={Suppliers}
                   options={{
                     title: 'Suppliers',
-                    headerLeft: ({props}) => (
+                    headerLeft: () => (
                       <Ionicons 
                       name='menu'
                       size={25}
-                      onPress={()=> props.navigation.openDrawer()}
+                      // onPress={()=> props.navigation.openDrawer()}
                       />
                     ),     
                   }}
                 />
     </Drawer.Navigator>
+    </NavigationContainer>
   );
 }
 
-export default MyDrawer;
+export default App;
