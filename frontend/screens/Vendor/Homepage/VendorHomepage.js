@@ -4,14 +4,13 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,  
-  Pressable
+  Pressable,
+  Modal
 } from 'react-native'
 import React, { useState } from 'react'
 import { 
   Image, 
   Input,
-  Modal,
-
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -66,28 +65,36 @@ const DATA = [
   },
 ];
 
-const Item = ({ title, grade, rate, photo }) => (
-  <View style={styles.container}>
-       <Image
-            source={{ uri: photo }}
-            containerStyle={styles.item}
-            PlaceholderContent={<ActivityIndicator />}
-          />
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.title}>Grade :{grade}</Text>
-        <Text style={styles.title}>Rate :{rate}</Text>
-  </View>
+const Item = ({ title, grade, rate, photo, displayModal }) => (
+    <Pressable
+    // style={[styles.button, styles.buttonOpen]}
+    onPress={() => displayModal()}
+    style={styles.vendor_container}
+    >
+          <View >
+              <Image
+                    source={{ uri: photo }}
+                    containerStyle={styles.vendor_item}
+                    PlaceholderContent={<ActivityIndicator />}
+                  />
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.title}>Grade :{grade}</Text>
+                <Text style={styles.title}>Rate :{rate}</Text>
+          </View>
+    </Pressable>
 );
 
 export default function VendorHomepage() {
   const [modalVisible, setModalVisible] = useState(false);
 
+  const displayModal = () => setModalVisible(true)
   const renderItem = ({ item }) => (
     <Item 
     title={item.title} 
     grade={item.grade} 
     rate={item.rate} 
     photo={item.photo} 
+    displayModal={displayModal}
     />
   );
 
@@ -104,13 +111,13 @@ export default function VendorHomepage() {
           }
         />
       <FlatList
-        style={styles.list}
+        style={styles.vendor_list}
         numColumns={2}
         data={DATA}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-        {/* <Modal
+        <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -119,34 +126,81 @@ export default function VendorHomepage() {
         //   setModalVisible(!modalVisible);
         // }}
       >
-        <View style={styles.centeredView}>
+        <View style={styles.vendor_modal}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+
+            <Text style={styles.vendor_head}>Product Name: Tomato</Text>
+
+            <View style={styles.vendor_modal_content}>
+              <View>
+                <Text style={styles.vendor_modalText}>Quantity: 1 </Text>
+                <Text style={styles.vendor_modalText}>4 kg </Text>
+                <Text style={styles.vendor_modalText}>Tomatoes are good for health. </Text>                    
+              </View>
+                <Image
+                      source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
+                      containerStyle={styles.vendor_img}
+                      // PlaceholderContent={<ActivityIndicator />}
+                    />
+            </View>
+                
+      
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.vendor_hide_btn}>Hide Modal</Text>
             </Pressable>
           </View>
         </View>
-      </Modal> */}
+      </Modal>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  vendor_container: {
     flex: 1,
     marginTop: 2,
     margin: 6
   },
-  list: {
+  vendor_list: {
     width: '100%',
   },
-  item: {
+  vendor_item: {
     aspectRatio: 1,
     width: '100%',
     flex: 1,
   },
+  vendor_modal: {
+    height: '50%',
+    marginTop: 'auto',
+    backgroundColor:'#fff',
+    borderRadius: 15,
+    padding: 5
+  },
+  vendor_head: {
+    fontSize: 25,
+    fontWeight:'bold',
+    color:'black'
+  },
+  vendor_img:{
+    width: 50,
+    aspectRatio: 1,
+  },
+  vendor_hide_btn :{
+    borderColor: 'gray',
+    padding: 5,
+    borderWidth: 2
+  },
+  vendor_modal_content:{
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-around',
+    margin: 6
+  },
+  vendor_modalText:{
+    flexWrap:'wrap',
+    flex: 0.5
+  }
   });
