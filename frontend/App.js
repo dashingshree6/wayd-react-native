@@ -66,10 +66,11 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 const Stack = createNativeStackNavigator()
 // const App: () => Node = () => {
 const App = () => {
+
   return (
         <NavigationContainer>
-          {/* <MyDrawer/> */}
-            <Stack.Navigator initialRouteName='VendorHomepage'>
+          <MyDrawer/>
+            {/* <Stack.Navigator initialRouteName='VendorsMyOrders'>
                 <Stack.Screen
                   name="Login"
                   component={Login}
@@ -233,7 +234,7 @@ const App = () => {
                 
                   }}
                 />
-            </Stack.Navigator>
+            </Stack.Navigator> */}
         </NavigationContainer>
   )
 };
