@@ -34,7 +34,6 @@ import DeliveryDrawer from './DeliveryDrawer';
 //
 import { Icon, ListItem } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
 
 function CustomDrawerContent(props) {
@@ -52,7 +51,6 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
-
   return (
     // <Drawer.Navigator
     //   useLegacyImplementation
@@ -143,7 +141,7 @@ const MyDrawer = () => {
           initialRouteName='DeliveryLocation'
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-                    <Drawer.Screen
+                    {/* <Drawer.Screen
                       name="Login"
                       component={Login}
                       // options={{ title: 'Homepage' }}
@@ -151,7 +149,7 @@ const MyDrawer = () => {
                         headerShown: false,
                       }}
 
-                    />
+                    /> */}
                     <Drawer.Screen
                       name="SalesHomepage"
                       component={SalesHomepage}
@@ -231,102 +229,22 @@ const MyDrawer = () => {
                           />
                         ),
 
-                      })}
-                    />
-                    <Drawer.Screen
-                      name="Suppliers"
-                      component={Suppliers}
-                      options={({ navigation }) => ({
-                        title: 'Suppliers',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-                    <Drawer.Screen
-                      name="DeliveryLocation"
-                      component={DeliveryLocation}
-                      options={({ navigation }) => ({
-                        title: 'Delivery Location',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-
-                    <Drawer.Screen
-                      name="CheckoutDetails"
-                      component={CheckoutDetails}
-                      options={({ navigation }) => ({
-                        title: 'Checkout Details',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-
-                    <Drawer.Screen
-                      name="VendorsMyOrders"
-                      component={VendorsMyOrders}
-                      options={({ navigation }) => ({
-                        title: 'My Orders',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-
-                    <Drawer.Screen
-                      name="VendorHomepage"
-                      component={VendorHomepage}
-                      options={({ navigation }) => ({
-                        title: 'Homepage',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-
-                    <Drawer.Screen
-                      name="VendorOrderTracking"
-                      component={VendorOrderTracking}
-                      options={({ navigation }) => ({
-                        title: 'Order Tracking',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
+                  })}
+                />
+                <Drawer.Screen
+                  name="Suppliers"
+                  component={Suppliers}
+                  options={{
+                    title: 'Suppliers',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),     
+                  }}
+                />
     </Drawer.Navigator>
   );
 }

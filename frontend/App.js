@@ -62,6 +62,7 @@ import VendorsMyOrders from './screens/Vendor/MyOrders/VendorsMyOrders';
 //
 import { Icon } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import DeliveryHomepage from './screens/Delivery/DeliveryHomepage';
 
 const Stack = createNativeStackNavigator()
 // const App: () => Node = () => {
@@ -206,6 +207,7 @@ const App = () => {
                 <Stack.Screen
                   name="VendorHomepage"
                   component={VendorHomepage}
+                  
                   options={{
                     title: 'Homepage',
                     headerLeft: ({props}) => (
