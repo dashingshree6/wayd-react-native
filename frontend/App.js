@@ -205,8 +205,8 @@ const App = () => {
 
                 <Stack.Screen
                   name="VendorHomepage"
-                  // component={VendorHomepage}
-                  component={DeliveryHomepage}
+                  component={VendorHomepage}
+                  
                   options={{
                     title: 'Homepage',
                     headerLeft: ({props}) => (

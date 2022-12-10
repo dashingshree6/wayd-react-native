@@ -19,6 +19,13 @@ import {
 //
 import { Icon } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Login from '../../Login/Login';
+import SalesHomepage from '../SalesHomepage/SalesHomepage';
+import SalesLiveOrder from '../SalesLiveOrder/SalesLiveOrder';
+import Customers from '../Customers/Customers';
+import ProcurementHomepage from '../ProcurementHomepage/ProcurementHomepage';
+import ProductDetails from '../ProductDetails/ProductDetails';
+import Suppliers from '../Suppliers/Suppliers';
 
 
 function CustomDrawerContent(props) {
@@ -39,7 +46,7 @@ function CustomDrawerContent(props) {
 
 const Drawer = createDrawerNavigator();
 
-const MyDrawer = () => {
+const MyDrawer = (props) => {
   return (
     <Drawer.Navigator
       useLegacyImplementation
@@ -114,7 +121,7 @@ const MyDrawer = () => {
                   component={Suppliers}
                   options={{
                     title: 'Suppliers',
-                    headerLeft: ({props}) => (
+                    headerLeft: () => (
                       <Ionicons 
                       name='menu'
                       size={25}
