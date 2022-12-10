@@ -40,8 +40,8 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       {/* <DrawerItemList {...props} /> */}
-      <AdminDrawer {...props}/>
-      {/* <VendorDrawer {...props}/> */}
+      {/* <AdminDrawer {...props}/> */}
+      <VendorDrawer {...props}/>
       {/* <DeliveryDrawer {...props}/> */}
 
     </DrawerContentScrollView>
