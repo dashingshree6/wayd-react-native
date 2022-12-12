@@ -140,7 +140,7 @@ const MyDrawer = () => {
 
     <Drawer.Navigator 
           useLegacyImplementation
-          initialRouteName='DeliveryLocation'
+          initialRouteName='ProcurementHomepage'
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
                     <Drawer.Screen
