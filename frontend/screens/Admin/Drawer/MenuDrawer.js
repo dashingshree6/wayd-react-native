@@ -40,8 +40,8 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       {/* <DrawerItemList {...props} /> */}
-      {/* <AdminDrawer {...props}/> */}
-      <VendorDrawer {...props}/>
+      <AdminDrawer {...props}/>
+      {/* <VendorDrawer {...props}/> */}
       {/* <DeliveryDrawer {...props}/> */}
 
     </DrawerContentScrollView>
@@ -153,6 +153,8 @@ const MyDrawer = () => {
                     <Drawer.Screen
                       name="SalesHomepage"
                       component={SalesHomepage}
+                      // component={CheckoutDetails}
+
                       options={({ navigation }) => ({
                         title: ' Sales Homepage',
                         headerLeft: () => (
@@ -201,11 +203,12 @@ const MyDrawer = () => {
 
                       })}
                     />
+                     {/* replace this component here for testing the page */}
                     <Drawer.Screen
                       name="ProcurementHomepage"
-                      component={VendorsMyOrders}
+                      component={CheckoutDetails}
                       options={({ navigation }) => ({
-                        title: 'ProcuremenT Homepage',
+                        title: 'Procurement Homepage',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
@@ -216,6 +219,7 @@ const MyDrawer = () => {
 
                       })}
                     />
+                   
                     <Drawer.Screen
                       name="ProductDetails"
                       component={ProductDetails}

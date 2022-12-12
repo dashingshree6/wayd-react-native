@@ -9,10 +9,18 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { 
+  Button,
   Image, 
   Input,
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
+
+
+
+const API="https://f5b6-49-205-239-58.in.ngrok.io/api/product/61a8c81b1e5a79501663f912"
+
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4Njk2OTJ9.96vyWZrmtn01Z607pB-cy0K6vXNwNWFNOszQpNsLi3U"
 
 const DATA = [
   {
@@ -87,6 +95,18 @@ const Item = ({ title, grade, rate, photo, displayModal }) => (
 export default function VendorHomepage() {
   const [modalVisible, setModalVisible] = useState(false);
 
+const [value,setValue] = useState(0)
+
+function incrementVal(){
+  
+}
+function incrementVal(){
+  
+}
+
+
+
+
   const displayModal = () => setModalVisible(true)
   const renderItem = ({ item }) => (
     <Item 
@@ -137,11 +157,13 @@ export default function VendorHomepage() {
                 <Text style={styles.vendor_modalText}>4 kg </Text>
                 <Text style={styles.vendor_modalText}>Tomatoes are good for health. </Text>                    
               </View>
+              <Button onPress={() => s}>+</Button>
                 <Image
                       source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                       containerStyle={styles.vendor_img}
                       // PlaceholderContent={<ActivityIndicator />}
                     />
+                    <Button>-</Button>
             </View>
                 
       

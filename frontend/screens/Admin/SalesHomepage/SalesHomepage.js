@@ -44,6 +44,8 @@ import {
 const SalesHomepage = ({ navigation, route  }) => {
   const [index, setIndex] = useState(0);
 
+  
+
   const renderItem = ({ item }) => (
     <Item title={item.title} />
   );
