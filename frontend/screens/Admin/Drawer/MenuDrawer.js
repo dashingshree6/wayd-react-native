@@ -35,6 +35,7 @@ import DeliveryDrawer from './DeliveryDrawer';
 import { Icon, ListItem } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
+import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 
 
 function CustomDrawerContent(props) {
@@ -155,8 +156,8 @@ const MyDrawer = () => {
                       name="SalesHomepage"
                       // component={SalesHomepage}
                       // component={CheckoutDetails}
-                      component={DeliveryHomepage}
-
+                      // component={DeliveryHomepage}
+                      component={DeliverySingleOrderStatus}
                       options={({ navigation }) => ({
                         title: ' Sales Homepage',
                         headerLeft: () => (
