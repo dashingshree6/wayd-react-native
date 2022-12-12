@@ -16,7 +16,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //
 import axios from 'axios';
-const API = 'https://789f-49-205-239-58.in.ngrok.io/api/products'
+const API = 'https://2171-49-205-239-58.in.ngrok.io/api/products'
 
 const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
 //
