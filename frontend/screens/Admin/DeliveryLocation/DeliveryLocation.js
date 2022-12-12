@@ -1,8 +1,13 @@
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import {  Icon, Image, AirbnbRating } from '@rneui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import StepIndicator from 'react-native-step-indicator';
+import axios from "axios";
+
+const API = 'https://c898-49-205-239-58.in.ngrok.io/api/lifecycle/'
+
+const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
 
 export default function DeliveryLocation({navigation}) {
     const [currentPosition, setCurrentPosition] = useState(0);
@@ -32,13 +37,31 @@ export default function DeliveryLocation({navigation}) {
     currentStepLabelColor: '#3aa832'
     }
 
+    const [data, setData] = useState({})
+
+    const getOrderLifecycle = () => {
+        axios.get(API , { headers: {"Authorization" : `Bearer ${TOKEN}`} })
+        .then(res => {
+        console.log(res.data);
+        setData(res.data)
+        }).catch((error) => {
+        console.log(error)
+        });
+    }
+
+    useEffect(()=> {
+        getOrderLifecycle()
+    },[])
+
   return (
     <View>
+      <ScrollView>
       <Text style={styles.delivery_loc_text}>Order Name : Grapes</Text>
       <Text style={styles.delivery_loc_text}>Quantity : 2kg</Text>
       <Text style={styles.delivery_loc_text}>Delivery Address: Madhapur</Text>
 
       <Text style={styles.delivery_loc_text_accept}>Your Order has been accepted.</Text>
+
 
       <View style={[styles.contentView]}>
         <StepIndicator
@@ -48,6 +71,54 @@ export default function DeliveryLocation({navigation}) {
             stepCount={4}
         />     
       </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Ordered</Text>
+            <Text>Date: {data.ordered} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Confirmed</Text>
+            <Text>Date: {data.confirmed} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Cancelled</Text>
+            <Text>Date: {data.cancelled} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Shipped</Text>
+            <Text>Date: {data.shipped} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Processing</Text>
+            <Text>Date: {data.processing} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Recieved</Text>
+            <Text>Date: {data.recieved} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <View style={styles.delivery_lo_card}>
+            <Text>Activity: Delivered</Text>
+            <Text>Date: {data.delivered} </Text> 
+            <Text>Location: </Text>
+        </View>
+
+        <Text style={styles.delivery_lo_card}>Delivered: {data.delivered}</Text>
+
+        <Text style={styles.delivery_lo_card}>Payment Recieved delivery: </Text>
+
+        <Text style={styles.delivery_lo_card}>WS Recieving Payment: </Text>
 
       <View style={styles.delivery_card}>
         <View style={styles.delivery_card_details}>
@@ -87,6 +158,7 @@ export default function DeliveryLocation({navigation}) {
             />
       </View>
 
+     </ScrollView>
     </View>
   )
 }
@@ -104,6 +176,7 @@ const styles = StyleSheet.create({
     },
     delivery_card: {
         backgroundColor:'#ededeb',
+        margin: 10
         // height: '50%'
     },
     delivery_loc_item: {
@@ -115,5 +188,10 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'row',
         justifyContent:'space-between'
-    }
+    },
+    delivery_lo_card: {
+        padding:10,
+        backgroundColor:'silver',
+        margin: 2
+      }  
 })
