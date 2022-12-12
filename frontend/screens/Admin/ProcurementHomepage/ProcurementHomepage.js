@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -8,9 +8,17 @@ import {
     useColorScheme,
     View,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
   } from 'react-native';
   import { Icon, Input, Button, Tab, TabView } from '@rneui/themed';
+
+  //
+  import axios from 'axios';
+  const API = 'https://789f-49-205-239-58.in.ngrok.io/api/order/procure'
+  
+  const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
+  //
 
   const DATA = [
     {
@@ -33,18 +41,24 @@ import {
     },
   ];
   
-  const Item = ({ title,stock,grade }) => (
+  const Item = (props) => (
     <TouchableOpacity
     style={styles.sales_live_button}
     // onPress={onPress}
     >
-          <View 
-          // style={styles.item}
-          >
-            <Text style={styles.title}>Product Name: {title}</Text>
-            <Text style={styles.title}>Available Stock: {stock}</Text>
-            <Text style={styles.title}>Grade : {grade}</Text>
-          </View>
+          <FlatList
+          data={props.procurement.list}
+          keyExtractor={item => item._id}
+          renderItem={({item}) => (
+            <View 
+            // style={styles.item}
+            >
+              <Text style={styles.title}>Product Name: {item.name}</Text>
+              <Text style={styles.title}>Available Stock: {item.extra_stock}</Text>
+              <Text style={styles.title}>Count : {item.count}</Text>
+            </View>
+          )}
+          />
     </TouchableOpacity>
   );
   
@@ -54,11 +68,30 @@ const ProcurementHomepage = ({ navigation, route  }) => {
 
   const renderItem = ({ item }) => (
     <Item 
-    title={item.title} 
-    stock={item.stock}
-    grade={item.grade}
+    procurement={item}
     />
   );
+
+   //
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const getAllProcurements= () => {
+    setLoading(true)
+    axios.get(API , { headers: {"Authorization" : `Bearer ${TOKEN}`} })
+    .then(res => {
+    console.log(res.data);
+    setData(res.data)
+    setLoading(false)
+    }).catch((error) => {
+    console.log(error)
+    setLoading(false)
+    });
+ }
+  useEffect(()=> {
+    getAllProcurements()
+  },[])
+ 
     return (
         <SafeAreaView>
               <View style={styles.sales_cont}>
@@ -93,18 +126,18 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                         />
                     </Tab>
 
-                    <TabView value={index} onChange={setIndex} animationType="spring">
+                    {/* <TabView value={index} onChange={setIndex} animationType="spring">
                         <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
                           <Text h1>Recent</Text>
                         </TabView.Item>
                         <TabView.Item style={{ backgroundColor: 'blue', width: '100%' }}>
                           <Text h1>Favorite</Text>
                         </TabView.Item>
-                    </TabView>
+                    </TabView> */}
                     <FlatList
-                      data={DATA}
+                      data={data}
                       renderItem={renderItem}
-                      keyExtractor={item => item.id}
+                      keyExtractor={item => item._id}
                     />
               </View>
         </SafeAreaView>
