@@ -9,15 +9,18 @@ import {
     View,
     FlatList,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    Modal,
+    Pressable,
+    TextInput
   } from 'react-native';
   import { Icon, Input, Button, Tab, TabView } from '@rneui/themed';
 
   //
   import axios from 'axios';
-  const API = 'https://789f-49-205-239-58.in.ngrok.io/api/order/procure'
+  const API = ' https://2171-49-205-239-58.in.ngrok.io/api/order/procure'
   
-  const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
+  const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4MjY5NDB9.IjTKrEnXuu3d_aiUUIG5LrSu3v3XZfgFrT7kkQXkFps"  
   //
 
   const DATA = [
@@ -65,12 +68,51 @@ import {
 
 const ProcurementHomepage = ({ navigation, route  }) => {
   const [index, setIndex] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [orderList, setOrderList] = useState([])
+  const [productForProcurement, setproductForProcurement] = useState({
+    extra_stock: 0,
+    price_generated: true,
+    _id: "61a8c7b51e5a79501663f911",
+    name: "",
+    count: 0
+})
 
   const renderItem = ({ item }) => (
     <Item 
     procurement={item}
     />
   );
+
+  //
+  const createProcurement = () => {
+    console.log(productForProcurement)
+    let arr = []
+    arr.push(productForProcurement)
+    console.log(arr)
+    setOrderList(arr)
+    console.log(orderList)
+
+    let formData = {
+      order_list: arr
+    }
+
+    axios.put(`${API}/${productForProcurement._id}` , 
+      { 
+        headers: {"Authorization" : `Bearer ${TOKEN}`},
+        data: JSON.stringify(formData) 
+      })
+    .then(res => {
+    console.log(res.data);
+    }).catch((error) => {
+    console.log(error)
+    setLoading(false)
+    });
+
+
+    setModalVisible(!modalVisible)
+  }
+  //
 
    //
   const [data, setData] = useState([])
@@ -103,6 +145,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
+                          onPress={() => setModalVisible(true)}
                         />
                     </View>
                     <Tab
@@ -140,6 +183,51 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                       keyExtractor={item => item._id}
                     />
               </View>
+
+              <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.procurement_modal}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                  <Input
+                    placeholder="Product Name"
+                    // leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                    onChangeText={value => setproductForProcurement({ ...productForProcurement, name: value })}
+                    />
+                       <Input
+                    placeholder="Count"
+                    // leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                    onChangeText={value => setproductForProcurement({ ...productForProcurement, count: value })}
+                    keyboardType='numeric'
+                    />
+                       <Input
+                    placeholder="Extra Stock"
+                    // leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                    onChangeText={value => setproductForProcurement({ ...productForProcurement, extra_stock: value })}
+                    keyboardType='numeric'
+                    />
+                             <Input
+                    placeholder="Price Generated"
+                    // leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                    onChangeText={value => setproductForProcurement({ ...productForProcurement, price_generated: value })}
+                    />
+                    
+                    <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => createProcurement()}
+                    >
+                      <Text style={styles.textStyle}>Submit</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </Modal>
         </SafeAreaView>
     )
 }
@@ -169,6 +257,9 @@ const styles = StyleSheet.create({
       backgroundColor: "#DDDDDD",
       padding: 10,
       margin: 2
+    },
+    procurement_modal : {
+      backgroundColor:'silver'
     }
 });
 
