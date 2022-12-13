@@ -26,8 +26,8 @@ const Login = ({navigation}) => {
     })
       .then(result => {
         if (result.status == 200) {
-          AsyncStorage.setItem('AccessToken');
-          navigation.replace('SalesHomepage');
+          AsyncStorage.setItem('AccessToken', result.data.token);
+          navigation.navigate('SalesHomepage');
         }
       })
       .catch(err => {
