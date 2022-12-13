@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {user_login} from '../API/user_api';
@@ -26,7 +26,7 @@ const Login = ({navigation}) => {
     })
       .then(result => {
         if (result.status == 200) {
-          AsyncStorage.setItem('AccessToken', result.data.token);
+          AsyncStorage.setItem('AccessToken');
           navigation.replace('SalesHomepage');
         }
       })
@@ -45,7 +45,8 @@ const Login = ({navigation}) => {
             placeholder="Enter your phonenumber"
             keyboardType="numeric"
             value={phone}
-            onChangeText={text => handleCheckEmail(text)}
+            onChangeText={text => setPhone(text)}
+
             // leftIcon={{ type: 'Feather', name: 'phone' }}
             // onChangeText={value => this.setState({ comment: value })}
             // leftIcon={

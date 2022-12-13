@@ -15,8 +15,7 @@ import {
   StyleSheet,
   Text,
   useColorScheme,
-  View,
-  Button,
+  View, Button
 } from 'react-native';
 
 import {
@@ -30,8 +29,8 @@ import {
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // const Stack = createNativeStackNavigator();
 
@@ -41,6 +40,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+
 
 //Screens
 
@@ -59,184 +59,184 @@ import CheckoutDetails from './screens/Vendor/CheckoutDetails/CheckoutDetails';
 import VendorHomepage from './screens/Vendor/Homepage/VendorHomepage';
 import VendorOrderTracking from './screens/Vendor/LiveOrderTracking/VendorOrderTracking';
 import VendorsMyOrders from './screens/Vendor/MyOrders/VendorsMyOrders';
-import Liveorder from './screens/Delivery/Liveorder';
-import DeliveryLiveOrderDetails from './screens/Delivery/DeliveryLiveOrderDetails';
 //
-import {Icon} from '@rneui/themed';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Icon } from '@rneui/themed';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-import {Provider as PaperProvider} from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 // const App: () => Node = () => {
 const App = () => {
+
   return (
-    <PaperProvider
-      settings={{
-        icon: props => <AntDesign {...props} />,
-      }}>
-      <NavigationContainer>
-        {/* <MyDrawer /> */}
-        <Stack.Navigator initialRouteName="VendorHomepage">
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            // options={{ title: 'Homepage' }}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="SalesHomepage"
-            component={SalesHomepage}
-            options={{
-              title: ' Sales Homepage',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="SalesLiveOrder"
-            component={SalesLiveOrder}
-            options={{
-              title: ' Sales Live Order',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="Customers"
-            component={Customers}
-            options={{
-              title: 'Customers',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="ProcurementHomepage"
-            component={ProcurementHomepage}
-            options={{
-              title: 'Procurement Homepage',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="ProductDetails"
-            component={ProductDetails}
-            options={{
-              title: 'Product Details',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="Suppliers"
-            component={Suppliers}
-            options={{
-              title: 'Suppliers',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
-                />
-              ),
-            }}
-          />
+        <NavigationContainer>
+          <MyDrawer/>
+            {/* <Stack.Navigator initialRouteName='VendorsMyOrders'>
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  // options={{ title: 'Homepage' }}
+                  options={{
+                    headerShown: false,
+                  }}
 
-          <Stack.Screen
-            name="CheckoutDetails"
-            component={CheckoutDetails}
-            options={{
-              title: 'Checkout Details',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
                 />
-              ),
-            }}
-          />
+                <Stack.Screen
+                  name="SalesHomepage"
+                  component={SalesHomepage}
+                  options={{
+                    title: ' Sales Homepage',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
 
-          <Stack.Screen
-            name="VendorsMyOrders"
-            component={VendorsMyOrders}
-            options={{
-              title: 'MyOrders Details',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
+                  }}
                 />
-              ),
-            }}
-          />
+                <Stack.Screen
+                  name="SalesLiveOrder"
+                  component={SalesLiveOrder}
+                  options={{
+                    title: ' Sales Live Order',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
 
-          <Stack.Screen
-            name="VendorHomepage"
-            // component={VendorHomepage}
-            // component={Liveorder}
-            component={DeliveryLiveOrderDetails}
-            options={{
-              title: 'Homepage',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
+                  }}
                 />
-              ),
-            }}
-          />
+                <Stack.Screen
+                  name="Customers"
+                  component={Customers}
+                  options={{
+                    title: 'Customers',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
 
-          <Stack.Screen
-            name="VendorOrderTracking"
-            component={VendorOrderTracking}
-            options={{
-              title: 'Order Tracking',
-              headerLeft: ({props}) => (
-                <Ionicons
-                  name="menu"
-                  size={25}
-                  // onPress={()=> props.navigation.openDrawer()}
+                  }}
                 />
-              ),
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
-  );
+                <Stack.Screen
+                  name="ProcurementHomepage"
+                  component={ProcurementHomepage}
+                  options={{
+                    title: 'Procurement Homepage',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+
+                  }}
+                />
+                <Stack.Screen
+                  name="ProductDetails"
+                  component={ProductDetails}
+                  options={{
+                    title: 'Product Details',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+
+                  }}
+                />
+                <Stack.Screen
+                  name="Suppliers"
+                  component={Suppliers}
+                  options={{
+                    title: 'Suppliers',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+                
+                  }}
+                />
+
+                <Stack.Screen
+                  name="CheckoutDetails"
+                  component={CheckoutDetails}
+                  options={{
+                    title: 'Checkout Details',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+                
+                  }}
+                />
+
+                <Stack.Screen
+                  name="VendorsMyOrders"
+                  component={VendorsMyOrders}
+                  options={{
+                    title: 'MyOrders Details',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+                
+                  }}
+                />
+
+                <Stack.Screen
+                  name="VendorHomepage"
+                  component={VendorHomepage}
+                  options={{
+                    title: 'Homepage',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+                
+                  }}
+                />
+
+                <Stack.Screen
+                  name="VendorOrderTracking"
+                  component={VendorOrderTracking}
+                  options={{
+                    title: 'Order Tracking',
+                    headerLeft: ({props}) => (
+                      <Ionicons 
+                      name='menu'
+                      size={25}
+                      // onPress={()=> props.navigation.openDrawer()}
+                      />
+                    ),
+                
+                  }}
+                />
+            </Stack.Navigator> */}
+        </NavigationContainer>
+  )
 };
 
 const styles = StyleSheet.create({

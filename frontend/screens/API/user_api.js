@@ -1,4 +1,5 @@
-import ApiManager from './ApiManager';
+// import ApiManager from './ApiManager';
+import ApiManager from "./ApiManager"
 
 export const user_login = async data => {
   try {
@@ -9,6 +10,6 @@ export const user_login = async data => {
     });
     return result;
   } catch (error) {
-    return error.responce.data;
+    return error.response.data;
   }
 };
