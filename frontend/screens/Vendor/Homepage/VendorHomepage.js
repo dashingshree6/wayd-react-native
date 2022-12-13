@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { 
+  Button,
   Image, 
   Input,
 } from '@rneui/themed';
@@ -20,6 +21,10 @@ const API = 'https://2171-49-205-239-58.in.ngrok.io/api/products'
 
 const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
 //
+
+
+
+
 
 
 const DATA = [
@@ -128,6 +133,9 @@ export default function VendorHomepage() {
   //   displayModal={displayModal}
   //   />
   // );
+const [value,setValue] = useState(0)
+
+
   const renderItem = ({ item }) => (
     <Item 
     product={item}
@@ -224,6 +232,7 @@ useEffect(()=> {
                   <Text style={styles.vendor_hide_btn}>Hide Modal</Text>
                 </Pressable>
               </View>
+              
             </View>
           </Modal>
     </View>
