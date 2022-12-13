@@ -1,12 +1,11 @@
-import { View, Text, SafeAreaView, StyleSheet, FlatList } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, FlatList,Modal,Pressable, TouchableOpacity, } from 'react-native'
 import React,{useState,useEffect} from 'react'
-import { Row, Rows, Table, TableWrapper } from 'react-native-table-component'
-import { Button } from '@rneui/themed'
+import { Input, Button, Tab } from '@rneui/themed'
 import axios from 'axios'
 
 
-const API="https://1c25-49-205-239-58.in.ngrok.io/api/discount"
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4OTgzNzF9.Z1IEHG62Q_nab-nEXjdg3eiCy9w_S_nvDPlWL_eqstk"
+const API="https://271f-49-205-239-58.in.ngrok.io/api/discount"
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5NTg4NjB9._-vDej75MpK16LHIspr-Da9ALh2P4eMoLy4I4fj0ysM"
 
 
 const Item = ({ code,description,_id }) => (
@@ -29,32 +28,29 @@ const Item = ({ code,description,_id }) => (
   );
 
 const Coupon = () => {
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [coupons, setCoupon] = useState([])
     const renderItem = ({item}) => (
         <Item _id={item._id} code={item.code} description={item.description}/>
     )
 
 
+   
+
+
+
     const [data,setData] = React.useState({});
-
-
+    const [loading, setLoading] = useState(true)
 
     const getCoupon =()=>{
-      
-      
       axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
-
-      .then(res => {
+    .then(res => {
         console.log(res.data)
         setData(res.data)
       }).catch((error) => {
         console.log(error)
       });
-      
-      
-     
-      
-    }
+}
     //call useeffect outside function****
     useEffect(() => {
         getCoupon()
@@ -78,6 +74,7 @@ const Coupon = () => {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
+                          onPress={() => setModalVisible(true)}
                         />
                     </View>
                      
@@ -98,6 +95,50 @@ const Coupon = () => {
                         keyExtractor={item => item.id}
                       />
                     </View>
+                    <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.procurement_modal}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                  <Input
+                    placeholder="Coupon Code"
+                    // onChangeText={value => setCoupon({ ...productForProcurement, name: value })}
+                    />
+                       <Input
+                    placeholder="Order Number"
+                    // onChangeText={value => setCoupon({ ...productForProcurement, count: value })}
+                    keyboardType='numeric'
+                    />
+                       <Input
+                    placeholder="Discount"
+                    // onChangeText={value => setCoupon({ ...productForProcurement, extra_stock: value })}
+                    keyboardType='numeric'
+                    />
+                             <Input
+                    placeholder="Description"
+                    // onChangeText={value => setCoupon({ ...productForProcurement, price_generated: value })}
+                    />
+                             <Input
+                    placeholder="Status"
+                    // onChangeText={value => setCoupon({ ...productForProcurement, price_generated: value })}
+                    />
+                    
+                    <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => createCoupon()}
+                    >
+                      <Text style={styles.textStyle}>Create</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </Modal>
           </SafeAreaView>
   )
 }
@@ -108,6 +149,31 @@ export default Coupon;
 const styles = StyleSheet.create({
     sales_cont: {
         padding:10
+      },
+      sales_btn: {
+        alignItems:'center'
+      },
+      sales_orders_type: {
+        display:'flex',
+        flexDirection: 'row',
+      },
+      sales_past_orders:{
+        alignItems:'flex-end'
+      },
+      item: {
+        backgroundColor: 'silver',
+        padding: 20,
+        marginVertical: 8,
+        marginHorizontal: 16,
+      },
+      sales_live_button: {
+        // alignItems: "center",
+        backgroundColor: "#DDDDDD",
+        padding: 10,
+        margin: 2
+      },
+      procurement_modal : {
+        backgroundColor:'silver'
       },
       customers_btn: {
         alignItems:'center'

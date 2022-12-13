@@ -212,7 +212,9 @@ const MyDrawer = () => {
                     <Drawer.Screen
                       name="ProcurementHomepage"
                       // component={CheckoutDetails}
-                      component={VendorHomepage}
+                      // component={VendorHomepage}
+                      component={Coupon}
+                      // component={ProcurementHomepage}
                       // component={Customers}
                       options={({ navigation }) => ({
                         title: 'Vendor Homepage',
