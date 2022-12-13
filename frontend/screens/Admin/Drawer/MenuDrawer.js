@@ -18,6 +18,7 @@ import ProcurementHomepage from '../ProcurementHomepage/ProcurementHomepage';
 import ProductDetails from '../ProductDetails/ProductDetails';
 import Suppliers from '../Suppliers/Suppliers';
 import DeliveryLocation from '../DeliveryLocation/DeliveryLocation';
+import Category from '../Category/Category';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -43,7 +44,7 @@ function CustomDrawerContent(props) {
       {/* <DrawerItemList {...props} /> */}
       <AdminDrawer {...props}/>
       {/* <VendorDrawer {...props}/> */}
-      {/* <DeliveryDrawer {...props}/> */}
+      <DeliveryDrawer {...props}/>
 
     </DrawerContentScrollView>
   );
@@ -140,7 +141,7 @@ const MyDrawer = () => {
 
     <Drawer.Navigator 
           useLegacyImplementation
-          initialRouteName='ProcurementHomepage'
+          initialRouteName='Login'
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
                     <Drawer.Screen
@@ -252,7 +253,7 @@ const MyDrawer = () => {
                       name="DeliveryLocation"
                       component={DeliveryLocation}
                       options={({ navigation }) => ({
-                        title: 'Delivery Location',
+                        title: 'Delivery',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
@@ -280,6 +281,24 @@ const MyDrawer = () => {
                       })}
                     />
 
+                    <Drawer.Screen
+                      name="Category"
+                      component={Category}
+                      options={({ navigation }) => ({
+                        title: 'Category',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    />
+
+
+                    {/* // Vendor Screens      */}
                     <Drawer.Screen
                       name="VendorsMyOrders"
                       component={VendorsMyOrders}
