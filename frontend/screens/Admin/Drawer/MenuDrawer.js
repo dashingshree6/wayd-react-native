@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
@@ -11,6 +11,7 @@ import {
 //Screens
 //Admin
 import Login from '../../Login/Login';
+import Signup from '../Signup/Signup';
 import SalesHomepage from '../SalesHomepage/SalesHomepage';
 import SalesLiveOrder from '../SalesLiveOrder/SalesLiveOrder';
 import Customers from '../Customers/Customers';
@@ -38,14 +39,24 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 
+import { isAuthenticated, setAuthToken } from '../../Login/index';
+import SyncStorage from 'sync-storage';
+
 
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      {/* <DrawerItemList {...props} /> */}
-      <AdminDrawer {...props}/>
-      {/* <VendorDrawer {...props}/> */}
-      <DeliveryDrawer {...props}/>
+
+      {
+        SyncStorage.get("role") === 1 && <AdminDrawer {...props}/>   
+      }
+      {
+        SyncStorage.get("role") === 0 && <VendorDrawer {...props}/>   
+      }
+      {
+        SyncStorage.get("role") === 2 && <DeliveryDrawer {...props}/>   
+      }
+    
 
     </DrawerContentScrollView>
   );
@@ -54,6 +65,9 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
+  useEffect(() => {
+    setAuthToken(isAuthenticated().token);
+  }, []);
   return (
     // <Drawer.Navigator
     //   useLegacyImplementation
@@ -141,10 +155,17 @@ const MyDrawer = () => {
 
     <Drawer.Navigator 
           useLegacyImplementation
-          initialRouteName='Login'
+          initialRouteName='Signup'
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-                    {/* <Drawer.Screen
+                   <Drawer.Screen
+                      name="Signup"
+                      component={Signup}
+                      options={{
+                        headerShown: false,
+                      }}
+                    /> 
+                    <Drawer.Screen
                       name="Login"
                       component={Login}
                       // options={{ title: 'Homepage' }}
@@ -152,13 +173,13 @@ const MyDrawer = () => {
                         headerShown: false,
                       }}
 
-                    /> */}
+                    /> 
                     <Drawer.Screen
                       name="SalesHomepage"
-                      // component={SalesHomepage}
+                      component={SalesHomepage}
                       // component={CheckoutDetails}
                       // component={DeliveryHomepage}
-                      component={DeliverySingleOrderStatus}
+                      // component={DeliverySingleOrderStatus}
                       options={({ navigation }) => ({
                         title: ' Sales Homepage',
                         headerLeft: () => (
