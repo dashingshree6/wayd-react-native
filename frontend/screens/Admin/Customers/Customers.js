@@ -14,9 +14,11 @@ import { Input, Button} from '@rneui/themed';
 
 //
 import axios from 'axios';
-const API = 'https://789f-49-205-239-58.in.ngrok.io/api/users'
+const API = 'https://2171-49-205-239-58.in.ngrok.io/api/users'
 
-const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
+const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4MjY5NDB9.IjTKrEnXuu3d_aiUUIG5LrSu3v3XZfgFrT7kkQXkFps"
+
+
 //
 
 const Item = (props) => (
