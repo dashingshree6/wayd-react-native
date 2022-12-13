@@ -36,6 +36,7 @@ import { Icon, ListItem } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
+import Coupon from '../Coupon/Coupon';
 
 
 function CustomDrawerContent(props) {
@@ -209,7 +210,9 @@ const MyDrawer = () => {
                      {/* replace this component here for testing the page */}
                     <Drawer.Screen
                       name="ProcurementHomepage"
-                      component={CheckoutDetails}
+                      // component={CheckoutDetails}
+                      component={Coupon}
+                      // component={Customers}
                       options={({ navigation }) => ({
                         title: 'Procurement Homepage',
                         headerLeft: () => (
