@@ -57,21 +57,10 @@ const DeliverySingleOrderStatus = ({navigation}) => {
   return (
     <View>
       <ScrollView>
-      <Text style={styles.delivery_loc_text}>Order Name : Grapes</Text>
-      <Text style={styles.delivery_loc_text}>Quantity : 2kg</Text>
-      <Text style={styles.delivery_loc_text}>Delivery Address: Madhapur</Text>
-
-      <Text style={styles.delivery_loc_text_accept}>Your Order has been accepted.</Text>
+     
 
 
-      <View style={[styles.contentView]}>
-        <StepIndicator
-            customStyles={customStyles}
-            currentPosition={currentPosition}
-            labels={labels}
-            stepCount={4}
-        />     
-      </View>
+     
 
         <View style={styles.delivery_lo_card}>
             <Text>Activity: Ordered</Text>
