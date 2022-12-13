@@ -58,6 +58,8 @@ const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
 const SalesHomepage = ({ navigation, route  }) => {
   const [index, setIndex] = useState(0);
 
+  
+
   const renderItem = ({ item }) => (
     <Item order={item} />
   );

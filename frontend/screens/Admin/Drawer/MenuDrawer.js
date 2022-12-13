@@ -35,7 +35,8 @@ import DeliveryDrawer from './DeliveryDrawer';
 //
 import { Icon, ListItem } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
+import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 
 
 function CustomDrawerContent(props) {
@@ -53,7 +54,6 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
-
   return (
     // <Drawer.Navigator
     //   useLegacyImplementation
@@ -144,7 +144,7 @@ const MyDrawer = () => {
           initialRouteName='Login'
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-                    <Drawer.Screen
+                    {/* <Drawer.Screen
                       name="Login"
                       component={Login}
                       // options={{ title: 'Homepage' }}
@@ -152,10 +152,13 @@ const MyDrawer = () => {
                         headerShown: false,
                       }}
 
-                    />
+                    /> */}
                     <Drawer.Screen
                       name="SalesHomepage"
-                      component={SalesHomepage}
+                      // component={SalesHomepage}
+                      // component={CheckoutDetails}
+                      // component={DeliveryHomepage}
+                      component={DeliverySingleOrderStatus}
                       options={({ navigation }) => ({
                         title: ' Sales Homepage',
                         headerLeft: () => (
@@ -204,9 +207,10 @@ const MyDrawer = () => {
 
                       })}
                     />
+                     {/* replace this component here for testing the page */}
                     <Drawer.Screen
                       name="ProcurementHomepage"
-                      component={ProcurementHomepage}
+                      component={CheckoutDetails}
                       options={({ navigation }) => ({
                         title: 'Procurement Homepage',
                         headerLeft: () => (
@@ -219,6 +223,7 @@ const MyDrawer = () => {
 
                       })}
                     />
+                   
                     <Drawer.Screen
                       name="ProductDetails"
                       component={ProductDetails}
@@ -253,7 +258,7 @@ const MyDrawer = () => {
                       name="DeliveryLocation"
                       component={DeliveryLocation}
                       options={({ navigation }) => ({
-                        title: 'Delivery',
+                        title: 'Delivery Location',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
@@ -281,24 +286,6 @@ const MyDrawer = () => {
                       })}
                     />
 
-                    <Drawer.Screen
-                      name="Category"
-                      component={Category}
-                      options={({ navigation }) => ({
-                        title: 'Category',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-
-
-                    {/* // Vendor Screens      */}
                     <Drawer.Screen
                       name="VendorsMyOrders"
                       component={VendorsMyOrders}
