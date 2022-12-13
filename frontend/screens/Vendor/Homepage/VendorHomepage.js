@@ -5,13 +5,14 @@ import {
   StyleSheet,
   ActivityIndicator,  
   Pressable,
-  Modal
+  Modal, 
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { 
-  Button,
+  
   Image, 
   Input,
+  Button
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -217,11 +218,13 @@ useEffect(()=> {
                     <Text style={styles.vendor_modalText}>4 kg </Text>
                     <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
                   </View>
-                    <Image
+                   <Button>-</Button>
+                   <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                           containerStyle={styles.vendor_img}
                           // PlaceholderContent={<ActivityIndicator />}
                         />
+                   <Button>+</Button>
                 </View>
                     
           
@@ -235,6 +238,12 @@ useEffect(()=> {
               
             </View>
           </Modal>
+
+
+
+
+          
+          
     </View>
   )
 }

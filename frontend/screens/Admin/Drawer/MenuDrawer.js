@@ -211,10 +211,10 @@ const MyDrawer = () => {
                     <Drawer.Screen
                       name="ProcurementHomepage"
                       // component={CheckoutDetails}
-                      component={Coupon}
+                      component={VendorHomepage}
                       // component={Customers}
                       options={({ navigation }) => ({
-                        title: 'Procurement Homepage',
+                        title: 'Vendor Homepage',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
