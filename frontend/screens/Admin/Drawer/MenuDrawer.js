@@ -21,6 +21,8 @@ import Suppliers from '../Suppliers/Suppliers';
 import DeliveryLocation from '../DeliveryLocation/DeliveryLocation';
 import Category from '../Category/Category';
 import PriceAddition from '../PriceAddition.js/PriceAddition';
+import Stock from '../Stock/Stock';
+import OrderStatus from '../OrderStatus/OrderStatus';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -66,27 +68,30 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
-  const [initialRoute, setInitialRoute] = useState("Login")
+  const [initialRoute, setInitialRoute] = useState("")
+  const token = SyncStorage.get("jwt")
+  const userRole = SyncStorage.get("role")
 
   const setInitialRouteName = () => {
-    if(isAuthenticated()) {
-      if(isAuthenticated().user.role === 1) {
+    if(token) {
+      if(userRole === 1) {
         setInitialRoute("SalesHomepage")
       }  
-      if(isAuthenticated().user.role === 0) {
+      if(userRole === 0) {
         setInitialRoute("VendorHomepage")
       } 
-      if(isAuthenticated().user.role === 2) {
+      if(userRole === 2) {
         setInitialRoute("DeliveryLocation")
       } 
     } else {
       setInitialRoute("Login")
     }
   }
-  useEffect(() => {
-    setAuthToken(isAuthenticated().token);
-    setInitialRouteName()
-  }, []);
+  // useEffect(() => {
+  //   setInitialRouteName()
+  //   setAuthToken(token);
+  //   console.log(token)
+  // }, []);
   return (
     // <Drawer.Navigator
     //   useLegacyImplementation
@@ -174,25 +179,29 @@ const MyDrawer = () => {
 
     <Drawer.Navigator 
           useLegacyImplementation
-          initialRouteName={initialRoute}
+          initialRouteName={"Login"}
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-                   <Drawer.Screen
+                   {/* <Drawer.Screen
                       name="Signup"
                       component={Signup}
                       options={{
                         headerShown: false,
                       }}
-                    /> 
-                    <Drawer.Screen
-                      name="Login"
-                      component={Login}
-                      // options={{ title: 'Homepage' }}
-                      options={{
-                        headerShown: false,
-                      }}
+                    />  */}
 
-                    /> 
+                  { !token && 
+                         <Drawer.Screen
+                         name="Login"
+                         component={Login}
+                         // options={{ title: 'Homepage' }}
+                         options={{
+                           headerShown: false,
+                         }}
+   
+                       /> 
+                   }
+             
                     <Drawer.Screen
                       name="SalesHomepage"
                       component={SalesHomepage}
@@ -325,6 +334,41 @@ const MyDrawer = () => {
 
                       })}
                     />
+
+                    <Drawer.Screen
+                      name="Stock"
+                      component={Stock}
+                      options={({ navigation }) => ({
+                        title: 'Stock',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    />
+
+                    <Drawer.Screen
+                      name="OrderStatus"
+                      component={OrderStatus}
+                      options={({ navigation }) => ({
+                        title: 'Order Status',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    />
+
+
+                    {/* Vendor */}
 
                     <Drawer.Screen
                       name="CheckoutDetails"
