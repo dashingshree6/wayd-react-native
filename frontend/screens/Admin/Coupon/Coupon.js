@@ -4,8 +4,8 @@ import { Input, Button, Tab } from '@rneui/themed'
 import axios from 'axios'
 
 
-const API="https://271f-49-205-239-58.in.ngrok.io/api/discount"
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5NTg4NjB9._-vDej75MpK16LHIspr-Da9ALh2P4eMoLy4I4fj0ysM"
+const API="https://2b08-49-205-239-58.in.ngrok.io/api/discount"
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5Nzg1NjZ9.StYstCiAilBzDx6oi2NTJ-UHPwbj0SU4qniupgMWQYY"
 
 
 const Item = ({ code,description,_id }) => (
@@ -27,19 +27,52 @@ const Item = ({ code,description,_id }) => (
 </View>
   );
 
-const Coupon = () => {
+const Coupon = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [coupons, setCoupon] = useState([])
+  const [coupons, setCoupons] =  useState([])
+const [values, setValues] = useState({
+  code:'',
+  description:'',
+  discount: '',
+  order_limit: '',
+  status: '',
+ 
+
+  formData: new FormData()
+})
+// const {
+//   code,
+//   description,
+//   discount,
+//   order_limit,
+//   formData
+// } = values;
+
+const createCoupon =()=>{
+  axios.post(`${API}/discount` ,
+  {
+    headers: {"Authorization" : `Bearer ${TOKEN}`},
+    data: JSON.stringify(values)
+  })
+  .then(res => {
+    console.log(res.data);
+  }).catch((error) => {
+    console.log(error)
+    setLoading(false)
+    });
+
+
+    setModalVisible(!modalVisible)
+  }
+
+
+
+
     const renderItem = ({item}) => (
         <Item _id={item._id} code={item.code} description={item.description}/>
     )
 
-
-   
-
-
-
-    const [data,setData] = React.useState({});
+  const [data,setData] = React.useState({});
     const [loading, setLoading] = useState(true)
 
     const getCoupon =()=>{
@@ -51,7 +84,6 @@ const Coupon = () => {
         console.log(error)
       });
 }
-    //call useeffect outside function****
     useEffect(() => {
         getCoupon()
     },[])
@@ -59,10 +91,8 @@ const Coupon = () => {
 
 
   return (
-
-
 <SafeAreaView>
-                <View style={styles.live_orders_cont}>
+  <View style={styles.live_orders_cont}>
                       <Text style={styles.live_orders_head}>Coupons</Text>
                       </View>
                        <View>
@@ -109,25 +139,25 @@ const Coupon = () => {
                   <View style={styles.modalView}>
                   <Input
                     placeholder="Coupon Code"
-                    // onChangeText={value => setCoupon({ ...productForProcurement, name: value })}
+                    onChangeText={value => setValues({ ...values, code: value })}
                     />
                        <Input
                     placeholder="Order Number"
-                    // onChangeText={value => setCoupon({ ...productForProcurement, count: value })}
+                    onChangeText={value => setValues({ ...values, description: value })}
                     keyboardType='numeric'
                     />
                        <Input
                     placeholder="Discount"
-                    // onChangeText={value => setCoupon({ ...productForProcurement, extra_stock: value })}
+                    onChangeText={value => setValues({ ...values, discount: value })}
                     keyboardType='numeric'
                     />
                              <Input
                     placeholder="Description"
-                    // onChangeText={value => setCoupon({ ...productForProcurement, price_generated: value })}
+                    onChangeText={value => setValues({ ...values, order_limit: value })}
                     />
                              <Input
                     placeholder="Status"
-                    // onChangeText={value => setCoupon({ ...productForProcurement, price_generated: value })}
+                    onChangeText={value => setValues({ ...values, status: value })}
                     />
                     
                     <Pressable
