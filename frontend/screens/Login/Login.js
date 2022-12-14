@@ -62,7 +62,7 @@ const Login = ({ navigation  }) => {
                 if (data.data.token) {
                     if (data.data.user && data.data.user.role === 1) {
                       // return <Redirect to="/admin/dashboard" />;
-                      return navigation.navigate("SalesHomepage")
+                      return navigation.navigate("PriceAddition")
                     } else {
                       return navigation.navigate("VendorHomepage")
                     }
