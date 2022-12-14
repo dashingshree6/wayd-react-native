@@ -20,6 +20,7 @@ import ProductDetails from '../ProductDetails/ProductDetails';
 import Suppliers from '../Suppliers/Suppliers';
 import DeliveryLocation from '../DeliveryLocation/DeliveryLocation';
 import Category from '../Category/Category';
+import PriceAddition from '../PriceAddition.js/PriceAddition';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -65,8 +66,26 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
+  const [initialRoute, setInitialRoute] = useState("Login")
+
+  const setInitialRouteName = () => {
+    if(isAuthenticated()) {
+      if(isAuthenticated().user.role === 1) {
+        setInitialRoute("SalesHomepage")
+      }  
+      if(isAuthenticated().user.role === 0) {
+        setInitialRoute("VendorHomepage")
+      } 
+      if(isAuthenticated().user.role === 2) {
+        setInitialRoute("DeliveryLocation")
+      } 
+    } else {
+      setInitialRoute("Login")
+    }
+  }
   useEffect(() => {
     setAuthToken(isAuthenticated().token);
+    setInitialRouteName()
   }, []);
   return (
     // <Drawer.Navigator
@@ -155,7 +174,7 @@ const MyDrawer = () => {
 
     <Drawer.Navigator 
           useLegacyImplementation
-          initialRouteName='Signup'
+          initialRouteName={initialRoute}
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
                    <Drawer.Screen
@@ -250,6 +269,22 @@ const MyDrawer = () => {
                       component={ProductDetails}
                       options={({ navigation }) => ({
                         title: 'Product Details',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    />
+
+                    <Drawer.Screen
+                      name="PriceAddition"
+                      component={PriceAddition}
+                      options={({ navigation }) => ({
+                        title: 'Price Addition',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
