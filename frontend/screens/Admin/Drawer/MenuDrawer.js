@@ -38,6 +38,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 import Coupon from '../Coupon/Coupon';
+import Coupons from '../Coupon/Coupons';
+
 
 
 function CustomDrawerContent(props) {
@@ -213,9 +215,10 @@ const MyDrawer = () => {
                       name="ProcurementHomepage"
                       // component={CheckoutDetails}
                       // component={VendorHomepage}
-                      component={Coupon}
+                      // component={ProductDetails}
                       // component={ProcurementHomepage}
-                      // component={Customers}
+                      component={Coupons}
+                      // component={Tabs}
                       options={({ navigation }) => ({
                         title: 'Vendor Homepage',
                         headerLeft: () => (

@@ -4,8 +4,8 @@ import { Input, Button, Tab } from '@rneui/themed'
 import axios from 'axios'
 
 
-const API="https://2b08-49-205-239-58.in.ngrok.io/api/discount"
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5Nzg1NjZ9.StYstCiAilBzDx6oi2NTJ-UHPwbj0SU4qniupgMWQYY"
+// const API="https://8a02-49-205-239-58.in.ngrok.io/api/discount"
+// const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5ODE0Mzl9.lRcod0OvG39rzWw85MTa5sQWN9TMGghQDlRlvzZ6CiE"
 
 
 const Item = ({ code,description,_id }) => (
@@ -27,19 +27,18 @@ const Item = ({ code,description,_id }) => (
 </View>
   );
 
-const Coupon = (props) => {
+const Coupon = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [coupons, setCoupons] =  useState([])
-const [values, setValues] = useState({
-  code:'',
-  description:'',
-  discount: '',
-  order_limit: '',
-  status: '',
- 
-
-  formData: new FormData()
-})
+  // const [coupons, setCoupons] =  useState([])
+  const [values, setValues] = useState({
+    code:'',
+    description:'',
+    discount: '',
+    order_limit: '',
+    status: '',
+    // formData: new FormData()
+  })
+  const [loading, setLoading] = useState(true)
 // const {
 //   code,
 //   description,
@@ -48,21 +47,69 @@ const [values, setValues] = useState({
 //   formData
 // } = values;
 
+
+const onChangeCode = (value) => {
+  setValues({ ...values, code: value });
+};
+
+const onChangeDescription = (value) => {
+  setValues({ ...values, description: value });
+};
+
+const onChangeDiscount = (value) => {
+  setValues({ ...values, discount: value });
+};
+const onChangeOrderLimit = (value) => {
+  setValues({ ...values, order_limit: value });
+};
+
+const onChangeStatus = (value) => {
+  setValues({ ...values, status: value });
+};
 const createCoupon =()=>{
-  axios.post(`${API}/discount` ,
-  {
-    headers: {"Authorization" : `Bearer ${TOKEN}`},
-    data: JSON.stringify(values)
+  // axios.post(API ,
+  // {
+  //   headers: {"Authorization" : `Bearer ${TOKEN}`},
+  //   data: JSON.stringify(values)
+  // })
+  // .then(res => {
+  //   console.log(res.data);
+  // }).catch((error) => {
+  //   console.log(error)
+  //   setLoading(false)
+  //   });
+
+
+  //   setModalVisible(!modalVisible)
+  setLoading(true);
+  var myHeaders = new Headers();
+
+  myHeaders.append(
+    'Authorization',
+    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5ODE0Mzl9.lRcod0OvG39rzWw85MTa5sQWN9TMGghQDlRlvzZ6CiE'
+  );
+
+  myHeaders.append('Content-Type', 'application/json');
+
+  fetch('https://8a02-49-205-239-58.in.ngrok.io/api/discount', {
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify({
+      code: values.code,
+      description: values.description,
+      discount: values.discount,
+      order_limit: values.order_limit,
+      status: values.status,
+    }),
   })
-  .then(res => {
-    console.log(res.data);
-  }).catch((error) => {
-    console.log(error)
-    setLoading(false)
-    });
+    .then((response) => {
+      setLoading(false)
+      response.text();
+    })
+    .then((result) => console.log(result))
+    .catch((error) => console.log(error));
 
 
-    setModalVisible(!modalVisible)
   }
 
 
@@ -73,10 +120,9 @@ const createCoupon =()=>{
     )
 
   const [data,setData] = React.useState({});
-    const [loading, setLoading] = useState(true)
 
     const getCoupon =()=>{
-      axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
+      axios.get(`https://8a02-49-205-239-58.in.ngrok.io/api/discount`, { headers : {"Authorization" : `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5ODE0Mzl9.lRcod0OvG39rzWw85MTa5sQWN9TMGghQDlRlvzZ6CiE`}})
     .then(res => {
         console.log(res.data)
         setData(res.data)
@@ -93,7 +139,7 @@ const createCoupon =()=>{
   return (
 <SafeAreaView>
   <View style={styles.live_orders_cont}>
-                      <Text style={styles.live_orders_head}>Coupons</Text>
+                      <Text style={styles.live_orders_head}>Coupon</Text>
                       </View>
                        <View>
                      <View style={styles.customers_btn}>
@@ -139,25 +185,30 @@ const createCoupon =()=>{
                   <View style={styles.modalView}>
                   <Input
                     placeholder="Coupon Code"
-                    onChangeText={value => setValues({ ...values, code: value })}
+                    // onChangeText={value => setValues({ ...values, code: value })}
+                    onChangeText={(value) => onChangeCode(value)}
                     />
                        <Input
                     placeholder="Order Number"
-                    onChangeText={value => setValues({ ...values, description: value })}
+                    // onChangeText={value => setValues({ ...values, description: value })}
+                    onChangeText={(value) => onChangeOrderLimit(value)}
                     keyboardType='numeric'
                     />
                        <Input
                     placeholder="Discount"
-                    onChangeText={value => setValues({ ...values, discount: value })}
+                    // onChangeText={value => setValues({ ...values, discount: value })}
+                    onChangeText={(value) => onChangeDiscount(value)}
                     keyboardType='numeric'
                     />
                              <Input
                     placeholder="Description"
-                    onChangeText={value => setValues({ ...values, order_limit: value })}
+                    // onChangeText={value => setValues({ ...values, order_limit: value })}
+                    onChangeText={(value) => onChangeDescription(value)}
                     />
                              <Input
                     placeholder="Status"
-                    onChangeText={value => setValues({ ...values, status: value })}
+                    // onChangeText={value => setValues({ ...values, status: value })}
+                    onChangeText={(value) => onChangeStatus(value)}
                     />
                     
                     <Pressable
