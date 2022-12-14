@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React,{useEffect} from 'react';
 // import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -63,180 +63,20 @@ import VendorsMyOrders from './screens/Vendor/MyOrders/VendorsMyOrders';
 import { Icon } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from './screens/Delivery/DeliveryHomepage';
+import SyncStorage from 'sync-storage';
+
+import { setAuthToken } from './screens/Login'; 
 
 const Stack = createNativeStackNavigator()
 // const App: () => Node = () => {
 const App = () => {
 
+  useEffect(()=>{
+    setAuthToken(SyncStorage.get("jwt"))
+  })
   return (
         <NavigationContainer>
           <MyDrawer/>
-            {/* <Stack.Navigator initialRouteName='VendorsMyOrders'>
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
-                  // options={{ title: 'Homepage' }}
-                  options={{
-                    headerShown: false,
-                  }}
-
-                />
-                <Stack.Screen
-                  name="SalesHomepage"
-                  component={SalesHomepage}
-                  options={{
-                    title: ' Sales Homepage',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-
-                  }}
-                />
-                <Stack.Screen
-                  name="SalesLiveOrder"
-                  component={SalesLiveOrder}
-                  options={{
-                    title: ' Sales Live Order',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-
-                  }}
-                />
-                <Stack.Screen
-                  name="Customers"
-                  component={Customers}
-                  options={{
-                    title: 'Customers',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-
-                  }}
-                />
-                <Stack.Screen
-                  name="ProcurementHomepage"
-                  component={ProcurementHomepage}
-                  options={{
-                    title: 'Procurement Homepage',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-
-                  }}
-                />
-                <Stack.Screen
-                  name="ProductDetails"
-                  component={ProductDetails}
-                  options={{
-                    title: 'Product Details',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-
-                  }}
-                />
-                <Stack.Screen
-                  name="Suppliers"
-                  component={Suppliers}
-                  options={{
-                    title: 'Suppliers',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-                
-                  }}
-                />
-
-                <Stack.Screen
-                  name="CheckoutDetails"
-                  component={CheckoutDetails}
-                  options={{
-                    title: 'Checkout Details',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-                
-                  }}
-                />
-
-                <Stack.Screen
-                  name="VendorsMyOrders"
-                  component={VendorsMyOrders}
-                  options={{
-                    title: 'MyOrders Details',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-                
-                  }}
-                />
-
-                <Stack.Screen
-                  name="VendorHomepage"
-                  component={VendorHomepage}
-                  
-                  options={{
-                    title: 'Homepage',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-                
-                  }}
-                />
-
-                <Stack.Screen
-                  name="VendorOrderTracking"
-                  component={VendorOrderTracking}
-                  options={{
-                    title: 'Order Tracking',
-                    headerLeft: ({props}) => (
-                      <Ionicons 
-                      name='menu'
-                      size={25}
-                      // onPress={()=> props.navigation.openDrawer()}
-                      />
-                    ),
-                
-                  }}
-                />
-            </Stack.Navigator> */}
         </NavigationContainer>
   )
 };
