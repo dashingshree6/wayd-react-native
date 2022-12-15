@@ -28,9 +28,6 @@ const CashCollection = () => {
   });
   
   
-  
-   }
-  
   return (
     <>
       <Text
@@ -102,7 +99,7 @@ const CashCollection = () => {
       </View>
     </>
   );
-
+}
 
 const styles = StyleSheet.create({
   container: {
