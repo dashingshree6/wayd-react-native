@@ -1,31 +1,31 @@
-// import React from 'react';
-// import {View, Text, Image, StyleSheet} from 'react-native';
-// import {Button, Card} from '@rneui/themed';
-// const image = {
-//   uri: 'https://cdn1.iconfinder.com/data/icons/minicons-4/64/box_split_cross-512.png',
-// };
+import React from 'react';
+import {View, Text, Image, StyleSheet} from 'react-native';
+import {Button, Card} from '@rneui/themed';
+const image = {
+  uri: 'https://cdn1.iconfinder.com/data/icons/minicons-4/64/box_split_cross-512.png',
+};
 
-// const CashCollection = () => {
-//   const requestOptions = {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json','Accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNzE3Mzd9.JHsh5BapP604aRq4ymwryyX53v3-iwaaW89-3mRo0G8'},
-//     data: JSON.stringify({ 
-//       status: true,
-//       code: "dark knight 123",
-//       order_limit: 1,
-//       discount: 18,
-//       description: "rate"
-//     })
-//   };
+const CashCollection = () => {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json','Accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNzE3Mzd9.JHsh5BapP604aRq4ymwryyX53v3-iwaaW89-3mRo0G8'},
+    data: JSON.stringify({ 
+      status: true,
+      code: "dark knight 123",
+      order_limit: 1,
+      discount: 18,
+      description: "rate"
+    })
+  };
   
-//   fetch('https://474b-49-205-239-58.in.ngrok.io/api/discount', requestOptions)
-//   .then((response) => response.json())
-//   .then((json) => {
-//     console.log('Fetch API Response', json.data);
-//   })
-//   .catch((error) => {
-//   console.error(error);
-//   });
+  fetch('https://474b-49-205-239-58.in.ngrok.io/api/discount', requestOptions)
+  .then((response) => response.json())
+  .then((json) => {
+    console.log('Fetch API Response', json.data);
+  })
+  .catch((error) => {
+  console.error(error);
+  });
   
   
   return (
@@ -176,25 +176,25 @@
 //   );
 
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//     marginTop: 10,
-//   },
-//   card: {
-//     margin: 10,
-//     borderWidth: 2,
-//     paddingHorizontal: 20,
-//     paddingVertical: 10,
-//   },
-//   content: {
-//     textAlign: 'left',
-//     marginVertical: 3,
-//     padding: 3,
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 10,
+  },
+  card: {
+    margin: 10,
+    borderWidth: 2,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  content: {
+    textAlign: 'left',
+    marginVertical: 3,
+    padding: 3,
+  },
+});
 
-// export default CashCollection;
+export default CashCollection;
