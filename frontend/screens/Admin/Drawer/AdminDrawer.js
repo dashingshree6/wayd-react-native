@@ -118,7 +118,7 @@ return (
       >Peoples</Text>
         <DrawerItem
           label="Customers"
-          onPress={() => props.navigation.navigate('Customers')}
+          onPress={() => props.navigation.navigate('Customers', { role: 0 })}
           icon={()=> (
             <AntDesign
             name='right'
@@ -132,7 +132,7 @@ return (
         />
         <DrawerItem
           label="Suppliers"
-          onPress={() => props.navigation.navigate('Suppliers')}
+          onPress={() => props.navigation.navigate('Customers', { role: 3 })}
           icon={()=> (
             <AntDesign
             name='right'
@@ -146,7 +146,7 @@ return (
         />
         <DrawerItem
           label="Delivery"
-          onPress={() => props.navigation.navigate('DeliveryLocation')}
+          onPress={() => props.navigation.navigate('Customers', { role: 2 })}
           icon={()=> (
             <AntDesign
             name='right'
