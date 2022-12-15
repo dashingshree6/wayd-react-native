@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import {View, Text, Button} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -27,6 +27,9 @@ import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
 import VendorHomepage from '../../Vendor/Homepage/VendorHomepage';
 import VendorOrderTracking from '../../Vendor/LiveOrderTracking/VendorOrderTracking';
 import VendorsMyOrders from '../../Vendor/MyOrders/VendorsMyOrders';
+import CashCollection from '../../Admin/CashCollection/CashCollection';
+import CreateOrder from '../../Admin/SalesHomepage/CreateOrder';
+import AddProducts from '../../Admin/ProductDetails/AddProducts';
 //
 
 //Drawer
@@ -46,22 +49,16 @@ import Coupons from '../Coupon/Coupons';
 import { isAuthenticated, setAuthToken } from '../../Login/index';
 import SyncStorage from 'sync-storage';
 
+import {Icon, ListItem} from '@rneui/themed';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-
-      {
-        SyncStorage.get("role") === 1 && <AdminDrawer {...props}/>   
-      }
-      {
-        SyncStorage.get("role") === 0 && <VendorDrawer {...props}/>   
-      }
-      {
-        SyncStorage.get("role") === 2 && <DeliveryDrawer {...props}/>   
-      }
-    
-
+      {/* <DrawerItemList {...props} /> */}
+      <AdminDrawer {...props} />
+      {/* <VendorDrawer {...props}/> */}
+      {/* <DeliveryDrawer {...props}/> */}
     </DrawerContentScrollView>
   );
 }
@@ -69,26 +66,26 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
-  const [initialRoute, setInitialRoute] = useState("Login")
+  const [initialRoute, setInitialRoute] = useState('Login');
 
   const setInitialRouteName = () => {
-    if(isAuthenticated()) {
-      if(isAuthenticated().user.role === 1) {
-        setInitialRoute("SalesHomepage")
-      }  
-      if(isAuthenticated().user.role === 0) {
-        setInitialRoute("VendorHomepage")
-      } 
-      if(isAuthenticated().user.role === 2) {
-        setInitialRoute("DeliveryLocation")
-      } 
+    if (isAuthenticated()) {
+      if (isAuthenticated().user.role === 1) {
+        setInitialRoute('SalesHomepage');
+      }
+      if (isAuthenticated().user.role === 0) {
+        setInitialRoute('VendorHomepage');
+      }
+      if (isAuthenticated().user.role === 2) {
+        setInitialRoute('DeliveryLocation');
+      }
     } else {
-      setInitialRoute("Login")
+      setInitialRoute('Login');
     }
-  }
+  };
   useEffect(() => {
     setAuthToken(isAuthenticated().token);
-    setInitialRouteName()
+    setInitialRouteName();
   }, []);
   return (
     // <Drawer.Navigator
@@ -165,29 +162,21 @@ const MyDrawer = () => {
     //               options={{
     //                 title: 'Suppliers',
     //                 headerLeft: ({props}) => (
-    //                   <Ionicons 
+    //                   <Ionicons
     //                   name='menu'
     //                   size={25}
     //                   onPress={()=> props.navigation.openDrawer()}
     //                   />
-    //                 ),     
+    //                 ),
     //               }}
     //             />
     // </Drawer.Navigator>
 
-    <Drawer.Navigator 
-          useLegacyImplementation
-          initialRouteName={initialRoute}
-          drawerContent={(props) => <CustomDrawerContent {...props} />}
-    >
-                   <Drawer.Screen
-                      name="Signup"
-                      component={Signup}
-                      options={{
-                        headerShown: false,
-                      }}
-                    /> 
-                    <Drawer.Screen
+    <Drawer.Navigator
+      useLegacyImplementation
+      initialRouteName="DeliveryLocation"
+      drawerContent={props => <CustomDrawerContent {...props} />}>
+      {/* <Drawer.Screen
                       name="Login"
                       component={Login}
                       // options={{ title: 'Homepage' }}
@@ -397,8 +386,99 @@ const MyDrawer = () => {
 
                       })}
                     />
+                    
+      <Drawer.Screen
+        name="SalesHomepage"
+        component={SalesHomepage}
+        options={({navigation}) => ({
+          title: ' Sales Homepage',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+          // drawerIcon: () => (
+          //   <AntDesign
+          //   name='right'
+          //   size={15}
+          //   />
+          // )
+        })}
+      />
+      <Drawer.Screen
+        name="SalesLiveOrder"
+        component={SalesLiveOrder}
+        options={({navigation}) => ({
+          title: ' Sales Live Order',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="Customers"
+        component={Customers}
+        options={({navigation}) => ({
+          title: 'Customers',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="ProcurementHomepage"
+        component={ProcurementHomepage}
+        options={({navigation}) => ({
+          title: 'Procurement Homepage',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="ProductDetails"
+        component={ProductDetails}
+        options={({navigation}) => ({
+          title: 'Product Details',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="Suppliers"
+        component={Suppliers}
+        options={{
+          title: 'Suppliers',
+          headerLeft: ({props}) => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => props.navigation.openDrawer()}
+            />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
-}
+};
 
 export default MyDrawer;
