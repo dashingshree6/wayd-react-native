@@ -159,6 +159,51 @@ return (
           )}
         />
 
+        <DrawerItem
+          label="Category"
+          onPress={() => props.navigation.navigate('Category')}
+          icon={()=> (
+            <AntDesign
+            name='right'
+            size={15}
+            style={{
+              position: "absolute",
+              right: 10,
+            }}
+            />
+          )}
+        />
+
+        <DrawerItem
+          label="PriceAddition"
+          onPress={() => props.navigation.navigate('PriceAddition')}
+          icon={()=> (
+            <AntDesign
+            name='right'
+            size={15}
+            style={{
+              position: "absolute",
+              right: 10,
+            }}
+            />
+          )}
+        />
+
+        <DrawerItem
+          label="Stock"
+          onPress={() => props.navigation.navigate('Stock')}
+          icon={()=> (
+            <AntDesign
+            name='right'
+            size={15}
+            style={{
+              position: "absolute",
+              right: 10,
+            }}
+            />
+          )}
+        />
+
         { SyncStorage.get("jwt") && (
 
         <DrawerItem
