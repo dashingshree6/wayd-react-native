@@ -28,7 +28,8 @@
     "react-native-select-dropdown": "^3.1.0",
     "react-native-step-indicator": "^1.0.3",
     "react-native-tableview-simple": "^4.3.1",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "sync-storage": "^0.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

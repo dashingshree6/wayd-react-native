@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {
@@ -11,6 +11,7 @@ import {
 //Screens
 //Admin
 import Login from '../../Login/Login';
+import Signup from '../Signup/Signup';
 import SalesHomepage from '../SalesHomepage/SalesHomepage';
 import SalesLiveOrder from '../SalesLiveOrder/SalesLiveOrder';
 import Customers from '../Customers/Customers';
@@ -18,6 +19,8 @@ import ProcurementHomepage from '../ProcurementHomepage/ProcurementHomepage';
 import ProductDetails from '../ProductDetails/ProductDetails';
 import Suppliers from '../Suppliers/Suppliers';
 import DeliveryLocation from '../DeliveryLocation/DeliveryLocation';
+import Category from '../Category/Category';
+import PriceAddition from '../PriceAddition.js/PriceAddition';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -52,6 +55,27 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
+  const [initialRoute, setInitialRoute] = useState('Login');
+
+  const setInitialRouteName = () => {
+    if (isAuthenticated()) {
+      if (isAuthenticated().user.role === 1) {
+        setInitialRoute('SalesHomepage');
+      }
+      if (isAuthenticated().user.role === 0) {
+        setInitialRoute('VendorHomepage');
+      }
+      if (isAuthenticated().user.role === 2) {
+        setInitialRoute('DeliveryLocation');
+      }
+    } else {
+      setInitialRoute('Login');
+    }
+  };
+  useEffect(() => {
+    setAuthToken(isAuthenticated().token);
+    setInitialRouteName();
+  }, []);
   return (
     // <Drawer.Navigator
     //   useLegacyImplementation
@@ -152,10 +176,7 @@ const MyDrawer = () => {
                     /> */}
       <Drawer.Screen
         name="SalesHomepage"
-        // component={SalesHomepage}
-        // component={CreateOrder}
-        component={AddProducts}
-        // component={CashCollection}
+        component={SalesHomepage}
         options={({navigation}) => ({
           title: ' Sales Homepage',
           headerLeft: () => (

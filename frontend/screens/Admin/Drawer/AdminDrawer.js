@@ -5,12 +5,14 @@ import {
 } from '@react-navigation/drawer';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import axios from 'axios';
+import SyncStorage from 'sync-storage';
+import { signout, isAuhenticated } from '../../Login/index';
 
 
 
-const API="https://f5b6-49-205-239-58.in.ngrok.io/api/user/6007f4f3ef94c1002488257d"
+const API="https://e56d-49-205-239-58.in.ngrok.io/api/user/636a56f35c526e4144ad5773"
 
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTAzODd9.jIhWWHg1Zh3nChGzUZbgMiGj3oVcrQkVbwEUz-PTtyc"
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
 
 
 export default function AdminDrawer(props) {
@@ -157,20 +159,29 @@ return (
           )}
         />
 
+        { SyncStorage.get("jwt") && (
+
         <DrawerItem
-          label="Logout"
-          onPress={() => props.navigation.navigate('Customers')}
-          icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
-            style={{
-              position: "absolute",
-              right: 10,
-            }}
-            />
-          )}
+        label="Logout"
+        onPress={() => {
+          signout(() => {
+            props.navigation.navigate('Login')
+          })
+        }}
+        icon={()=> (
+          <AntDesign
+          name='right'
+          size={15}
+          style={{
+            position: "absolute",
+            right: 10,
+          }}
+          />
+        )}
         />
+        )}
+
+        
       
   
       </>

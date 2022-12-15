@@ -5,11 +5,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import StepIndicator from 'react-native-step-indicator';
 import axios from "axios";
 
-const API = 'https://2171-49-205-239-58.in.ngrok.io/api/lifecycle/637dfd6345335151184e5ebb'
+const API="https://e56d-49-205-239-58.in.ngrok.io/api/lifecycle/639476eacfe9003c7ff4fe7d"
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
 
-const TOKEN=  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4MjY5NDB9.IjTKrEnXuu3d_aiUUIG5LrSu3v3XZfgFrT7kkQXkFps"
 
-export default function DeliveryLocation({navigation}) {
+//when delivery partner click on the specific order from (DeliveryHomePage.js) this component will open up.
+const DeliverySingleOrderStatus = ({navigation}) => {
     const [currentPosition, setCurrentPosition] = useState(0);
 
     const labels = ["Order Accepted","Driver at the store","Order on the way","Order Recieved"];
@@ -120,43 +121,7 @@ export default function DeliveryLocation({navigation}) {
 
         <Text style={styles.delivery_lo_card}>WS Recieving Payment: </Text>
 
-      <View style={styles.delivery_card}>
-        <View style={styles.delivery_card_details}>
-            <Image
-            source={{ 
-                uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLe5PABjXc17cjIMOibECLM7ppDwMmiDg6Dw&usqp=CAU'  
-            }}
-            containerStyle={styles.delivery_loc_item}
-            // PlaceholderContent={<ActivityIndicator />}
-            />
-            <View style={styles.delivery_card_details}>
-                <Ionicons
-                name='chatbubble-outline'
-                size={25}
-                />
-                <Ionicons
-                name='ios-call-outline'
-                size={25}
-                />
-
-            </View>
-
-        </View>
-            <Text>Santosh Raj</Text>
-            <Text>Estimated Time: 00:50 minutes</Text>
-            <AirbnbRating
-            count={5}
-            reviews={[,
-                'Bad',
-                'OK',
-                'Good',
-                'Hmm...',
-                'Ok'
-            ]}
-            defaultRating={3}
-            size={20}
-            />
-      </View>
+     
 
      </ScrollView>
     </View>
@@ -195,3 +160,5 @@ const styles = StyleSheet.create({
         margin: 2
       }  
 })
+
+export default DeliverySingleOrderStatus

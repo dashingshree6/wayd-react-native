@@ -1,11 +1,48 @@
-import * as React from 'react';
+import React, { useState, useEffect} from 'react';
 import { Text, View } from 'react-native';
 import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import AntDesign from "react-native-vector-icons/AntDesign";
+import axios from 'axios';
+import SyncStorage from 'sync-storage';
+import { signout, isAuhenticated } from '../../Login/index';
+
+
+const API="https://f5b6-49-205-239-58.in.ngrok.io/api/user/636e0bf09598d4489cdb1ff4"
+
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTAzODd9.jIhWWHg1Zh3nChGzUZbgMiGj3oVcrQkVbwEUz-PTtyc"
 
 export default function VendorDrawer(props) {
+
+
+
+  const [data,setData] = React.useState({});
+
+
+
+  const getUser =()=>{
+    
+    
+    axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
+    .then(res => {
+      console.log(res.data)
+      setData(res.data)
+    }).catch((error) => {
+      console.log(error)
+    });
+    
+    
+   
+    
+  }
+  //call useeffect outside function****
+  useEffect(() => {
+    getUser()
+  },[])
+  
+
+
     return (
       <>
       <Text
@@ -22,7 +59,7 @@ export default function VendorDrawer(props) {
             margin: 10
         }}
         >
-          <Text style={{marginLeft: 15}}>Name :</Text>
+          <Text style={{marginLeft: 15}}>Name :{data.phone_number}</Text>
           <Text style={{marginLeft: 15}}>Phone Number :</Text>
           <Text style={{marginLeft: 15}}>Due Amount :</Text>
         </View>
@@ -70,20 +107,27 @@ export default function VendorDrawer(props) {
           )}
         />
   
+      { SyncStorage.get("jwt") && (
+
         <DrawerItem
-          label="Logout"
-          onPress={() => props.navigation.navigate('Login')}
-          icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
-            style={{
-              position: "absolute",
-              right: 10,
-            }}
-            />
-          )}
+        label="Logout"
+        onPress={() => {
+          signout(() => {
+            props.navigation.navigate('Login')
+          })
+        }}
+        icon={()=> (
+          <AntDesign
+          name='right'
+          size={15}
+          style={{
+            position: "absolute",
+            right: 10,
+          }}
+          />
+        )}
         />
+       )}
        
   
       </>
