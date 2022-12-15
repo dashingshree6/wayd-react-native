@@ -334,6 +334,21 @@ const MyDrawer = () => {
 
                       })}
                     />
+                    <Drawer.Screen
+                      name="Category"
+                      component={Category}
+                      options={({ navigation }) => ({
+                        title: 'Category',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    />
 
                     <Drawer.Screen
                       name="Stock"
@@ -423,6 +438,22 @@ const MyDrawer = () => {
                       component={VendorOrderTracking}
                       options={({ navigation }) => ({
                         title: 'Order Tracking',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    />
+
+                    <Drawer.Screen
+                      name="DeliveryHomepage"
+                      component={DeliveryHomepage}
+                      options={({ navigation }) => ({
+                        title: 'Delivery Homepage',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
