@@ -5,7 +5,8 @@ import {
 } from '@react-navigation/drawer';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import axios from 'axios';
-
+import SyncStorage from 'sync-storage';
+import { signout, isAuhenticated } from '../../Login/index';
 
 
 const API="https://f5b6-49-205-239-58.in.ngrok.io/api/user/636e0bf09598d4489cdb1ff4"
@@ -106,20 +107,27 @@ export default function VendorDrawer(props) {
           )}
         />
   
+      { SyncStorage.get("jwt") && (
+
         <DrawerItem
-          label="Logout"
-          onPress={() => props.navigation.navigate('Login')}
-          icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
-            style={{
-              position: "absolute",
-              right: 10,
-            }}
-            />
-          )}
+        label="Logout"
+        onPress={() => {
+          signout(() => {
+            props.navigation.navigate('Login')
+          })
+        }}
+        icon={()=> (
+          <AntDesign
+          name='right'
+          size={15}
+          style={{
+            position: "absolute",
+            right: 10,
+          }}
+          />
+        )}
         />
+       )}
        
   
       </>
