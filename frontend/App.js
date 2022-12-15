@@ -65,15 +65,18 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from './screens/Delivery/DeliveryHomepage';
 import SyncStorage from 'sync-storage';
 
-import { setAuthToken } from './screens/Login'; 
+import { setAuthToken, isAuthenticated } from './screens/Login'; 
 
 const Stack = createNativeStackNavigator()
 // const App: () => Node = () => {
 const App = () => {
 
   useEffect(()=>{
-    setAuthToken(SyncStorage.get("jwt"))
+    // setAuthToken(SyncStorage.get("jwt"))
+    setAuthToken(isAuthenticated().token);
+
   })
+  
   return (
         <NavigationContainer>
           <MyDrawer/>
