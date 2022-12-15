@@ -27,7 +27,7 @@ import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
 import VendorHomepage from '../../Vendor/Homepage/VendorHomepage';
 import VendorOrderTracking from '../../Vendor/LiveOrderTracking/VendorOrderTracking';
 import VendorsMyOrders from '../../Vendor/MyOrders/VendorsMyOrders';
-import CashCollection from '../../Admin/CashCollection/CashCollection';
+// import CashCollection from '../../Admin/CashCollection/CashCollection';
 import CreateOrder from '../../Admin/SalesHomepage/CreateOrder';
 import AddProducts from '../../Admin/ProductDetails/AddProducts';
 //
@@ -36,9 +36,6 @@ import AddProducts from '../../Admin/ProductDetails/AddProducts';
 import AdminDrawer from './AdminDrawer';
 import VendorDrawer from './VendorDrawer';
 import DeliveryDrawer from './DeliveryDrawer';
-//
-//
-import { Icon, ListItem } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
@@ -50,14 +47,13 @@ import { isAuthenticated, setAuthToken } from '../../Login/index';
 import SyncStorage from 'sync-storage';
 
 import {Icon, ListItem} from '@rneui/themed';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       {/* <DrawerItemList {...props} /> */}
-      <AdminDrawer {...props} />
-      {/* <VendorDrawer {...props}/> */}
+      {/* <AdminDrawer {...props} /> */}
+      <VendorDrawer {...props}/>
       {/* <DeliveryDrawer {...props}/> */}
     </DrawerContentScrollView>
   );
@@ -174,7 +170,7 @@ const MyDrawer = () => {
 
     <Drawer.Navigator
       useLegacyImplementation
-      initialRouteName="DeliveryLocation"
+      initialRouteName="VendorHomepage"
       drawerContent={props => <CustomDrawerContent {...props} />}>
       {/* <Drawer.Screen
                       name="Login"
@@ -245,8 +241,8 @@ const MyDrawer = () => {
                       // component={CheckoutDetails}
                       // component={VendorHomepage}
                       // component={ProductDetails}
-                      // component={ProcurementHomepage}
-                      component={Coupons}
+                      component={ProcurementHomepage}
+                      // component={Coupons}
                       // component={Tabs}
                       options={({ navigation }) => ({
                         title: 'Vendor Homepage',
@@ -435,7 +431,7 @@ const MyDrawer = () => {
           ),
         })}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="ProcurementHomepage"
         component={ProcurementHomepage}
         options={({navigation}) => ({
@@ -448,8 +444,8 @@ const MyDrawer = () => {
             />
           ),
         })}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="ProductDetails"
         component={ProductDetails}
         options={({navigation}) => ({
@@ -462,8 +458,8 @@ const MyDrawer = () => {
             />
           ),
         })}
-      />
-      <Drawer.Screen
+      /> */}
+      {/* <Drawer.Screen
         name="Suppliers"
         component={Suppliers}
         options={{
@@ -476,7 +472,7 @@ const MyDrawer = () => {
             />
           ),
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };
