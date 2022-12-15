@@ -1,12 +1,11 @@
-import { View, Text, SafeAreaView, StyleSheet, FlatList } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, FlatList,Modal,Pressable, TouchableOpacity, } from 'react-native'
 import React,{useState,useEffect} from 'react'
-import { Row, Rows, Table, TableWrapper } from 'react-native-table-component'
-import { Button } from '@rneui/themed'
+import { Input, Button, Tab } from '@rneui/themed'
 import axios from 'axios'
 
 
-const API="https://1c25-49-205-239-58.in.ngrok.io/api/discount"
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4OTgzNzF9.Z1IEHG62Q_nab-nEXjdg3eiCy9w_S_nvDPlWL_eqstk"
+// const API="https://8a02-49-205-239-58.in.ngrok.io/api/discount"
+// const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5ODE0Mzl9.lRcod0OvG39rzWw85MTa5sQWN9TMGghQDlRlvzZ6CiE"
 
 
 const Item = ({ code,description,_id }) => (
@@ -29,33 +28,108 @@ const Item = ({ code,description,_id }) => (
   );
 
 const Coupon = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  // const [coupons, setCoupons] =  useState([])
+  const [values, setValues] = useState({
+    code:'',
+    description:'',
+    discount: '',
+    order_limit: '',
+    status: '',
+    // formData: new FormData()
+  })
+  const [loading, setLoading] = useState(true)
+// const {
+//   code,
+//   description,
+//   discount,
+//   order_limit,
+//   formData
+// } = values;
+
+
+const onChangeCode = (value) => {
+  setValues({ ...values, code: value });
+};
+
+const onChangeDescription = (value) => {
+  setValues({ ...values, description: value });
+};
+
+const onChangeDiscount = (value) => {
+  setValues({ ...values, discount: value });
+};
+const onChangeOrderLimit = (value) => {
+  setValues({ ...values, order_limit: value });
+};
+
+const onChangeStatus = (value) => {
+  setValues({ ...values, status: value });
+};
+const createCoupon =()=>{
+  // axios.post(API ,
+  // {
+  //   headers: {"Authorization" : `Bearer ${TOKEN}`},
+  //   data: JSON.stringify(values)
+  // })
+  // .then(res => {
+  //   console.log(res.data);
+  // }).catch((error) => {
+  //   console.log(error)
+  //   setLoading(false)
+  //   });
+
+
+  //   setModalVisible(!modalVisible)
+  setLoading(true);
+  var myHeaders = new Headers();
+
+  myHeaders.append(
+    'Authorization',
+    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5ODE0Mzl9.lRcod0OvG39rzWw85MTa5sQWN9TMGghQDlRlvzZ6CiE'
+  );
+
+  myHeaders.append('Content-Type', 'application/json');
+
+  fetch('https://8a02-49-205-239-58.in.ngrok.io/api/discount', {
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify({
+      code: values.code,
+      description: values.description,
+      discount: values.discount,
+      order_limit: values.order_limit,
+      status: values.status,
+    }),
+  })
+    .then((response) => {
+      setLoading(false)
+      response.text();
+    })
+    .then((result) => console.log(result))
+    .catch((error) => console.log(error));
+
+
+  }
+
+
+
 
     const renderItem = ({item}) => (
         <Item _id={item._id} code={item.code} description={item.description}/>
     )
 
-
-    const [data,setData] = React.useState({});
-
-
+  const [data,setData] = React.useState({});
 
     const getCoupon =()=>{
-      
-      
-      axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
-
-      .then(res => {
+      axios.get(`https://8a02-49-205-239-58.in.ngrok.io/api/discount`, { headers : {"Authorization" : `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5ODE0Mzl9.lRcod0OvG39rzWw85MTa5sQWN9TMGghQDlRlvzZ6CiE`}})
+    .then(res => {
         console.log(res.data)
         setData(res.data)
       }).catch((error) => {
         console.log(error)
       });
-      
-      
-     
-      
-    }
-    //call useeffect outside function****
+}
     useEffect(() => {
         getCoupon()
     },[])
@@ -63,11 +137,9 @@ const Coupon = () => {
 
 
   return (
-
-
 <SafeAreaView>
-                <View style={styles.live_orders_cont}>
-                      <Text style={styles.live_orders_head}>Coupons</Text>
+  <View style={styles.live_orders_cont}>
+                      <Text style={styles.live_orders_head}>Coupon</Text>
                       </View>
                        <View>
                      <View style={styles.customers_btn}>
@@ -78,6 +150,7 @@ const Coupon = () => {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
+                          onPress={() => setModalVisible(true)}
                         />
                     </View>
                      
@@ -98,6 +171,55 @@ const Coupon = () => {
                         keyExtractor={item => item.id}
                       />
                     </View>
+                    <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert("Modal has been closed.");
+                  setModalVisible(!modalVisible);
+                }}
+                style={styles.procurement_modal}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                  <Input
+                    placeholder="Coupon Code"
+                    // onChangeText={value => setValues({ ...values, code: value })}
+                    onChangeText={(value) => onChangeCode(value)}
+                    />
+                       <Input
+                    placeholder="Order Number"
+                    // onChangeText={value => setValues({ ...values, description: value })}
+                    onChangeText={(value) => onChangeOrderLimit(value)}
+                    keyboardType='numeric'
+                    />
+                       <Input
+                    placeholder="Discount"
+                    // onChangeText={value => setValues({ ...values, discount: value })}
+                    onChangeText={(value) => onChangeDiscount(value)}
+                    keyboardType='numeric'
+                    />
+                             <Input
+                    placeholder="Description"
+                    // onChangeText={value => setValues({ ...values, order_limit: value })}
+                    onChangeText={(value) => onChangeDescription(value)}
+                    />
+                             <Input
+                    placeholder="Status"
+                    // onChangeText={value => setValues({ ...values, status: value })}
+                    onChangeText={(value) => onChangeStatus(value)}
+                    />
+                    
+                    <Pressable
+                      style={[styles.button, styles.buttonClose]}
+                      onPress={() => createCoupon()}
+                    >
+                      <Text style={styles.textStyle}>Create</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </Modal>
           </SafeAreaView>
   )
 }
@@ -108,6 +230,31 @@ export default Coupon;
 const styles = StyleSheet.create({
     sales_cont: {
         padding:10
+      },
+      sales_btn: {
+        alignItems:'center'
+      },
+      sales_orders_type: {
+        display:'flex',
+        flexDirection: 'row',
+      },
+      sales_past_orders:{
+        alignItems:'flex-end'
+      },
+      item: {
+        backgroundColor: 'silver',
+        padding: 20,
+        marginVertical: 8,
+        marginHorizontal: 16,
+      },
+      sales_live_button: {
+        // alignItems: "center",
+        backgroundColor: "#DDDDDD",
+        padding: 10,
+        margin: 2
+      },
+      procurement_modal : {
+        backgroundColor:'silver'
       },
       customers_btn: {
         alignItems:'center'

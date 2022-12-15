@@ -40,6 +40,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 import Coupon from '../Coupon/Coupon';
+import Coupons from '../Coupon/Coupons';
+
 
 import { isAuthenticated, setAuthToken } from '../../Login/index';
 import SyncStorage from 'sync-storage';
@@ -252,8 +254,11 @@ const MyDrawer = () => {
                     <Drawer.Screen
                       name="ProcurementHomepage"
                       // component={CheckoutDetails}
-                      component={VendorHomepage}
-                      // component={Customers}
+                      // component={VendorHomepage}
+                      // component={ProductDetails}
+                      // component={ProcurementHomepage}
+                      component={Coupons}
+                      // component={Tabs}
                       options={({ navigation }) => ({
                         title: 'Vendor Homepage',
                         headerLeft: () => (
