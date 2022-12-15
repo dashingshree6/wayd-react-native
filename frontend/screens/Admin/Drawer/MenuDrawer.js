@@ -29,7 +29,7 @@ import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
 import VendorHomepage from '../../Vendor/Homepage/VendorHomepage';
 import VendorOrderTracking from '../../Vendor/LiveOrderTracking/VendorOrderTracking';
 import VendorsMyOrders from '../../Vendor/MyOrders/VendorsMyOrders';
-// import CashCollection from '../../Admin/CashCollection/CashCollection';
+import CashCollection from '../../Admin/CashCollection/CashCollection';
 import CreateOrder from '../../Admin/SalesHomepage/CreateOrder';
 import AddProducts from '../../Admin/ProductDetails/AddProducts';
 //
@@ -54,9 +54,11 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       {/* <DrawerItemList {...props} /> */}
-      {/* <AdminDrawer {...props} /> */}
-      <VendorDrawer {...props}/>
-      {/* <DeliveryDrawer {...props}/> */}
+
+      { SyncStorage.get("role") === 1 &&   <AdminDrawer {...props} /> }
+      { SyncStorage.get("role") === 0 &&   <VendorDrawer {...props} /> }
+      { SyncStorage.get("role") === 2 &&   <DeliveryDrawer {...props} /> }
+
     </DrawerContentScrollView>
   );
 }
@@ -65,6 +67,7 @@ const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
   const [initialRoute, setInitialRoute] = useState("Login")
+  const token = SyncStorage.get("userToken")
 
   const setInitialRouteName = () => {
     if(isAuthenticated()) {
@@ -81,99 +84,38 @@ const MyDrawer = () => {
       setInitialRoute('Login');
     }
   }
-  useEffect(() => {
-    setAuthToken(isAuthenticated().token);
-    setInitialRouteName()
-  }, []);
+  // useEffect(() => {
+  //   setAuthToken(isAuthenticated().token);
+  //   setInitialRouteName()
+  // }, []);
+
   return (
-    // <Drawer.Navigator
-    //   useLegacyImplementation
-    //   drawerContent={(props) => <CustomDrawerContent {...props} />}
-    // >
-    //             <Drawer.Screen
-    //               name="Login"
-    //               component={Login}
-    //               // options={{ title: 'Homepage' }}
-    //               options={{
-    //                 headerShown: false,
-    //               }}
 
-    //             />
-    //             <Drawer.Screen
-    //               name="SalesHomepage"
-    //               component={SalesHomepage}
-    //               options={{
-    //                 title: ' Sales Homepage'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="SalesLiveOrder"
-    //               component={SalesLiveOrder}
-    //               options={{
-    //                 title: ' Sales Live Order'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="Customers"
-    //               component={Customers}
-    //               options={{
-    //                 title: 'Customers'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="ProcurementHomepage"
-    //               component={ProcurementHomepage}
-    //               options={{
-    //                 title: 'Procurement Homepage'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="ProductDetails"
-    //               component={ProductDetails}
-    //               options={{
-    //                 title: 'Product Details'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="Suppliers"
-    //               component={Suppliers}
-    //               options={{
-    //                 title: 'Suppliers',
-    //                 headerLeft: ({props}) => (
-    //                   <Ionicons
-    //                   name='menu'
-    //                   size={25}
-    //                   onPress={()=> props.navigation.openDrawer()}
-    //                   />
-    //                 ),
-    //               }}
-    //             />
-    // </Drawer.Navigator>
-
-    <Drawer.Navigator
-      useLegacyImplementation
-      initialRouteName="DeliveryLocation"
-      drawerContent={props => <CustomDrawerContent {...props} />}>
+    <Drawer.Navigator 
+          useLegacyImplementation
+          initialRouteName={initialRoute}
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
+                   {/* <Drawer.Screen
+                      name="Signup"
+                      component={Signup}
+                      options={{
+                        headerShown: false,
+                      }}
+                    />  */}
+                  
+                  { !token && 
+                  
+                  <Drawer.Screen
+                    name="Login"
+                    component={Login}
+                    // options={{ title: 'Homepage' }}
+                    options={{
+                      headerShown: false,
+                    }}
+                  /> 
+                  }
+   
       {/* <Drawer.Screen
                       name="Login"
                       component={Login}
@@ -451,6 +393,8 @@ const MyDrawer = () => {
                       })}
                     />
                     
+   
+    
       <Drawer.Screen
         name="SalesHomepage"
         component={SalesHomepage}

@@ -6,6 +6,8 @@ import SyncStorage from 'sync-storage';
 
 export const getPincodes = () => axios.get(`${API}/pin`);
 
+export const getAllUsers = async () => await axios.get(`${API}/users`)
+
 // POST
 
 export const createPincodes = (data) =>

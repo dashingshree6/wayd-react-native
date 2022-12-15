@@ -82,15 +82,11 @@ const Login = ({ navigation  }) => {
                 //   }
                 // }
                 if(userToken) {
-                  console.log(" IF statement userToken",userToken)
                   if ( userRole === 1) {
-                    console.log("userrole 1",userRole)
                     return navigation.navigate("SalesHomepage")
                   } else if ( userRole === 0) {
-                    console.log("userrole 0",userRole)
                     return navigation.navigate("VendorHomepage")
                   } else {
-                    console.log("userrole 2",userRole)
                     return navigation.navigate("DeliveryHomepage")
                   }
                 } else {

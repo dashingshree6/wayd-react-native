@@ -9,17 +9,8 @@ import {
     ActivityIndicator,
     FlatList
   } from 'react-native';
-import { Input, Button} from '@rneui/themed';
-// import { Cell, Section, TableView } from 'react-native-tableview-simple';
-
-//
-import axios from 'axios';
-const API = 'https://2171-49-205-239-58.in.ngrok.io/api/users'
-
-const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4MjY5NDB9.IjTKrEnXuu3d_aiUUIG5LrSu3v3XZfgFrT7kkQXkFps"
-
-
-//
+import { Input, Button, Tab, TabView} from '@rneui/themed';
+import { getAllUsers } from '../../ApiCalls/ApiCalls';
 
 const Item = (props) => (
         <View style={{ flexDirection: 'row' }}>
@@ -36,6 +27,10 @@ const Item = (props) => (
   );
 
 const Customers = ({ navigation, route  }) => {
+    const [index, setIndex] = useState(0);
+    const [users, setUsers] = useState([])
+    const [userList, setUsersList] = useState([])
+    const { role } = route.params;
 
     const renderItem = ({ item }) => (
         <Item 
@@ -45,55 +40,89 @@ const Customers = ({ navigation, route  }) => {
     //
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
-    const getAllProducts= () => {
+
+    const getUsersList = () => {
         setLoading(true)
-        axios.get(API , { headers: {"Authorization" : `Bearer ${TOKEN}`} })
-        .then(res => {
-        console.log(res.data);
-        setData(res.data.filter(i => i.role === 0))
-        setLoading(false)
-        }).catch((error) => {
-        console.log(error)
-        setLoading(false)
-        });
+        getAllUsers("get")
+          .then((res) => {
+            if (res.error) {
+              console.log(res.error);
+              setLoading(false)
+            } else {
+              setUsers(res.data);
+              setUsersList(res.data.filter(i => i.role === 0))
+              setLoading(false)
+            }
+          })
+          .catch((err) => console.log(err));
+      };
+    
+    const filterList = (userRole) => {
+        let arr = []
+        arr = users.filter(user => user.role === userRole)
+        setUsersList(arr)
+        console.log(arr)
     }
     
     useEffect(()=> {
-        getAllProducts()
+        filterList(role)
+        getUsersList()
     },[])
     //
     return (
         <SafeAreaView>
                 <View>
-                     <View style={styles.customers_btn}>
-                        <Button
-                          title={'Create Customer'}
-                          containerStyle={{
-                            width: 200,
-                            marginHorizontal: 50,
-                            marginVertical: 10,
-                          }}
-                        />
-                    </View>
-                    {/* <TableView appearance="light">
-                        <Section header="Customers List" footer="A Footer">
-                            <Cell cellStyle="Basic" title="Basic" />
-                            <Cell cellStyle="RightDetail" title="RightDetail" detail="Detail" />
-                            <Cell cellStyle="LeftDetail" title="LeftDetail" detail="Detail" />
-                            <Cell
-                            cellStyle="Subtitle"
-                            title="Subtitle"
-                            detail="No linebreakkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
-                            />
-                            <Cell
-                            cellStyle="Basic"
-                            title="Pressable w/ accessory"
-                            accessory="DisclosureIndicator"
-                            // onPress={() => console.log('Heyho!')}
-                            />
-                        </Section>
-                    </TableView> */}
-                    <View style={styles.customers_table_header}>
+                <Tab
+                value={index}
+                onChange={(e) => {
+                    setIndex(e)
+                    if(e == 0){
+                        filterList(0)
+                    } else if(e == 1) {
+                        filterList(3)
+                    } else {
+                        filterList(2)
+                    }
+                    console.log(e)
+                }}
+                indicatorStyle={{
+                    backgroundColor: 'white',
+                    height: 3,
+                }}
+                variant="primary"
+                >
+                    <Tab.Item
+                        title="Customers"
+                        titleStyle={{ fontSize: 12 }}
+                        // icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
+                    />
+                    <Tab.Item
+                        title="Suppliers"
+                        titleStyle={{ fontSize: 12 }}
+                        // icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
+
+                    />
+                    <Tab.Item
+                        title="Delivery"
+                        titleStyle={{ fontSize: 12 }}
+                        // icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
+                    />
+                </Tab>
+
+                <TabView value={index} onChange={setIndex} animationType="spring">
+                <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
+                
+                
+                </TabView.Item>
+                <TabView.Item style={{ backgroundColor: 'blue', width: '100%' }}>
+                    <Text>Favorite</Text>
+                </TabView.Item>
+                <TabView.Item style={{ backgroundColor: 'green', width: '100%' }}>
+                    <Text>Cart</Text>
+                </TabView.Item>
+                </TabView>
+
+                    {/* <View style={styles.customers_table_header}>
                         <View style={{ width: '33%'}}>
                             <Text style={styles.customers_table_header_cell}>Name</Text>
                         </View>
@@ -103,16 +132,26 @@ const Customers = ({ navigation, route  }) => {
                         <View style={{ width: '33%'}}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold' , textAlign: 'center'}}>CC</Text>
                         </View>
-                    </View>
+                    </View> */}
 
                     {
                         loading ?
                         <ActivityIndicator size="large" />
                         :
                         <FlatList
-                        data={data}
-                        renderItem={renderItem}
+                        data={userList}
+                        // renderItem={renderItem}
                         keyExtractor={item => item._id}
+                        renderItem={({item})=> (
+                            <View style={styles.customers_card}>
+                                    <Text style={{ fontSize: 16, textAlign: 'center'}}>Username: {item.username}</Text>
+                             
+                                    <Text style={{ fontSize: 16, textAlign: 'center'}}>Email: {item.email}</Text>
+                            
+                                    {/* <Text style={{ fontSize: 16, textAlign: 'center'}}>{item && item["address"]["pincode"]}</Text> */}
+                             
+                            </View>
+                        )}
                         />
                     }
 
@@ -144,6 +183,11 @@ const styles = StyleSheet.create({
         display:"flex",
         flexDirection:"row",
         justifyContent:'space-around'
+    },
+    customers_card: {
+        backgroundColor:'silver',
+        padding: 10,
+        margin: 5
     }
 });
 
