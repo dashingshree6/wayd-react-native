@@ -7,7 +7,8 @@ import {
     Text,
     useColorScheme,
     View,
-    TextInput 
+    TextInput,
+    ActivityIndicator 
   } from 'react-native';
 import { 
     Input,
@@ -28,7 +29,7 @@ const Login = ({ navigation  }) => {
       });
 
     const { phone_number, password, error, loading, didRedirect } = values;
-    const { user } = isAuthenticated();
+    const { user, token } = isAuthenticated();
 
     const handleChange = (name) => (event) => {
         setValues({ ...values, error: false, [name]: event.target.value });
@@ -43,40 +44,62 @@ const Login = ({ navigation  }) => {
             if (data.error) {
               setValues({ ...values, error: data.data.error, loading: false });
             } else {
-              if (data.data.user.role === 0) {
-                setValues({
-                  ...values,
-                  error: "not authorized",
-                  didRedirect: false,
-                });
-              } else {
                 authenticate(data.data, () => {
                   setValues({
                     ...values,
                     didRedirect: true,
+                    phone_number: "",
+                    password: "",
                   });
                 });
                 //new added
                 SyncStorage.set("role",data.data.user.role)
-                console.log(SyncStorage.get("role"))
-                if (data.data.token) {
-                    if (data.data.user && data.data.user.role === 1) {
-                      // return <Redirect to="/admin/dashboard" />;
-                      return navigation.navigate("PriceAddition")
-                    } else {
-                      return navigation.navigate("VendorHomepage")
-                    }
-                  }
-                  if (isAuthenticated() && user.role === 1) {
+                SyncStorage.set("userToken",data.data.token)
+                let userRole = SyncStorage.get("role")
+                let userToken = SyncStorage.get("userToken")
+                console.log("Signin Role",SyncStorage.get("role"))
+                console.log("Signin Token",SyncStorage.get("userToken"))
+                // if (data.data.token) {
+                //     if (data.data.user && data.data.user.role === 1) {
+                //       // return <Redirect to="/admin/dashboard" />;
+                //       return navigation.navigate("PriceAddition")
+                //     } else {
+                //       return navigation.navigate("VendorHomepage")
+                //     }
+                //   }
+                //   if (isAuthenticated() && user.role === 1) {
+                //     return navigation.navigate("SalesHomepage")
+                //   }
+                //   if (isAuthenticated() && user.role === 0) {
+                //       return navigation.navigate("VendorHomepage")
+                //   }
+
+                // if (didRedirect) {
+                //   if (user && user.role === 1) {
+                //     return navigation.navigate("PriceAddition")
+                //   } else {
+                //     return navigation.navigate("VendorHomepage")
+                //   }
+                // }
+                if(userToken) {
+                  console.log(" IF statement userToken",userToken)
+                  if ( userRole === 1) {
+                    console.log("userrole 1",userRole)
                     return navigation.navigate("SalesHomepage")
+                  } else if ( userRole === 0) {
+                    console.log("userrole 0",userRole)
+                    return navigation.navigate("VendorHomepage")
+                  } else {
+                    console.log("userrole 2",userRole)
+                    return navigation.navigate("DeliveryHomepage")
                   }
-                  if (isAuthenticated() && user.role === 0) {
-                      return navigation.navigate("VendorHomepage")
-                  }
+                } else {
+                  return navigation.navigate("Login")
+                }      
 
               }
               //
-            }
+            
           })
           .catch((err) =>
             setValues({
@@ -105,10 +128,20 @@ const Login = ({ navigation  }) => {
         }
       };
     
-    //   useEffect(()=>{
+      useEffect(()=>{
     //     SyncStorage.remove('jwt')
-    //   })
+       console.log("Before Login",SyncStorage.get("jwt"))
+      })
 
+    if(values.loading) {
+      <ActivityIndicator
+      size={"large"}
+      style={{
+        justifyContent:'center',
+        alignItems:'center'
+      }}
+      />
+    }
     return (
         <SafeAreaView>
             <ScrollView>
@@ -118,6 +151,7 @@ const Login = ({ navigation  }) => {
                     <Input
                     placeholder='Enter your phonenumber'
                     keyboardType='numeric'
+                    value={phone_number}
                     // leftIcon={{ type: 'Feather', name: 'phone' }}
                     // onChangeText={value => this.setState({ comment: value })}
                     // leftIcon={
@@ -133,6 +167,7 @@ const Login = ({ navigation  }) => {
                     <Input
                     placeholder='Enter your password'
                     secureTextEntry={true}
+                    value={password}
                     // leftIcon={{ type: 'Feather', name: 'phone' }}
                     // onChangeText={value => this.setState({ comment: value })}
                     // leftIcon={
