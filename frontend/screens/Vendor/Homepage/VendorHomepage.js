@@ -16,6 +16,7 @@ import {
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import SyncStorage from 'sync-storage';
 
 //
 import axios from 'axios';
@@ -118,7 +119,7 @@ const Item = (props) => (
   </Pressable>
 );
 
-export default function VendorHomepage() {
+export default function VendorHomepage({navigation}) {
 
 
 const [orders, setOrders] = useState({
@@ -128,6 +129,29 @@ const [orders, setOrders] = useState({
   address:"",
   coupon:null
 });
+
+const [cartItems, setCartItems] = useState([]);
+const [singleItem, setItem] = useState({
+  name: "",
+  grade: "",
+  price: 0
+})
+const [quantity, setQuantity] = useState(1)
+const [productPrice, setProductPrice] = useState(1)
+
+const pushItemInCart = (product_id, product_name, product_grade, product_price) => {
+  hideModal()
+  let obj = {
+    id: product_id,
+    name: product_name,
+    grade: product_grade,
+    price: product_price
+  }
+
+  let filteredItems = cartItems.length ? cartItems.filter(i => i.id !== obj.id) : [];
+  setCartItems([...filteredItems,obj])
+  console.log(cartItems)
+}
 
 
 const createCustomerOrder =()=>{
@@ -158,8 +182,19 @@ console.error(error);
   const displayModal = (productData) => {
     setModalVisible(true)
     setModalProduct(productData)
+    setProductPrice(productData.price * quantity)
   }
-  const hideModal = () => setModalVisible(!modalVisible)
+  const hideModal = () => {
+    setModalVisible(!modalVisible)
+    setProductPrice(1)
+    setQuantity(1)
+  }
+
+  const proceedCheckout = () => {
+    navigation.navigate("CheckoutDetails")
+    SyncStorage.set("cart",cartItems)
+
+  }
   // const renderItem = ({ item }) => (
   //   <Item 
   //   title={item.title} 
@@ -211,8 +246,9 @@ useEffect(()=> {
               name='shoppingcart'
               size={50}
               color='gray'
-              
+              onPress={() => proceedCheckout()}
             />
+        <Text style={{fontWeight:'bold', fontSize: 20}}>Items Present in Cart = {cartItems.length ? cartItems.length : "Empty Cart"}</Text>
        <Input
           placeholder='Search'
           leftIcon={
@@ -256,20 +292,25 @@ useEffect(()=> {
 
                 <View style={styles.vendor_modal_content}>
                   <View>
-                    <Text style={styles.vendor_modalText}>Quantity: {modalProduct.stock} </Text>
-                    <Text style={styles.vendor_modalText}>4 kg </Text>
-                    <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
+                    <Text style={styles.vendor_modalText}>Grade: {modalProduct.grade} </Text>
+                    <Text style={styles.vendor_modalText}>Quantity: {quantity} </Text>
+                    <Text style={styles.vendor_modalText}>Price: {productPrice} </Text>                    
                   </View>
                   <Button
-                          title={'-'}
+                  title={'-'}
                           // containerStyle={{
                           //   width: 200,
                           //   marginHorizontal: 50,
                           //   marginVertical: 10,
                           // }}
-                          
-                    
-                        />
+                   onPress={() => {
+                    if(quantity > 1) {
+                      setQuantity(quantity-1)
+                      let totalPrice = modalProduct.price * (quantity - 1)
+                      setProductPrice(totalPrice)
+                    }
+                  }}
+                  />
                    <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                           containerStyle={styles.vendor_img}
@@ -282,10 +323,20 @@ useEffect(()=> {
                           //   marginHorizontal: 50,
                           //   marginVertical: 10,
                           // }}
-                          onPress={() => createCustomerOrder()}
+                          // onPress={() => createCustomerOrder()}
+                          onPress={() => {
+                            setQuantity(quantity+1)
 
+                            let totalPrice = modalProduct.price * (quantity + 1)
+                            setProductPrice(totalPrice)
+                          }}
                         />
                 </View>
+                <Button
+                title={"Add to cart"}
+                onPress={() => pushItemInCart(modalProduct._id, modalProduct.name,modalProduct.grade,productPrice)}
+                />
+
                     
           
                 <Pressable
