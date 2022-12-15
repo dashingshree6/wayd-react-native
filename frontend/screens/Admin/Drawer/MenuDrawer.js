@@ -96,13 +96,6 @@ const MyDrawer = () => {
           initialRouteName={initialRoute}
           drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-                   {/* <Drawer.Screen
-                      name="Signup"
-                      component={Signup}
-                      options={{
-                        headerShown: false,
-                      }}
-                    />  */}
                   
                   { !token && 
                   
@@ -309,6 +302,22 @@ const MyDrawer = () => {
 
                       })}
                     />
+
+                      <Drawer.Screen
+                      name="Signup"
+                      component={Signup}
+                      options={({ navigation }) => ({
+                        title: 'Create User',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    /> 
 
 
                     {/* Vendor */}
