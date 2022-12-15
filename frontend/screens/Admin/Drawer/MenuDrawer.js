@@ -38,9 +38,6 @@ import AddProducts from '../../Admin/ProductDetails/AddProducts';
 import AdminDrawer from './AdminDrawer';
 import VendorDrawer from './VendorDrawer';
 import DeliveryDrawer from './DeliveryDrawer';
-//
-//
-import { Icon, ListItem } from '@rneui/themed';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
@@ -51,6 +48,7 @@ import Coupons from '../Coupon/Coupons';
 import { isAuthenticated, setAuthToken } from '../../Login/index';
 import SyncStorage from 'sync-storage';
 
+import {Icon, ListItem} from '@rneui/themed';
 
 function CustomDrawerContent(props) {
   return (
@@ -58,6 +56,8 @@ function CustomDrawerContent(props) {
       {/* <DrawerItemList {...props} /> */}
     
       {/* <VendorDrawer {...props}/> */}
+      {/* <AdminDrawer {...props} /> */}
+      <VendorDrawer {...props}/>
       {/* <DeliveryDrawer {...props}/> */}
 
       { SyncStorage.get("role") === 1 &&   <AdminDrawer {...props} /> }
@@ -121,6 +121,15 @@ const MyDrawer = () => {
                   /> 
                   }
    
+      {/* <Drawer.Screen
+                      name="Login"
+                      component={Login}
+                      // options={{ title: 'Homepage' }}
+                      options={{
+                        headerShown: false,
+                      }}
+
+                    /> 
                     <Drawer.Screen
                       name="SalesHomepage"
                       component={SalesHomepage}
@@ -181,8 +190,8 @@ const MyDrawer = () => {
                       // component={CheckoutDetails}
                       // component={VendorHomepage}
                       // component={ProductDetails}
-                      // component={ProcurementHomepage}
-                      component={Coupons}
+                      component={ProcurementHomepage}
+                      // component={Coupons}
                       // component={Tabs}
                       options={({ navigation }) => ({
                         title: 'Vendor Homepage',
@@ -391,6 +400,96 @@ const MyDrawer = () => {
                     
    
     
+      <Drawer.Screen
+        name="SalesHomepage"
+        component={SalesHomepage}
+        options={({navigation}) => ({
+          title: ' Sales Homepage',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+          // drawerIcon: () => (
+          //   <AntDesign
+          //   name='right'
+          //   size={15}
+          //   />
+          // )
+        })}
+      />
+      <Drawer.Screen
+        name="SalesLiveOrder"
+        component={SalesLiveOrder}
+        options={({navigation}) => ({
+          title: ' Sales Live Order',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="Customers"
+        component={Customers}
+        options={({navigation}) => ({
+          title: 'Customers',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      {/* <Drawer.Screen
+        name="ProcurementHomepage"
+        component={ProcurementHomepage}
+        options={({navigation}) => ({
+          title: 'Procurement Homepage',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      /> */}
+      {/* <Drawer.Screen
+        name="ProductDetails"
+        component={ProductDetails}
+        options={({navigation}) => ({
+          title: 'Product Details',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      /> */}
+      {/* <Drawer.Screen
+        name="Suppliers"
+        component={Suppliers}
+        options={{
+          title: 'Suppliers',
+          headerLeft: ({props}) => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => props.navigation.openDrawer()}
+            />
+          ),
+        }}
+      /> */}
     </Drawer.Navigator>
   );
 };
