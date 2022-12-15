@@ -54,11 +54,6 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       {/* <DrawerItemList {...props} /> */}
-    
-      {/* <VendorDrawer {...props}/> */}
-      {/* <AdminDrawer {...props} /> */}
-      <VendorDrawer {...props}/>
-      {/* <DeliveryDrawer {...props}/> */}
 
       { SyncStorage.get("role") === 1 &&   <AdminDrawer {...props} /> }
       { SyncStorage.get("role") === 0 &&   <VendorDrawer {...props} /> }
