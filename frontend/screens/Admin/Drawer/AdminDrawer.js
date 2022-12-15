@@ -72,7 +72,20 @@ return (
                 </View>
               
               
-  
+                <DrawerItem
+                label="Create User"
+                onPress={() => props.navigation.navigate('Signup')}
+                icon={()=> (
+                  <AntDesign
+                  name='right'
+                  size={15}
+                  style={{
+                    position: "absolute",
+                    right: 10,
+                  }}
+                  />
+                )}
+              />
       <Text
       style={{
         fontSize: 20,
@@ -132,7 +145,7 @@ return (
         />
         <DrawerItem
           label="Suppliers"
-          onPress={() => props.navigation.navigate('Customers', { role: 3 })}
+          onPress={() => props.navigation.navigate('Customers', { role: 1 })}
           icon={()=> (
             <AntDesign
             name='right'

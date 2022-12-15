@@ -63,12 +63,26 @@ const Customers = ({ navigation, route  }) => {
         setUsersList(arr)
         console.log(arr)
     }
+
+    const setTab = (e) => {
+        setIndex(e)
+        if(e == 0){
+            filterList(0)
+        } else if(e == 1) {
+            filterList(3)
+        } else {
+            filterList(2)
+        }
+        console.log(e)
+    }
     
     useEffect(()=> {
-        filterList(role)
         getUsersList()
+       
+        console.log("Customers Role",role)
     },[])
     //
+    useEffect(()=>{ setTab(role)},[role])
     return (
         <SafeAreaView>
                 <View>
@@ -111,7 +125,7 @@ const Customers = ({ navigation, route  }) => {
 
                 <TabView value={index} onChange={setIndex} animationType="spring">
                 <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
-                
+                  <View><Text>Helo</Text></View>
                 
                 </TabView.Item>
                 <TabView.Item style={{ backgroundColor: 'blue', width: '100%' }}>
