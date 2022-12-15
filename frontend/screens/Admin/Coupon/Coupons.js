@@ -19,9 +19,9 @@ import {
   //
   import axios from 'axios';
 
-  const API = 'https://852c-49-205-239-58.in.ngrok.io/api/discount'
+  const API = 'https://474b-49-205-239-58.in.ngrok.io/api/discount'
 
-  const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNDIwNzB9.RRMyiWc0DqOgxn3qehN0jeX3JAk_I-xcn-mIbFzhGa4"
+  const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNzE3Mzd9.JHsh5BapP604aRq4ymwryyX53v3-iwaaW89-3mRo0G8"
 
 
   const Item = ({code,description,_id}) => (
@@ -45,18 +45,20 @@ import {
           containerStyle={{
             width:75,
             padding:2,
-            marginLeft:260,
+            marginLeft:290,
             // position:'absolute'
+          
           }}
           />
-          {/* <Button 
+          <Button 
           title={'Delete'}
           containerStyle={{
             width:75,padding:2,
-            marginLeft:250,
+            marginLeft:190,
+            marginTop:-43
           
           }}
-          /> */}
+          />
     </TouchableOpacity>
           </View>
   );
@@ -92,6 +94,92 @@ const onChangeOrderLimit = (value) => {
 const onChangeStatus = (value) => {
   setValues({ ...values, status: value });
 };
+
+
+const createCoupon =()=>{
+
+  // 1
+  // setLoading(true);
+  // var myHeaders = new Headers();
+
+  // myHeaders.append(
+  //   'Authorization',
+  //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNjQ1Mjl9.d4KxtwgqTGJn6-c6tnxSfSW2peRDwBfjA7LnVhJmcoQ'
+  // );
+  // myHeaders.append('Content-Type', 'application/json');
+
+  // fetch('https://5d27-49-205-239-58.in.ngrok.io/api/discount', {
+  //   method: 'POST',
+  //   headers: myHeaders,
+  //   body: JSON.stringify({
+  //     code: values.code,
+  //     description: values.description,
+  //     discount: values.discount,
+  //     order_limit: values.order_limit,
+  //     status: values.status,
+  //   })
+  // })
+  //   .then((response) => {
+  //     setLoading(false)
+  //     response.text();
+  //   })
+  //   .then((result) => console.log(result))
+  //   .catch((error) => console.log(error));
+
+
+// 2
+// axios({
+//   method: 'post',
+//   url:'https://5d27-49-205-239-58.in.ngrok.io/api/discount',
+//   data:{
+//     status: true,
+//     code: "coupon new 123",
+//     order_limit: 5,
+//     discount: 10,
+//     description: "rate"
+//   },
+//   headers: {
+//     "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNjQ1Mjl9.d4KxtwgqTGJn6-c6tnxSfSW2peRDwBfjA7LnVhJmcoQ",
+//     "Accept": "application/json",
+//     "Content-Type":"application/json"
+//   }
+// })
+// .then(function (response) {
+//   console.log("response", JSON.stringify(response.data))
+// })
+// .catch(function (error) {
+//   console.log("error", error)
+// })
+
+
+
+const requestOptions = {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json','Accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNzE3Mzd9.JHsh5BapP604aRq4ymwryyX53v3-iwaaW89-3mRo0G8'},
+  data: JSON.stringify({ 
+    status: true,
+    code: "dark knight 123",
+    order_limit: 1,
+    discount: 18,
+    description: "rate"
+  })
+};
+
+fetch('https://474b-49-205-239-58.in.ngrok.io/api/discount', requestOptions)
+.then((response) => response.json())
+.then((json) => {
+  console.log('Fetch API Response', json.data);
+})
+.catch((error) => {
+console.error(error);
+});
+
+
+
+ }
+
+
+
 const renderItem = ({item}) => (
   <Item _id={item._id} code={item.code} description={item.description}/>
 )  
@@ -128,7 +216,9 @@ const renderItem = ({item}) => (
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
-                          onPress={() => setModalVisible(true)}
+                          // onPress={() => setModalVisible(true)}
+                          onPress={() => createCoupon()}
+
                         />
                     </View>
                     <Tab
@@ -169,8 +259,7 @@ const renderItem = ({item}) => (
                  
 
               </View>
-
-              <Modal
+              <View
                 animationType="slide"
                 transparent={false}
                 visible={modalVisible}
@@ -179,7 +268,8 @@ const renderItem = ({item}) => (
                   setModalVisible(!modalVisible);
                 }}
                 style={styles.procurement_modal}
-              >
+                >
+                <View style={styles.head}><Text>Add Your Coupon</Text></View>
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                   <Input
@@ -188,7 +278,7 @@ const renderItem = ({item}) => (
                     onChangeText={(value) => onChangeCode(value)}
                     />
                        <Input
-                    placeholder="Order Number"
+                    placeholder="Order Limit"
                     // onChangeText={value => setValues({ ...values, description: value })}
                     onChangeText={(value) => onChangeOrderLimit(value)}
                     keyboardType='numeric'
@@ -211,14 +301,21 @@ const renderItem = ({item}) => (
                     />
                     
                     <Button
-                      style={[styles.button, styles.buttonClose]}
+                      // style={[styles.button, styles.buttonClose]}
+                      style={styles.button}
+                      title="POST: Create Coupon"
                       onPress={() => createCoupon()}
                     >
-                      <Text style={styles.textStyle}>Submit</Text>
+                      <Text style={styles.textStyle}>Add Coupon</Text>
+                      {/* <View style={{ backgroundColor: 'blue', padding: 10 }}>
+          <Text style={{ color: 'white', textAlign: 'center' }}>
+            {loading ? 'Menyimpan...' : 'Simpan'}
+          </Text>
+        </View> */}
                     </Button>
                   </View>
                 </View>
-              </Modal>
+              </View>
         </SafeAreaView>
     )
 }
@@ -228,6 +325,10 @@ const renderItem = ({item}) => (
 export default Coupons;
 
 const styles = StyleSheet.create({
+  head:{
+textAlign:'center',
+alignItems:'center',
+  },
   sales_cont: {
     padding:10
   },
@@ -272,6 +373,10 @@ centeredView:{
   alignContent:'center'
 },
 button:{
-  // width:1
+  width:10,
+  backgroundColor:'red',
+},
+textStyle:{
+  color:'white'
 }
 });
