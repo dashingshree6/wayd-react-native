@@ -15,12 +15,13 @@ import {
   Button
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
 
 //
 import axios from 'axios';
-const API = 'https://271f-49-205-239-58.in.ngrok.io/api/products'
+const API = 'https://0c63-49-205-239-58.in.ngrok.io/api/products'
 
-const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5NTg4NjB9._-vDej75MpK16LHIspr-Da9ALh2P4eMoLy4I4fj0ysM"
+const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzExMzYyMzB9.SBijiSXrRZ51RuCY0zciIGs6YQC9m2VMQDXRFOtu--8"
 //
 
 
@@ -118,6 +119,40 @@ const Item = (props) => (
 );
 
 export default function VendorHomepage() {
+
+
+const [orders, setOrders] = useState({
+  products:"",
+  originalAmount: "",
+  user:"",
+  address:"",
+  coupon:null
+});
+
+
+const createCustomerOrder =()=>{
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json','Accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzExMzYyMzB9.SBijiSXrRZ51RuCY0zciIGs6YQC9m2VMQDXRFOtu--8'},
+    data: JSON.stringify({ 
+      products:"61e529080ee3de0f8828f08c",
+      originalAmount: 2252,
+      user:"5ffc2229a70cf50024a4e3cb",
+      address:"Peddamma Gudi, Road 36(Test 1)",
+      coupon:null
+    })
+  };
+
+fetch('https://0c63-49-205-239-58.in.ngrok.io/api/order/create', requestOptions)
+.then((response) => response.json())
+.then((json) => {
+  console.log('Fetch API Response', json.data);
+})
+.catch((error) => {
+console.error(error);
+});
+}
+
   const [modalVisible, setModalVisible] = useState(false);
 
   const displayModal = (productData) => {
@@ -172,6 +207,12 @@ useEffect(()=> {
   
   return (
     <View>
+       <AntDesign
+              name='shoppingcart'
+              size={50}
+              color='gray'
+              
+            />
        <Input
           placeholder='Search'
           leftIcon={
@@ -180,6 +221,7 @@ useEffect(()=> {
               size={24}
               color='gray'
             />
+           
           }
         />
       
@@ -218,13 +260,31 @@ useEffect(()=> {
                     <Text style={styles.vendor_modalText}>4 kg </Text>
                     <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
                   </View>
-                   <Button>-</Button>
+                  <Button
+                          title={'-'}
+                          // containerStyle={{
+                          //   width: 200,
+                          //   marginHorizontal: 50,
+                          //   marginVertical: 10,
+                          // }}
+                          
+                    
+                        />
                    <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                           containerStyle={styles.vendor_img}
                           // PlaceholderContent={<ActivityIndicator />}
                         />
-                   <Button>+</Button>
+                     <Button
+                          title={'+'}
+                          // containerStyle={{
+                          //   width: 200,
+                          //   marginHorizontal: 50,
+                          //   marginVertical: 10,
+                          // }}
+                          onPress={() => createCustomerOrder()}
+
+                        />
                 </View>
                     
           
