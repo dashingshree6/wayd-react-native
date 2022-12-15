@@ -5,21 +5,22 @@ import {
   StyleSheet,
   ActivityIndicator,  
   Pressable,
-  Modal
+  Modal, 
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { 
-  Button,
+  
   Image, 
   Input,
+  Button
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //
 import axios from 'axios';
-const API = 'https://2171-49-205-239-58.in.ngrok.io/api/products'
+const API = 'https://271f-49-205-239-58.in.ngrok.io/api/products'
 
-const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA2NTQxNjZ9.0hJtqKtOvHWzFo7xpevgtcsFPznS8sSZXxIff_O2y4E"
+const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA5NTg4NjB9._-vDej75MpK16LHIspr-Da9ALh2P4eMoLy4I4fj0ysM"
 //
 
 
@@ -217,11 +218,13 @@ useEffect(()=> {
                     <Text style={styles.vendor_modalText}>4 kg </Text>
                     <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
                   </View>
-                    <Image
+                   <Button>-</Button>
+                   <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                           containerStyle={styles.vendor_img}
                           // PlaceholderContent={<ActivityIndicator />}
                         />
+                   <Button>+</Button>
                 </View>
                     
           
@@ -235,6 +238,12 @@ useEffect(()=> {
               
             </View>
           </Modal>
+
+
+
+
+          
+          
     </View>
   )
 }
