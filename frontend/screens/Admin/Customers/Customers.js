@@ -7,7 +7,11 @@ import {
     Text,
     View,
     ActivityIndicator,
-    FlatList
+    FlatList,
+    Alert,
+    Modal,
+    Pressable,
+    ImageBackground
   } from 'react-native';
 import { Input, Button, Tab, TabView} from '@rneui/themed';
 import { getAllUsers } from '../../ApiCalls/ApiCalls';
@@ -16,6 +20,7 @@ const Item = (props) => (
         <View style={{ flexDirection: 'row' }}>
            <View style={{ width: '33%',}}>
                <Text style={{ fontSize: 16, textAlign: 'center'}}>{props.user.username}</Text>
+           
            </View>
            <View style={{ width: '33%'}}>
                <Text style={{ fontSize: 16, textAlign: 'center'}}>Rs.2500</Text>
@@ -27,6 +32,13 @@ const Item = (props) => (
   );
 
 const Customers = ({ navigation, route  }) => {
+    //due
+    const [values, setValues] = useState({
+        amount:'',
+        date:'',
+        time:'',
+ })
+    const [modalVisible, setModalVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [users, setUsers] = useState([])
     const [userList, setUsersList] = useState([])
@@ -40,6 +52,19 @@ const Customers = ({ navigation, route  }) => {
     //
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
+
+
+    const onChangeAmount=(value) =>{
+        setValues({...values, amount: value});
+    }
+
+    const onChangeDate =(value) => {
+        setValues({...values, date: value})
+    }
+
+    const onChangeTime =(value) => {
+        setValues({...values, time: value})
+    }
 
     const getUsersList = () => {
         setLoading(true)
@@ -152,22 +177,97 @@ const Customers = ({ navigation, route  }) => {
                         loading ?
                         <ActivityIndicator size="large" />
                         :
+                        
                         <FlatList
                         data={userList}
+                        
                         // renderItem={renderItem}
                         keyExtractor={item => item._id}
                         renderItem={({item})=> (
+                            
+
+
+                            
                             <View style={styles.customers_card}>
+                            { item.role === 0 && 
+
+                               <View style={styles.centeredView}>
+                               <Pressable
+                                   style={[styles.button, styles.buttonOpen]}
+                                   onPress={() => setModalVisible(true)}
+                               >
+                                   <Text style={styles.textStyle}>UPDATE DUE AMOUNT</Text>
+                               </Pressable>
+                               </View>
+                             }
+                         
+
+                                
                                     <Text style={{ fontSize: 16, textAlign: 'center'}}>Username: {item.username}</Text>
                              
                                     <Text style={{ fontSize: 16, textAlign: 'center'}}>Email: {item.email}</Text>
-                            
-                                    {/* <Text style={{ fontSize: 16, textAlign: 'center'}}>{item && item["address"]["pincode"]}</Text> */}
+                                    {/* Button for Update */}
+                                    {/* <Button
+                                    title={'Update'}
+                                    containerStyle={{
+                                                                width: 80,
+                                                                height:50,
+                                                                marginHorizontal: 20,
+                                                                marginVertical: 10,
+                                                                marginBottom:10,
+                                                                position:'absolute'
+                                                              }}
+                                    
+                                    /> */}
+
+    {/* <Text style={{ fontSize: 16, textAlign: 'center'}}>{item && item["address"]["pincode"]}</Text> */}
                              
-                            </View>
-                        )}
-                        />
-                    }
+     </View>
+    )}
+
+    
+    />
+    }
+   <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView2}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Log Transaction</Text>
+           
+                <Input 
+                placeholder='Enter the Amount'
+                onChangeText={(value) => onChangeAmount(value)}
+                />
+                <Input 
+                placeholder='Enter the Date'
+                keyboardType='phone-pad'
+                onChangeText={(value) => onChangeDate(value)}
+                />
+                <Input 
+                placeholder='Enter the Time'
+                onChangeText={(value) => onChangeTime(value)}
+                />
+                {/* <Input 
+                placeholder='Enter the User'
+                />
+             */}
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle2}>Update</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+  
 
                 </View>
         </SafeAreaView>
@@ -175,6 +275,63 @@ const Customers = ({ navigation, route  }) => {
 }
 
 const styles = StyleSheet.create({
+    centeredView2: {
+        flex: 1,
+        justifyContent: "center",
+        height:100,
+        
+      },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        
+        // marginTop: 22
+        position:'relative'
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.75,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+      },
+      buttonOpen: {
+        backgroundColor: "#000",
+      },
+      buttonClose: {
+        backgroundColor: "#2196F3",
+      },
+      textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+      },
+      textStyle2: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+        width:75
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+     
+        color:'#000'
+      },
     sales_cont: {
       padding:10
     },
