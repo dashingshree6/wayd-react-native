@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   TouchableHighlight,
   Text,
+  Button,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
@@ -69,22 +70,34 @@ export default function VendorsMyOrders({navigation, route}) {
             return (
               <>
                 {item.status != 'Delivered' && (
-                  <View style={styles.orderCards}>
-                    <Text>
-                      <Text style={styles.cardTitle}>Order Id : </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      alert(`click`);
+                    }}>
+                    <View style={styles.orderCards}>
+                      <Text>
+                        <Text style={styles.cardTitle}>Order Id : </Text>
 
-                      {item.user._id}
-                    </Text>
-                    <Text>
-                      <Text style={styles.cardTitle}>Delivery Status :</Text>
-                      {item.status}
-                    </Text>
+                        {item.user._id}
+                      </Text>
+                      <Text>
+                        <Text style={styles.cardTitle}>Delivery Status :</Text>
+                        {item.status}
+                      </Text>
 
-                    <Text>Rs.{item.products.cost}/-</Text>
-                    {item.products.details.map((elem, index) => (
-                      <Text>{elem.name}</Text>
-                    ))}
-                  </View>
+                      <Text>Rs.{item.products.cost}/-</Text>
+                      {item.products.details.map((elem, index) => (
+                        <Text>{elem.name}</Text>
+                      ))}
+                      <Button
+                        onPress={() => {
+                          alert(`PDF`);
+                        }}
+                        title="Invoice"
+                        color="#841584"
+                      />
+                    </View>
+                  </TouchableOpacity>
                 )}
               </>
             );

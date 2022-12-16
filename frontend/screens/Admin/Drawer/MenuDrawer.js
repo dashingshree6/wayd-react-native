@@ -8,10 +8,12 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 
-//Screens
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import SyncStorage from 'sync-storage';
+import GenerateInvoice from '../GenerateInvoice/GenerateInvoice';
+
+//--------------------Screens
 //Admin
-import Login from '../../Login/Login';
-import Signup from '../Signup/Signup';
 import SalesHomepage from '../SalesHomepage/SalesHomepage';
 import SalesLiveOrder from '../SalesLiveOrder/SalesLiveOrder';
 import Customers from '../Customers/Customers';
@@ -19,10 +21,12 @@ import ProcurementHomepage from '../ProcurementHomepage/ProcurementHomepage';
 import ProductDetails from '../ProductDetails/ProductDetails';
 import Suppliers from '../Suppliers/Suppliers';
 import DeliveryLocation from '../DeliveryLocation/DeliveryLocation';
-import Category from '../Category/Category';
 import PriceAddition from '../PriceAddition.js/PriceAddition';
 import Stock from '../Stock/Stock';
 import OrderStatus from '../OrderStatus/OrderStatus';
+import Login from '../../Login/Login';
+import Signup from '../Signup/Signup';
+import Category from '../Category/Category';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -37,13 +41,6 @@ import VendorDrawer from './VendorDrawer';
 import DeliveryDrawer from './DeliveryDrawer';
 //
 //
-import {Icon, ListItem} from '@rneui/themed';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
-import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
-
-import {isAuthenticated, setAuthToken} from '../../Login/index';
-import SyncStorage from 'sync-storage';
 
 function CustomDrawerContent(props) {
   return (
@@ -77,114 +74,16 @@ const MyDrawer = () => {
       setInitialRoute('Login');
     }
   };
-  // useEffect(() => {
-  //   setInitialRouteName()
-  //   setAuthToken(token);
-  //   console.log(token)
-  // }, []);
 
   return (
-    // <Drawer.Navigator
-    //   useLegacyImplementation
-    //   drawerContent={(props) => <CustomDrawerContent {...props} />}
-    // >
-    //             <Drawer.Screen
-    //               name="Login"
-    //               component={Login}
-    //               // options={{ title: 'Homepage' }}
-    //               options={{
-    //                 headerShown: false,
-    //               }}
-
-    //             />
-    //             <Drawer.Screen
-    //               name="SalesHomepage"
-    //               component={SalesHomepage}
-    //               options={{
-    //                 title: ' Sales Homepage'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="SalesLiveOrder"
-    //               component={SalesLiveOrder}
-    //               options={{
-    //                 title: ' Sales Live Order'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="Customers"
-    //               component={Customers}
-    //               options={{
-    //                 title: 'Customers'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="ProcurementHomepage"
-    //               component={ProcurementHomepage}
-    //               options={{
-    //                 title: 'Procurement Homepage'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="ProductDetails"
-    //               component={ProductDetails}
-    //               options={{
-    //                 title: 'Product Details'
-    //                 // headerLeft: <Icon name='menu' size={24} color='white'
-    //                 // onPress={()=> navigation.toggleDrawer()}
-    //                 // />,
-
-    //               }}
-    //             />
-    //             <Drawer.Screen
-    //               name="Suppliers"
-    //               component={Suppliers}
-    //               options={{
-    //                 title: 'Suppliers',
-    //                 headerLeft: ({props}) => (
-    //                   <Ionicons
-    //                   name='menu'
-    //                   size={25}
-    //                   onPress={()=> props.navigation.openDrawer()}
-    //                   />
-    //                 ),
-    //               }}
-    //             />
-    // </Drawer.Navigator>
-
     <Drawer.Navigator
       useLegacyImplementation
       initialRouteName={'Login'}
       drawerContent={props => <CustomDrawerContent {...props} />}>
-      {/* <Drawer.Screen
-                      name="Signup"
-                      component={Signup}
-                      options={{
-                        headerShown: false,
-                      }}
-                    />  */}
-
       {!token && (
         <Drawer.Screen
           name="Login"
           component={VendorsMyOrders}
-          // options={{ title: 'Homepage' }}
           options={{
             headerShown: false,
           }}
@@ -194,9 +93,6 @@ const MyDrawer = () => {
       <Drawer.Screen
         name="SalesHomepage"
         component={SalesHomepage}
-        // component={CheckoutDetails}
-        // component={DeliveryHomepage}
-        // component={DeliverySingleOrderStatus}
         options={({navigation}) => ({
           title: ' Sales Homepage',
           headerLeft: () => (
@@ -206,14 +102,24 @@ const MyDrawer = () => {
               onPress={() => navigation.openDrawer()}
             />
           ),
-          // drawerIcon: () => (
-          //   <AntDesign
-          //   name='right'
-          //   size={15}
-          //   />
-          // )
         })}
       />
+
+      <Drawer.Screen
+        name="GenerateInvoice"
+        component={GenerateInvoice}
+        options={({navigation}) => ({
+          title: 'Generate Invoice',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+
       <Drawer.Screen
         name="SalesLiveOrder"
         component={SalesLiveOrder}
@@ -242,7 +148,7 @@ const MyDrawer = () => {
           ),
         })}
       />
-      {/* replace this component here for testing the page */}
+
       <Drawer.Screen
         name="ProcurementHomepage"
         component={CheckoutDetails}
