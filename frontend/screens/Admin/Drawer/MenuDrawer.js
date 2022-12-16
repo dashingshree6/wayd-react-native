@@ -23,6 +23,7 @@ import Category from '../Category/Category';
 import PriceAddition from '../PriceAddition.js/PriceAddition';
 import Stock from '../Stock/Stock';
 import OrderStatus from '../OrderStatus/OrderStatus';
+import SalesVendorForm from '../SalesHomepage/SalesVendorForm';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -308,6 +309,22 @@ const MyDrawer = () => {
                       component={Signup}
                       options={({ navigation }) => ({
                         title: 'Create User',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    /> 
+
+                    <Drawer.Screen
+                      name="SalesVendorForm"
+                      component={SalesVendorForm}
+                      options={({ navigation }) => ({
+                        title: 'Select Vendor',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'

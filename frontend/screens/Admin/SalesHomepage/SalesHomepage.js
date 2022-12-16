@@ -137,6 +137,7 @@ useEffect(()=> {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
+                          omPress={() => navigation.navigate('SalesVendorForm')}
                         />
                     </View>
                     <Tab

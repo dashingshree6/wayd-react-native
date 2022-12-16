@@ -17,88 +17,10 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import SyncStorage from 'sync-storage';
-
-//
-import axios from 'axios';
-const API = 'https://0c63-49-205-239-58.in.ngrok.io/api/products'
-
-const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzExMzYyMzB9.SBijiSXrRZ51RuCY0zciIGs6YQC9m2VMQDXRFOtu--8"
-//
+import { getAllProducts, addProductToCart } from '../../ApiCalls/ApiCalls';
+import Toast from 'react-native-toast-message'
 
 
-
-
-
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Potato',
-    grade: 'A',
-    rate: 'Rs.45',
-    photo: "http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTUNYRJGfr6dAmrrvtz8mF5qV0ojVV9cuEFzswwOcfqxd4EDeDD05eO-KSs2uLidN92YVgeCdcpdthCF4E"
-  
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Potato',
-    grade: 'A',
-    rate: 'Rs.45',
-    photo: "http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTUNYRJGfr6dAmrrvtz8mF5qV0ojVV9cuEFzswwOcfqxd4EDeDD05eO-KSs2uLidN92YVgeCdcpdthCF4E"
-  
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Potato',
-    grade: 'A',
-    rate: 'Rs.45',
-    photo: "http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTUNYRJGfr6dAmrrvtz8mF5qV0ojVV9cuEFzswwOcfqxd4EDeDD05eO-KSs2uLidN92YVgeCdcpdthCF4E"
-  
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Potato',
-    grade: 'A',
-    rate: 'Rs.45',
-    photo: "http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTUNYRJGfr6dAmrrvtz8mF5qV0ojVV9cuEFzswwOcfqxd4EDeDD05eO-KSs2uLidN92YVgeCdcpdthCF4E"
-  
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571443443e29d72',
-    title: 'Potato',
-    grade: 'A',
-    rate: 'Rs.45',
-    photo: "http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTUNYRJGfr6dAmrrvtz8mF5qV0ojVV9cuEFzswwOcfqxd4EDeDD05eO-KSs2uLidN92YVgeCdcpdthCF4E"
-  
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-14557654461e29d72',
-    title: 'Potato',
-    grade: 'A',
-    rate: 'Rs.45',
-    photo: "http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcTUNYRJGfr6dAmrrvtz8mF5qV0ojVV9cuEFzswwOcfqxd4EDeDD05eO-KSs2uLidN92YVgeCdcpdthCF4E"
-  
-  },
-];
-
-// const Item = ({ title, grade, rate, photo, displayModal }) => (
-//     <Pressable
-//     // style={[styles.button, styles.buttonOpen]}
-//     onPress={() => displayModal()}
-//     style={styles.vendor_container}
-//     >
-//           <View >
-//               <Image
-//                     source={{ uri: photo }}
-//                     containerStyle={styles.vendor_item}
-//                     PlaceholderContent={<ActivityIndicator />}
-//                   />
-//                 <Text style={styles.title}>{title}</Text>
-//                 <Text style={styles.title}>Grade :{grade}</Text>
-//                 <Text style={styles.title}>Rate :{rate}</Text>
-//           </View>
-//     </Pressable>
-// );
 
 const Item = (props) => (
   <Pressable
@@ -120,7 +42,8 @@ const Item = (props) => (
 );
 
 export default function VendorHomepage({navigation}) {
-
+const jwt = JSON.parse(SyncStorage.get("jwt"));
+console.log("Vendor Homepage jwt",jwt)
 
 const [orders, setOrders] = useState({
   products:"",
@@ -139,43 +62,23 @@ const [singleItem, setItem] = useState({
 const [quantity, setQuantity] = useState(1)
 const [productPrice, setProductPrice] = useState(1)
 
-const pushItemInCart = (product_id, product_name, product_grade, product_price) => {
+
+const pushItemInCart = (product_id, product_name, product_grade, product_price,product_quantity) => {
   hideModal()
   let obj = {
-    id: product_id,
+    _id: product_id,
     name: product_name,
     grade: product_grade,
-    price: product_price
+    price: product_price,
+    Selectedquantity: product_quantity
   }
 
-  let filteredItems = cartItems.length ? cartItems.filter(i => i.id !== obj.id) : [];
+  let filteredItems = cartItems.length ? cartItems.filter(i => i._id !== obj._id) : [];
   setCartItems([...filteredItems,obj])
   console.log(cartItems)
 }
 
 
-const createCustomerOrder =()=>{
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json','Accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzExMzYyMzB9.SBijiSXrRZ51RuCY0zciIGs6YQC9m2VMQDXRFOtu--8'},
-    data: JSON.stringify({ 
-      products:"61e529080ee3de0f8828f08c",
-      originalAmount: 2252,
-      user:"5ffc2229a70cf50024a4e3cb",
-      address:"Peddamma Gudi, Road 36(Test 1)",
-      coupon:null
-    })
-  };
-
-fetch('https://0c63-49-205-239-58.in.ngrok.io/api/order/create', requestOptions)
-.then((response) => response.json())
-.then((json) => {
-  console.log('Fetch API Response', json.data);
-})
-.catch((error) => {
-console.error(error);
-});
-}
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -190,11 +93,61 @@ console.error(error);
     setQuantity(1)
   }
 
-  const proceedCheckout = () => {
-    navigation.navigate("CheckoutDetails")
-    SyncStorage.set("cart",cartItems)
+  const proceedCheckout = (id) => {
+    navigation.navigate("CheckoutDetails", { userId: id })
+    SyncStorage.set("cart",JSON.stringify(cartItems))
 
   }
+
+  const addNewProductToCart = (product_id, product_name, product_grade, product_price,product_quantity, userId) => {
+    hideModal()
+    let obj = {
+      _id: product_id,
+      name: product_name,
+      grade: product_grade,
+      price: product_price,
+      quantity: product_quantity
+    }
+
+    let quanArr = []
+    quanArr.push(product_quantity)
+    let productData = {
+   
+      quantityArray: quanArr,
+      buy_DirectQuantity: [],
+      numberOfItem: 1,
+      _userID: userId,
+      details: [
+         {
+                  _id: product_id,
+                  name: product_name,
+                  grade: product_grade,
+                  price: product_price,
+                  Selectedquantity: product_quantity
+        }
+      ]
+    
+  
+  }
+  
+    addProductToCart(obj, product_id)
+      .then(res => {
+        Toast.show({
+            type: 'success',
+            text1: "Product added to cart"
+          });
+        console.log(res.data)
+        SyncStorage.set("cartId",res.data.cartDetails[0]["_id"])
+        console.log(res.data.cartDetails[0]["_id"])
+      })
+      .catch(err =>
+        Toast.show({
+            type: 'error',
+            text1: err
+          })
+      );
+     
+  };
   // const renderItem = ({ item }) => (
   //   <Item 
   //   title={item.title} 
@@ -219,26 +172,23 @@ const [value,setValue] = useState(0)
   const [data, setData] = useState([])
   const [modalProduct, setModalProduct] = useState({})
   const [loading, setLoading] = useState(true)
-  // const Imageurl = product
-  // ? `${API}/product/photo/${product._id}`
-  // : `https://tse2.mm.bing.net/th?id=OIP.AvUZJkFRu60sN2FGvV0srAHaEK&pid=Api&P=0&w=329&h=186`;
 
-  const getAllProducts= () => {
+  const getProductsAll = () => {
     setLoading(true)
-    axios.get(API , { headers: {"Authorization" : `Bearer ${TOKEN}`} })
-    .then(res => {
-    console.log(res.data);
-    setData(res.data)
-    setLoading(false)
-    }).catch((error) => {
-    console.log(error)
-    setLoading(false)
-    });
-}
+    getAllProducts().then(data => {
+      if (data.error) {
+        console.log(data.error);
+        setLoading(false)
+      } else {
+        setData(data.data)
+        setLoading(false)
+      }
+    }).catch(err => console.log(err))
+  };
 
-useEffect(()=> {
-    getAllProducts()
-},[])
+  useEffect(()=> {
+    getProductsAll()
+  },[])
   
   return (
     <View>
@@ -246,7 +196,8 @@ useEffect(()=> {
               name='shoppingcart'
               size={50}
               color='gray'
-              onPress={() => proceedCheckout()}
+              // onPress={() => proceedCheckout(jwt.user._id)}
+              onPress={() => proceedCheckout(SyncStorage.get("cartId"))}
             />
         <Text style={{fontWeight:'bold', fontSize: 20}}>Items Present in Cart = {cartItems.length ? cartItems.length : "Empty Cart"}</Text>
        <Input
@@ -267,10 +218,8 @@ useEffect(()=> {
       <FlatList
       style={styles.vendor_list}
       numColumns={2}
-      // data={DATA}
       data={data}
       renderItem={renderItem}
-      // keyExtractor={item => item.id}
       keyExtractor={item => item._id}
     />
       }
@@ -334,7 +283,16 @@ useEffect(()=> {
                 </View>
                 <Button
                 title={"Add to cart"}
-                onPress={() => pushItemInCart(modalProduct._id, modalProduct.name,modalProduct.grade,productPrice)}
+                onPress={() =>{ 
+                  addNewProductToCart
+                  (modalProduct._id, 
+                  modalProduct.name,
+                  modalProduct.grade,
+                  modalProduct.price,
+                  quantity,
+                  jwt.user._id
+                  )
+                }}
                 />
 
                     
