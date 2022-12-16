@@ -10,7 +10,7 @@ const API="https://e56d-49-205-239-58.in.ngrok.io/api/product/61a8c81b1e5a795016
 
 const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
 
-export default function CheckoutDetails(props) {
+export default function CheckoutDetails({navigation}) {
 
 
   const [data,setData] = React.useState({});
@@ -45,6 +45,17 @@ export default function CheckoutDetails(props) {
   return (
     <View>
         <Text style={styles.vendor_checkout_head}>Checkout Details</Text>
+        <Button
+                          title={'Back'}
+                          containerStyle={{
+                            width: 60,
+                            height:38,
+                            marginHorizontal: 20,
+                            marginVertical: 2,
+                          }}
+                          onPress={() => navigation.navigate('VendorHomepage')}
+
+                        />
         <View style={styles.vendor_checkout_btns}>
                 <Button
                 title={'Instant Order'}
