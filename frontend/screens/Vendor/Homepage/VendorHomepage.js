@@ -100,6 +100,7 @@ const DATA = [
 // );
 
 const Item = (props) => (
+  
   <Pressable
   // style={[styles.button, styles.buttonOpen]}
   onPress={() => props.displayModal(props.product)}
@@ -118,7 +119,16 @@ const Item = (props) => (
   </Pressable>
 );
 
-export default function VendorHomepage() {
+export default function VendorHomepage({navigation}) {
+
+  const [ newPrice, setNewPrice] = useState(0);
+  const newTotalPrice=()=>{
+    let product = [];
+  //  let price;
+    setNewPrice(count * props.product.price)
+    
+  }
+// const increseQuantity
 
 
 const [orders, setOrders] = useState({
@@ -126,8 +136,14 @@ const [orders, setOrders] = useState({
   originalAmount: "",
   user:"",
   address:"",
-  coupon:null
+  coupon:null,
+  productArr: [{name:'apple', quantity: 1}, {
+    
+  }]
+  
 });
+
+
 
 
 const createCustomerOrder =()=>{
@@ -172,6 +188,38 @@ console.error(error);
 const [value,setValue] = useState(0)
 
 
+
+
+ 
+
+
+
+const [productToCart, setProductToCart] = useState([])
+
+const [count, setCount] = useState(1)
+const [count2, setCount2] = useState(0)
+
+
+const increaseValue2 =()=>{
+  setCount2(prevCount2 => prevCount2 +1)
+}
+
+const increaseValue =()=>{
+  setCount(prevCount => prevCount +1)
+}
+const decreseValue =()=>{
+  setCount(prevCount => prevCount -1)
+}
+
+
+
+
+const addProductToCart=()=>{
+
+
+}
+
+
   const renderItem = ({ item }) => (
     <Item 
     product={item}
@@ -208,11 +256,12 @@ useEffect(()=> {
   return (
     <View>
        <AntDesign
+          
               name='shoppingcart'
               size={50}
               color='gray'
-              
-            />
+              onPress={() => navigation.navigate('CheckoutDetails')}
+            >{count2}</AntDesign>
        <Input
           placeholder='Search'
           leftIcon={
@@ -256,19 +305,21 @@ useEffect(()=> {
 
                 <View style={styles.vendor_modal_content}>
                   <View>
-                    <Text style={styles.vendor_modalText}>Quantity: {modalProduct.stock} </Text>
-                    <Text style={styles.vendor_modalText}>4 kg </Text>
-                    <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
+                    <Text style={styles.vendor_modalText}>Name : {modalProduct.description} </Text>                    
+                    <Text style={styles.vendor_modalText}>Quantity: {count} (kg)</Text>
+                    {/* <Text style={styles.vendor_modalText}>Stock {modalProduct.stock} </Text> */}
+                    <Text style={styles.vendor_modalText}>Price : {modalProduct.price}</Text>
+                    <Text style={styles.vendor_modalText}>Total Price : {newPrice}</Text>
                   </View>
                   <Button
                           title={'-'}
-                          // containerStyle={{
-                          //   width: 200,
-                          //   marginHorizontal: 50,
-                          //   marginVertical: 10,
-                          // }}
+                          containerStyle={{
+                            width: 50,
+                            marginHorizontal: 20,
+                            marginVertical: 10,
+                          }}
                           
-                    
+                          onPress={() => decreseValue()}
                         />
                    <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
@@ -277,22 +328,44 @@ useEffect(()=> {
                         />
                      <Button
                           title={'+'}
-                          // containerStyle={{
-                          //   width: 200,
-                          //   marginHorizontal: 50,
-                          //   marginVertical: 10,
-                          // }}
-                          onPress={() => createCustomerOrder()}
+                          containerStyle={{
+                            width: 50,
+                            marginHorizontal: 20,
+                            marginVertical: 10,
+                          }}
+                          onPress={() => 
+                            {
+                            increaseValue()
+                            newTotalPrice()
+                          }}
 
                         />
                 </View>
                     
+                    <Button 
+                    title={'Add Product To Cart'}
+                    containerStyle={{
+                      width: 200,
+                      marginHorizontal: 20,
+                      marginVertical: 10,
+                      marginLeft:169
+                    }}
+                    onPress={() => {
+                      increaseValue2();
+                      hideModal()
+                      
+                      setCount(0)
+                    }}
+                    
+                    />
           
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => hideModal()}
                 >
-                  <Text style={styles.vendor_hide_btn}>Hide Modal</Text>
+                  <Text style={styles.vendor_hide_btn}
+                  
+                  >Hide Modal</Text>
                 </Pressable>
               </View>
               
