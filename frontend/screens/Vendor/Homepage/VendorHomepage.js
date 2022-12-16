@@ -16,6 +16,7 @@ import {
 } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import SyncStorage from 'sync-storage';
 
 //
 import axios from 'axios';
@@ -119,16 +120,7 @@ const Item = (props) => (
   </Pressable>
 );
 
-export default function VendorHomepage({navigation}) {
-
-  const [ newPrice, setNewPrice] = useState(0);
-  const newTotalPrice=()=>{
-    let product = [];
-  //  let price;
-    setNewPrice(count * props.product.price)
-    
-  }
-// const increseQuantity
+export default function VendorHomepage() {
 
 
 const [orders, setOrders] = useState({
@@ -142,8 +134,6 @@ const [orders, setOrders] = useState({
   }]
   
 });
-
-
 
 
 const createCustomerOrder =()=>{
@@ -174,8 +164,19 @@ console.error(error);
   const displayModal = (productData) => {
     setModalVisible(true)
     setModalProduct(productData)
+    setProductPrice(productData.price * quantity)
   }
-  const hideModal = () => setModalVisible(!modalVisible)
+  const hideModal = () => {
+    setModalVisible(!modalVisible)
+    setProductPrice(1)
+    setQuantity(1)
+  }
+
+  const proceedCheckout = () => {
+    navigation.navigate("CheckoutDetails")
+    SyncStorage.set("cart",cartItems)
+
+  }
   // const renderItem = ({ item }) => (
   //   <Item 
   //   title={item.title} 
@@ -260,8 +261,8 @@ useEffect(()=> {
               name='shoppingcart'
               size={50}
               color='gray'
-              onPress={() => navigation.navigate('CheckoutDetails')}
-            >{count2}</AntDesign>
+              
+            />
        <Input
           placeholder='Search'
           leftIcon={
@@ -305,21 +306,19 @@ useEffect(()=> {
 
                 <View style={styles.vendor_modal_content}>
                   <View>
-                    <Text style={styles.vendor_modalText}>Name : {modalProduct.description} </Text>                    
-                    <Text style={styles.vendor_modalText}>Quantity: {count} (kg)</Text>
-                    {/* <Text style={styles.vendor_modalText}>Stock {modalProduct.stock} </Text> */}
-                    <Text style={styles.vendor_modalText}>Price : {modalProduct.price}</Text>
-                    <Text style={styles.vendor_modalText}>Total Price : {newPrice}</Text>
+                    <Text style={styles.vendor_modalText}>Quantity: {modalProduct.stock} </Text>
+                    <Text style={styles.vendor_modalText}>4 kg </Text>
+                    <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
                   </View>
                   <Button
                           title={'-'}
-                          containerStyle={{
-                            width: 50,
-                            marginHorizontal: 20,
-                            marginVertical: 10,
-                          }}
+                          // containerStyle={{
+                          //   width: 200,
+                          //   marginHorizontal: 50,
+                          //   marginVertical: 10,
+                          // }}
                           
-                          onPress={() => decreseValue()}
+                    
                         />
                    <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
@@ -328,19 +327,23 @@ useEffect(()=> {
                         />
                      <Button
                           title={'+'}
-                          containerStyle={{
-                            width: 50,
-                            marginHorizontal: 20,
-                            marginVertical: 10,
-                          }}
-                          onPress={() => 
-                            {
-                            increaseValue()
-                            newTotalPrice()
-                          }}
+                          // containerStyle={{
+                          //   width: 200,
+                          //   marginHorizontal: 50,
+                          //   marginVertical: 10,
+                          // }}
+                          onPress={() => createCustomerOrder()}
 
+                            // let totalPrice = modalProduct.price * (quantity + 1)
+                            // setProductPrice(totalPrice)
+                          // }}
                         />
                 </View>
+                <Button
+                title={"Add to cart"}
+                onPress={() => pushItemInCart(modalProduct._id, modalProduct.name,modalProduct.grade,productPrice)}
+                />
+
                     
                     <Button 
                     title={'Add Product To Cart'}
