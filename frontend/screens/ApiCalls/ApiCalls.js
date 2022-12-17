@@ -19,8 +19,8 @@ export const updatePincodes = (data, id) =>
   axios.patch(`${API}/pin/${id}`, { percent_add: data });
 
  
-export const updateCashCollection = () =>
-axios.post(`${API}/cashcollection`)
+export const updateCashCollection = (data) =>
+axios.post(`${API}/cashcollection`,data)
        
 
   

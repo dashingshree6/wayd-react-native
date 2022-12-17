@@ -14,7 +14,8 @@ import {
     ImageBackground
   } from 'react-native';
 import { Input, Button, Tab, TabView} from '@rneui/themed';
-import { getAllUsers } from '../../ApiCalls/ApiCalls';
+import { getAllUsers, updateCashCollection } from '../../ApiCalls/ApiCalls';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 const Item = (props) => (
         <View style={{ flexDirection: 'row' }}>
@@ -33,16 +34,27 @@ const Item = (props) => (
 
 const Customers = ({ navigation, route  }) => {
     //due
-    const [values, setValues] = useState({
-        amount:'',
-        date:'',
+  const [reload, setReload] = useState(false)  
+ const [id, setId] = useState("")   
+ const [values, setValues] = useState({
+        Amount:'',
+        Date:'',
         time:'',
+        // isCashCollected:'',
+        // orderId:'',
+      
  })
+ const [] = useState('')
     const [modalVisible, setModalVisible] = useState(false);
     const [index, setIndex] = useState(0);
     const [users, setUsers] = useState([])
-    const [userList, setUsersList] = useState([])
+    const [userList, setUsersList] =  useState([])
     const { role } = route.params;
+const [modalCustomer, setModalCustomer] = useState({})
+const [selectedUser, SetSelectedUser] = useState()
+
+
+
 
     const renderItem = ({ item }) => (
         <Item 
@@ -53,18 +65,34 @@ const Customers = ({ navigation, route  }) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const doDisable =val =>{
+        if (id) {
+            if (id !== val){
+                return true;
+            }
+        }
+        return false
+    }
 
     const onChangeAmount=(value) =>{
-        setValues({...values, amount: value});
+        setValues({...values, Amount: value});
     }
 
     const onChangeDate =(value) => {
-        setValues({...values, date: value})
+        setValues({...values, Date: value})
     }
 
     const onChangeTime =(value) => {
         setValues({...values, time: value})
     }
+    // const onChangeisCashCollected =(value) => {
+    //     setValues({...values, isCashCollected: value})
+    // }
+    // const onChangeOrderId =(value) => {
+    //     setValues({...values, orderId: value})
+    // }
+  
+    
 
     const getUsersList = () => {
         setLoading(true)
@@ -75,17 +103,71 @@ const Customers = ({ navigation, route  }) => {
               setLoading(false)
             } else {
               setUsers(res.data);
+              
               setUsersList(res.data.filter(i => i.role === 0))
+
+             
               setLoading(false)
             }
           })
           .catch((err) => console.log(err));
       };
-    
+      console.log(`---USERS-----`,users)
+      console.log(`------`,userList)
+
+
+
+
+//log cash collection
+var newUserId;
+const userIdhandler = (id) => {
+    // var newUserId; 
+  newUserId = id
+  console.log("/////////////////////////////",newUserId)
+  return newUserId = id;
+}
+
+React.useEffect(()=>{
+    console.log("------------------------Effect newUseID----------------------",newUserId)
+},[])
+
+
+
+console.log("------------------------var newUseID----------------------",newUserId)
+const logCashCollection = (data) => {
+    setReload(false);
+    if(data.Amount !== "" && data.Date !== "" && data.time){
+        updateCashCollection(data)
+        .then(res => {
+        //     Toast.show({
+        //         type:'success',
+        //         text1:'Cash Collected successfully'
+        // });
+        setReload(true);
+        setValues({
+            Amount:'',
+            Date:'',
+            time:'',
+            // userId:newUserId,
+            userId:'',
+            // isCashCollected:'',
+            // orderId:'',
+          
+        })
+        })
+        .catch(err =>
+           
+            
+            console.log(err))
+    }
+}
+
+
+
     const filterList = (userRole) => {
         let arr = []
         arr = users.filter(user => user.role === userRole)
-        setUsersList(arr)
+        // setUsersList(arr)
         console.log(arr)
     }
 
@@ -194,11 +276,20 @@ const Customers = ({ navigation, route  }) => {
                                <View style={styles.centeredView}>
                                <Pressable
                                    style={[styles.button, styles.buttonOpen]}
-                                   onPress={() => setModalVisible(true)}
+                                   onPress={() => {
+                                    // setModalVisible(true);
+                                    userIdhandler(item._id)
+                                    
+                            }
+                                
+
+                                }
+                                   
                                >
-                                   <Text style={styles.textStyle}>UPDATE DUE AMOUNT</Text>
+                                   <Text style={styles.textStyle}>LOG CASH COLLECTED</Text>
                                </Pressable>
                                </View>
+
                              }
                          
 
@@ -206,6 +297,15 @@ const Customers = ({ navigation, route  }) => {
                                     <Text style={{ fontSize: 16, textAlign: 'center'}}>Username: {item.username}</Text>
                              
                                     <Text style={{ fontSize: 16, textAlign: 'center'}}>Email: {item.email}</Text>
+                                    <Text style={{ fontSize: 16, textAlign: 'center'}}>Due Amount: {item.due_amount}</Text>
+                                    <Text style={{ fontSize: 16, textAlign: 'center'}} >Id: {item._id}</Text>
+                                    {/* <Button title='loadPop' id={item._id} onPress={(e)=>{
+                                        
+                                        let selectId = e.target.id
+                                        SetSelectedUser(item)    
+                                        setModalVisible(true);                    
+                                        
+                                   }}/> */}
                                     {/* Button for Update */}
                                     {/* <Button
                                     title={'Update'}
@@ -239,7 +339,7 @@ const Customers = ({ navigation, route  }) => {
       >
         <View style={styles.centeredView2}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Log Transaction</Text>
+            <Text style={styles.modalText}>Log Cash Collected</Text>
            
                 <Input 
                 placeholder='Enter the Amount'
@@ -255,14 +355,42 @@ const Customers = ({ navigation, route  }) => {
                 onChangeText={(value) => onChangeTime(value)}
                 />
                 {/* <Input 
-                placeholder='Enter the User'
-                />
-             */}
+                placeholder='Enter the isCollected'
+                onChangeText={(value) => onChangeisCashCollected(value)}
+                /> */}
+                {/* <Input 
+                placeholder='Enter the orderId'
+                onChangeText={(value) => onChangeOrderId(value)}
+                /> */}
+              
+               
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle2}>Update</Text>
+              <Text style={styles.textStyle2}
+               onPress={() => {
+                
+                // let id = selectedUser._id
+
+                // setUsersList(prev=>{
+                    
+                //     pre
+
+                // })
+
+                
+                
+                logCashCollection(values);
+                setModalVisible(!modalVisible)
+               }}
+              >Submit</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle2}>Close</Text>
             </Pressable>
           </View>
         </View>
