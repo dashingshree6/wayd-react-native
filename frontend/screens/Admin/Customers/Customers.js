@@ -13,6 +13,7 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
+import {API} from '../../backend';
 
 export default function Customers() {
   const [allUsers, setAllUser] = useState([
@@ -57,14 +58,13 @@ export default function Customers() {
     userId: '',
   });
 
-  let dynamicAPI = 'https://de42-49-205-239-58.in.ngrok.io/api';
-  let API = `${dynamicAPI}/users`;
+  let url = `${API}/users`;
   const TOKEN =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTgxMDF9.ITnJjF8atFSnGl7dwBejIVLRnPantE5F8YWsW1uehHY';
 
   React.useEffect(() => {
     axios
-      .get(API, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
       .then(res => {
         console.log(res.data);
         setAllUser(res.data);
@@ -85,7 +85,7 @@ export default function Customers() {
       body: JSON.stringify(selectedUser), // body data type must match "Content-Type" header
     };
 
-    let url = `${dynamicAPI}/cashcollection`;
+    let url = `${API}/cashcollection`;
     await fetch(url, options)
       .then(res => res.json())
       .then(data => {
@@ -96,7 +96,7 @@ export default function Customers() {
     setModalVisible(!modalVisible);
 
     axios
-      .get(API, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
       .then(res => {
         console.log(res.data);
         setAllUser(res.data);
@@ -122,10 +122,6 @@ export default function Customers() {
                   </Text>
 
                   <View>
-                    <Text>Due: {item.due_amount}</Text>
-                  </View>
-
-                  <View style={styles.greenCard}>
                     <Text>Due: {item.due_amount}</Text>
                   </View>
 
@@ -157,7 +153,7 @@ export default function Customers() {
                   </View>
 
                   <Button
-                    title="Update"
+                    title="Update Due Amount"
                     color="black"
                     onPress={() => {
                       setSelectedUser(prev => ({
@@ -202,11 +198,11 @@ export default function Customers() {
             />
 
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={styles.SaveBtn}
               onPress={() => {
                 handlepost();
               }}>
-              <Text style={styles.textStyle}>Update Details</Text>
+              <Text style={styles.textStyle}>Save</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
@@ -237,6 +233,11 @@ const styles = StyleSheet.create({
   },
   redCard: {
     backgroundColor: 'red',
+  },
+  SaveBtn: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 10,
   },
   input: {
     borderWidth: 1,
