@@ -110,15 +110,7 @@ const MyDrawer = () => {
                   /> 
                   }
    
-      {/* <Drawer.Screen
-                      name="Login"
-                      component={Login}
-                      // options={{ title: 'Homepage' }}
-                      options={{
-                        headerShown: false,
-                      }}
-
-                    /> 
+     
                     <Drawer.Screen
                       name="SalesHomepage"
                       component={SalesHomepage}
@@ -143,6 +135,7 @@ const MyDrawer = () => {
 
                       })}
                     />
+                      
                     <Drawer.Screen
                       name="SalesLiveOrder"
                       component={SalesLiveOrder}
@@ -173,7 +166,8 @@ const MyDrawer = () => {
 
                       })}
                     />
-                     {/* replace this component here for testing the page */}
+                    
+                    
                     <Drawer.Screen
                       name="ProcurementHomepage"
                       // component={CheckoutDetails}
@@ -324,7 +318,7 @@ const MyDrawer = () => {
                       name="SalesVendorForm"
                       component={SalesVendorForm}
                       options={({ navigation }) => ({
-                        title: 'Select Vendor',
+                        title: 'Create Sales Order',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
@@ -421,54 +415,8 @@ const MyDrawer = () => {
                     
    
     
-      <Drawer.Screen
-        name="SalesHomepage"
-        component={SalesHomepage}
-        options={({navigation}) => ({
-          title: ' Sales Homepage',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-          // drawerIcon: () => (
-          //   <AntDesign
-          //   name='right'
-          //   size={15}
-          //   />
-          // )
-        })}
-      />
-      <Drawer.Screen
-        name="SalesLiveOrder"
-        component={SalesLiveOrder}
-        options={({navigation}) => ({
-          title: ' Sales Live Order',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      />
-      <Drawer.Screen
-        name="Customers"
-        component={Customers}
-        options={({navigation}) => ({
-          title: 'Customers',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      />
+ 
+   
       {/* <Drawer.Screen
         name="ProcurementHomepage"
         component={ProcurementHomepage}

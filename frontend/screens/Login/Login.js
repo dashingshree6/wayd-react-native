@@ -55,10 +55,12 @@ const Login = ({ navigation  }) => {
                 //new added
                 SyncStorage.set("role",data.data.user.role)
                 SyncStorage.set("userToken",data.data.token)
+                SyncStorage.set("userId", data.data.user._id)
                 let userRole = SyncStorage.get("role")
                 let userToken = SyncStorage.get("userToken")
                 console.log("Signin Role",SyncStorage.get("role"))
                 console.log("Signin Token",SyncStorage.get("userToken"))
+                console.log("Signin User Id",SyncStorage.get("userId"))
                 // if (data.data.token) {
                 //     if (data.data.user && data.data.user.role === 1) {
                 //       // return <Redirect to="/admin/dashboard" />;

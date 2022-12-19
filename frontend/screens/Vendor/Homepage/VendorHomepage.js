@@ -17,7 +17,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import SyncStorage from 'sync-storage';
-import { getAllProducts, addProductToCart } from '../../ApiCalls/ApiCalls';
+import { getAllProducts, addProductToCart, getCartDetailsByUserId } from '../../ApiCalls/ApiCalls';
 import Toast from 'react-native-toast-message'
 
 
@@ -61,6 +61,7 @@ const [singleItem, setItem] = useState({
 })
 const [quantity, setQuantity] = useState(1)
 const [productPrice, setProductPrice] = useState(1)
+const [cartQuantity, setCartQuantity] = useState(0)
 
 
 const pushItemInCart = (product_id, product_name, product_grade, product_price,product_quantity) => {
@@ -94,9 +95,11 @@ const pushItemInCart = (product_id, product_name, product_grade, product_price,p
   }
 
   const proceedCheckout = (id) => {
-    navigation.navigate("CheckoutDetails", { userId: id })
-    SyncStorage.set("cart",JSON.stringify(cartItems))
-
+    // // if(props.manualOrder)
+    // if(id) {
+      // props.navigation.navigate("CheckoutDetails", { userId: id })
+      navigation.navigate("CheckoutDetails")
+    // } 
   }
 
   const addNewProductToCart = (product_id, product_name, product_grade, product_price,product_quantity, userId) => {
@@ -138,13 +141,16 @@ const pushItemInCart = (product_id, product_name, product_grade, product_price,p
           });
         console.log(res.data)
         SyncStorage.set("cartId",res.data.cartDetails[0]["_id"])
+        SyncStorage.set("noOfItems", res.data.cartDetails[0]["numberOfItem"])
+        setCartQuantity( res.data.cartDetails[0]["numberOfItem"])
         console.log(res.data.cartDetails[0]["_id"])
       })
-      .catch(err =>
+      .catch((err) => {
         Toast.show({
-            type: 'error',
-            text1: err
-          })
+          type: 'error',
+          text1: err.type
+        })
+      }
       );
      
   };
@@ -175,6 +181,7 @@ const [value,setValue] = useState(0)
 
   const getProductsAll = () => {
     setLoading(true)
+    setCartQuantity(0)
     getAllProducts().then(data => {
       if (data.error) {
         console.log(data.error);
@@ -186,20 +193,43 @@ const [value,setValue] = useState(0)
     }).catch(err => console.log(err))
   };
 
+  const getExistingCartDetails = () => {
+    const loggedUserId = SyncStorage.get("userId")
+    // setLoggdeUserId(userID)
+      getCartDetailsByUserId(loggedUserId).then(res => {
+        console.log(res.data)
+        let cart = res.data.filter(i => i.status === "YET_TO_CHECKOUT")
+        SyncStorage.set("cartId", cart[0]['_id'])
+        console.log('Existing cart',cart)
+        // setData(res.data)
+      }).catch((error) => {
+        console.log(error)
+      });  
+  }
+
+
   useEffect(()=> {
-    getProductsAll()
-  },[])
+    const unsubscribe = navigation.addListener('focus', () => {
+      getProductsAll()
+      getExistingCartDetails()
+    });
+
+    return unsubscribe;
+
+  },[navigation])
   
   return (
     <View>
+      <Toast position='top'/>
        <AntDesign
               name='shoppingcart'
               size={50}
               color='gray'
               // onPress={() => proceedCheckout(jwt.user._id)}
-              onPress={() => proceedCheckout(SyncStorage.get("cartId"))}
+              // onPress={() => proceedCheckout(SyncStorage.get("cartId"))}
+              onPress={() => proceedCheckout()}
             />
-        <Text style={{fontWeight:'bold', fontSize: 20}}>Items Present in Cart = {cartItems.length ? cartItems.length : "Empty Cart"}</Text>
+        <Text style={{fontWeight:'bold', fontSize: 20}}>Items Present in Cart = { cartQuantity ? cartQuantity : "Empty Cart"}</Text>
        <Input
           placeholder='Search'
           leftIcon={

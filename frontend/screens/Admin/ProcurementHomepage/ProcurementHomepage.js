@@ -15,7 +15,7 @@ import {
     TextInput
   } from 'react-native';
   import { Icon, Input, Button, Tab, TabView } from '@rneui/themed';
-
+import { getAllProcurements } from '../../ApiCalls/ApiCalls';
   //
   import axios from 'axios';
 
@@ -121,9 +121,9 @@ const ProcurementHomepage = ({ navigation, route  }) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const getAllProcurements= () => {
+  const getAllProcurementsData = () => {
     setLoading(true)
-    axios.get(API , { headers: {"Authorization" : `Bearer ${TOKEN}`} })
+    getAllProcurements()
     .then(res => {
     console.log(res.data);
     setData(res.data)
@@ -134,7 +134,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
     });
  }
   useEffect(()=> {
-    getAllProcurements()
+    getAllProcurementsData()
   },[])
  
     return (

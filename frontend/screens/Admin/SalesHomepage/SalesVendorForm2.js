@@ -1,19 +1,13 @@
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { Button, Image, Input } from '@rneui/themed';
 import axios from 'axios';
 import SyncStorage from 'sync-storage';
 import { getCartDetails, createNewOrder, getCartDetailsByUserId, updateCartDetails } from '../../ApiCalls/ApiCalls';
 import Toast from 'react-native-toast-message'
-import { DialogLoading } from '@rneui/base/dist/Dialog/Dialog.Loading';
 
 
-
-const API="https://e56d-49-205-239-58.in.ngrok.io/api/product/61a8c81b1e5a79501663f912"
-
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
-
-export default function CheckoutDetails({ navigation, goToFirstTab}) {
+export default function SalesVendorForm2({ navigation, goToFirstTab}) {
   // const items = SyncStorage.get("cart")
 
   // const { userId } = route.params;
@@ -31,12 +25,10 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
       originalAmount: 0,
       user:"",
       address:"",
-      coupon:null
+      coupon:null,
+      userType: "Customer"
   })
-  const [jwt, setjwt] = useState({})
   const [reload, setReload] = useState(false)
-  const [ loading, setLoading] = useState(false)
-
 
   // const getFinalPrice = () => {
   //   setCartItems(data)
@@ -51,24 +43,20 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
   const goBackToHomeapge = () => props.navigation.pop()
 
   const checkoutDetails = () => {
-    setLoading(true)
     const Cart_id = SyncStorage.get("cartId")    
     getCartDetails(Cart_id).then(res => {
-      console.log('Cart Details Checkout',res.data)
+      console.log(res.data)
       setFinalPrice(res.data[0]['cost'])
       setData(res.data)
-      setLoading(false)
-
     }).catch((error) => {
       console.log(error)
-      setLoading(false)
-
     });
 
-    // setLoggdeUserId(userID)
+    // const loggedUserId = SyncStorage.get("userId")
+    // // setLoggdeUserId(userID)
     //   getCartDetailsByUserId(loggedUserId).then(res => {
     //     console.log(res.data)
-    //     setData(res.data)
+    //     // setData(res.data)
     //   }).catch((error) => {
     //     console.log(error)
     //   });  
@@ -79,19 +67,16 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
   const goToVendorHomepage = () => navigation.navigate("VendorHomepage")
 
   const createOrder = (data,navigation) => {
-    setLoading(true)
-
     let obj = {
       products: SyncStorage.get("cartId") ,
       originalAmount: finalPrice,
-      user: SyncStorage.get("userId"),
+      user: SyncStorage.get("manual_order_userId"),
       address: 'Hyderabad',
-      coupon:null
+      coupon:null,
+      userType: "Customer"
     }
     console.log("Create Order data", obj)
     createNewOrder(obj).then(res => {
-      setLoading(false)
-
       console.log(res.data)
       SyncStorage.remove("cartId")
       SyncStorage.remove("manual_order_userId")
@@ -118,8 +103,6 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
       }
 
     }).catch((error) => {
-      setLoading(false)
-
       console.log(error)
       Toast.show({
         type: 'error',
@@ -147,57 +130,38 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
   }
   }
 
-  const updateCart = (action, product_id) => {
-    setLoading(true)
+const updateCart = (action, product_id) => {
 
-    updateCartDetails(action, product_id)
-      .then(res => {
-        Toast.show({
-            type: 'success',
-            text1: "Cart Updated Successfully"
-          });
-        console.log(res.data)
-        // setReload(!reload)
-        checkoutDetails()
-        setLoading(false)
-
-      })
-      .catch((err) => {
-        setLoading(false)
-
-        Toast.show({
-          type: 'error',
-          text1: err.type
+      updateCartDetails(action, product_id)
+        .then(res => {
+          Toast.show({
+              type: 'success',
+              text1: "Cart Updated Successfully"
+            });
+          console.log(res.data)
+          setReload(!reload)
         })
-      }
-      );
+        .catch((err) => {
+          Toast.show({
+            type: 'error',
+            text1: err.type
+          })
+        }
+        );
   }
 
   
   //call useeffect outside function****
   useEffect(() => {
-    // getFinalPrice()
-    const unsubscribe = navigation.addListener('focus', () => {
       checkoutDetails()
-    });
 
-    return unsubscribe;
-
-  },[navigation,reload])
+  },[navigation, reload])
   
 
 
-  if(loading) {
-    <ActivityIndicator 
-    size="large" 
-    style={{
-      flexDirection:'row',
-      justifyContent:'center',
-      alignItems:'center',
-      height:'100%'
-    }}
-    />
-  }
+
+
+
   return (
     <View style={styles.vendor_checkout}>
        <Toast position='top'/>
@@ -235,32 +199,32 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
                     <Text style={styles.vendor_checkout_modalText}>Grade: {data.grade} </Text>
                     <Text style={styles.vendor_checkout_modalText}>Price {data.price}</Text>
                     <View style={styles.vendor_checkout_btns}>
-                                <Button
-                                title={'-'}
-                                containerStyle={{
-                                    width: '25%',
-                                    marginVertical: 10,
-                                }}
-                                onPress={() => updateCart('decrease',data._id)}
-                                />
-                                <Button
-                                title={'+'}
-                                containerStyle={{
-                                    width: "25%",
-                                    marginVertical: 10,
-                                }}
-                                onPress={() => updateCart('increase',data._id)}
-                                />
-                        </View>
-                        <Button
-                        title={'Remove'}
-                        containerStyle={{
-                            // width: "100%",
-                            marginVertical: 5,
-                        }}
-                        onPress={() => updateCart('remove',data._id)}
-                        />                                         
-               </View>
+                            <Button
+                            title={'-'}
+                            containerStyle={{
+                                width: '25%',
+                                marginVertical: 10,
+                            }}
+                            onPress={() => updateCart('decrease',data._id)}
+                            />
+                            <Button
+                            title={'+'}
+                            containerStyle={{
+                                width: "25%",
+                                marginVertical: 10,
+                            }}
+                            onPress={() => updateCart('increase',data._id)}
+                            />
+                    </View>
+                    <Button
+                    title={'Remove'}
+                    containerStyle={{
+                        // width: "100%",
+                        marginVertical: 5,
+                    }}
+                    onPress={() => updateCart('remove',data._id)}
+                    />                     
+              </View>
                  <Image
                        source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                        containerStyle={styles.vendor_checkout_img}
@@ -289,7 +253,7 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
               }}
               titleStyle={{ fontWeight: 'bold' }}
             />
-        <Text style={styles.vendor_checkout_pg}>Final Price : Rs.{ finalPrice}</Text>
+        <Text style={styles.vendor_checkout_pg}>Final Price : Rs.{ data.length && data[0]["cost"]}</Text>
         <Text style={styles.vendor_checkout_pg}>Address :</Text>
         <Text style={styles.vendor_checkout_pg}>Current Due Amount :</Text>
         <Text style={styles.vendor_checkout_pg}>Propose Payment :</Text>
@@ -301,6 +265,7 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
             let manualUserId = SyncStorage.get("manual_order_userId")
             if(manualUserId) {
               setOrder({
+                ...order,
                 products: SyncStorage.get("cartId") ,
                 originalAmount: data.length && data[0]["cost"],
                 user: manualUserId,
@@ -309,6 +274,7 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
               })
             } else {
               setOrder({
+                ...order,
                 products: SyncStorage.get("cartId") ,
                 originalAmount: data.length && data[0]["cost"],
                 user: SyncStorage.get("userId"),
