@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import {API, TOKEN} from '../../backend';
-import axios from 'axios';
+import axios, {all} from 'axios';
 import salesDashImg from './salesDashImg.jpg';
 
 export default function SalesHomepage() {
@@ -20,7 +20,7 @@ export default function SalesHomepage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState();
   const [filterOrder, setFilterOrder] = useState();
-
+  const [filterPastOrder, setFilterPastOrder] = useState();
   let url = `${API}/order/all`;
 
   React.useEffect(() => {
@@ -185,7 +185,7 @@ export default function SalesHomepage() {
             <TouchableOpacity
               style={styles.tab}
               onPress={e => {
-                setFilterOrder(
+                setFilterPastOrder(
                   allOrder?.filter(
                     (item, index) => item.status === 'Delivered',
                   ),
@@ -196,7 +196,7 @@ export default function SalesHomepage() {
             <TouchableOpacity
               style={styles.tab}
               onPress={e => {
-                setFilterOrder(
+                setFilterPastOrder(
                   allOrder?.filter(
                     (item, index) => item.status === 'Cancelled',
                   ),
@@ -207,35 +207,37 @@ export default function SalesHomepage() {
           </View>
         )}
 
-        <ScrollView>
-          {showLiveOrder &&
-            filterOrder?.map((item, index) => (
-              <View style={styles.liveOrderCard} key={index}>
-                <Text>Order Id: {item?._id}</Text>
-                <Text>Status: {item?.status}</Text>
-                <Text>Payment: {item?.payment_status}</Text>
-                <Text>Order Date: {item?.ordered}</Text>
-                <Button
-                  title="Update Order Status"
-                  color="black"
-                  onPress={() => {
-                    setSelectedOrder(item);
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            ))}
+        <View style={styles.scrollViewParent}>
+          <ScrollView style={styles.scrollView}>
+            {showLiveOrder &&
+              filterOrder?.map((item, index) => (
+                <View style={styles.liveOrderCard} key={index}>
+                  <Text>Order Id: {item?._id}</Text>
+                  <Text>Status: {item?.status}</Text>
+                  <Text>Payment: {item?.payment_status}</Text>
+                  <Text>Order Date: {item?.ordered}</Text>
+                  <Button
+                    title="Update Order Status"
+                    color="black"
+                    onPress={() => {
+                      setSelectedOrder(item);
+                      setModalVisible(true);
+                    }}
+                  />
+                </View>
+              ))}
 
-          {!showLiveOrder &&
-            filterOrder?.map((item, index) => (
-              <View style={styles.liveOrderCard} key={index}>
-                <Text>Order Id: {item?._id}</Text>
-                <Text>Status: {item?.status}</Text>
-                <Text>Payment: {item?.payment_status}</Text>
-                <Text>Order Date: {item?.ordered}</Text>
-              </View>
-            ))}
-        </ScrollView>
+            {!showLiveOrder &&
+              filterPastOrder?.map((item, index) => (
+                <View style={styles.liveOrderCard} key={index}>
+                  <Text>Order Id: {item?._id}</Text>
+                  <Text>Status: {item?.status}</Text>
+                  <Text>Payment: {item?.payment_status}</Text>
+                  <Text>Order Date: {item?.ordered}</Text>
+                </View>
+              ))}
+          </ScrollView>
+        </View>
       </View>
       {/* //////////////////////// MODAL /////////////////////////////// */}
       <Modal animationType="slide" transparent={false} visible={modalVisible}>
@@ -250,29 +252,22 @@ export default function SalesHomepage() {
 
             <View>
               {selectedOrder?.status === 'Placed' && (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'flex-start',
-                    padding: 10,
-                  }}>
-                  <View style={{width: 150, height: 40}}>
+                <View style={styles.buttonView}>
+                  <View style={styles.buttonInnerView}>
                     <Button
                       title="Reject Order"
                       color="red"
-                      style={{width: 150, height: 40}}
+                      style={styles.buttonInnerView}
                       onPress={() => {
                         rejectOrder();
                       }}
                     />
                   </View>
-                  <View style={{width: 150, height: 40}}>
+                  <View style={styles.buttonInnerView}>
                     <Button
                       title="Accept Order"
                       color="green"
-                      style={{width: 100, height: 40}}
+                      style={styles.buttonInnerView}
                       onPress={e => {
                         acceptOrder();
                       }}
@@ -282,19 +277,12 @@ export default function SalesHomepage() {
               )}
 
               {selectedOrder?.status === 'Accepted' && (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'flex-start',
-                    padding: 10,
-                  }}>
-                  <View style={{width: 150, height: 40}}>
+                <View style={styles.buttonView}>
+                  <View style={styles.buttonInnerView}>
                     <Button
                       title="Process Order"
                       color="green"
-                      style={{width: 150, height: 40}}
+                      style={styles.buttonInnerView}
                       onPress={e => {
                         processOrder();
                       }}
@@ -304,19 +292,12 @@ export default function SalesHomepage() {
               )}
 
               {selectedOrder?.status === 'Processing' && (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'flex-start',
-                    padding: 10,
-                  }}>
-                  <View style={{width: 150, height: 40}}>
+                <View style={styles.buttonView}>
+                  <View style={styles.buttonInnerView}>
                     <Button
                       title="Assign Delivery"
                       color="green"
-                      style={{width: 150, height: 40}}
+                      style={styles.buttonInnerView}
                       onPress={e => {
                         processOrder();
                       }}
@@ -349,6 +330,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
   },
+  scrollViewParent: {paddingTop: 20},
+  scrollView: {backgroundColor: '#94C973', paddingRight: 10, height: '100%'},
+  buttonInnerView: {
+    width: 150,
+    height: 40,
+  },
+  buttonView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-start',
+    padding: 10,
+  },
   liveOrderBtn: {
     padding: 10,
     backgroundColor: '#94C973',
@@ -377,34 +371,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 
-  postStatusButton: {
-    backgroundColor: 'black',
-    padding: 10,
-    width: 200,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 10,
-  },
-  postStatusButtonText: {
-    color: 'white',
-    textAlign: 'center',
-  },
-  cancelButton: {
-    backgroundColor: 'red',
-    padding: 10,
-    width: 200,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 10,
-  },
-  confirmButton: {
-    backgroundColor: 'green',
-    padding: 10,
-    width: 200,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 10,
-  },
   salesDashImg: {
     height: 300,
   },
@@ -413,12 +379,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  ordersListView: {
-    paddingTop: 10,
-    paddingRight: 10,
-    backgroundColor: '#2E8BC0',
-    height: '100%',
-  },
+
   orderTitle: {
     fontSize: 20,
     textAlign: 'center',
@@ -430,7 +391,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
     backgroundColor: '#B1D4E0',
     height: '100%',
-    paddingBottom: 10,
   },
   tabView: {
     flexDirection: 'row',
