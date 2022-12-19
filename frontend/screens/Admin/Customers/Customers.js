@@ -14,9 +14,11 @@ import {
 } from 'react-native';
 import {API, TOKEN} from '../../backend';
 import CashImg from './cashImg.jpg';
+import modalImg from './modalImg.jpg';
 
 export default function Customers() {
   const [allUsers, setAllUser] = useState();
+  const [apiTrigger, setApiTrigger] = useState();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState({
@@ -40,34 +42,17 @@ export default function Customers() {
       .catch(error => {
         console.log(`Error:`, error);
       });
-  }, [selectedUser.Amount]);
+  }, [apiTrigger]);
 
-  let handlepost = async () => {
-    console.log(`---selectedUser`, selectedUser);
-
-    let options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(selectedUser), // body data type must match "Content-Type" header
-    };
-
+  let handlepost = () => {
     let url = `${API}/cashcollection`;
-    await fetch(url, options)
-      .then(res => res.json())
-      .then(data => {
-        console.clear();
-        console.log(`-----response data-------`, data);
-      });
-
-    setModalVisible(!modalVisible);
-
     axios
-      .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .post(url, selectedUser, {headers: {Authorization: `Bearer ${TOKEN}`}})
       .then(res => {
-        console.log(res.data);
-        setAllUser(res.data);
+        console.log(`---------------`, res.data);
+        alert(`Cash Details Updated Successfully!`);
+        setModalVisible(!modalVisible);
+        setApiTrigger(Math.floor(Math.random() * 100000));
       })
       .catch(error => {
         console.log(`Error:`, error);
@@ -82,7 +67,7 @@ export default function Customers() {
         <View style={styles.allUsersView}>
           <Text style={styles.dashboardTitle}>Cash Collection Dashbaord</Text>
           {allUsers
-            ?.filter((item, index) => item.role == 0)
+            ?.filter((item, index) => item.role === 0)
             .map((item, key) => (
               <View style={styles.usersCard}>
                 {item.due_amount > item.max_due ? (
@@ -102,11 +87,12 @@ export default function Customers() {
                       title="Update"
                       color="black"
                       onPress={() => {
-                        setSelectedUser(prev => ({
-                          ...prev,
+                        setSelectedUser({
                           userId: `${item._id}`,
                           Amount: item.due_amount,
-                        }));
+                          time: '19:30 ',
+                          isCashCollected: true,
+                        });
                         setModalVisible(true);
                       }}
                       id={item._id}
@@ -129,11 +115,12 @@ export default function Customers() {
                       title="Update Due Amount"
                       color="black"
                       onPress={() => {
-                        setSelectedUser(prev => ({
-                          ...prev,
+                        setSelectedUser({
                           userId: `${item._id}`,
                           Amount: item.due_amount,
-                        }));
+                          time: '19:30 ',
+                          isCashCollected: true,
+                        });
                         setModalVisible(true);
                       }}
                       id={item._id}
@@ -154,9 +141,9 @@ export default function Customers() {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>
-              User Id {`${selectedUser.userId}`}
-            </Text>
+            <Image source={modalImg} style={{height: 100}} />
+
+            <Text style={{paddingTop: 10}}>User id: {selectedUser.userId}</Text>
 
             <TextInput
               style={styles.input}
@@ -171,20 +158,25 @@ export default function Customers() {
               value={selectedUser.Amount}
             />
 
-            <Pressable
-              style={styles.SaveBtn}
-              onPress={() => {
-                handlepost();
-              }}>
-              <Text style={styles.textStyle}>Save</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}>
-              <Text style={styles.textStyle}>Close</Text>
-            </Pressable>
+            <View style={styles.postCancelView}>
+              <View style={{width: 100, height: 50}}>
+                <Button
+                  title="Save"
+                  onPress={() => {
+                    handlepost();
+                  }}
+                  color="black"
+                />
+              </View>
+              <View style={{width: 100, height: 50}}>
+                <Button
+                  title="Close"
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                />
+              </View>
+            </View>
           </View>
         </View>
       </Modal>
@@ -205,6 +197,15 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
+  postCancelView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: '95%',
+    height: 100,
+  },
+
   cashImg: {
     width: 400,
     height: 200,
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     width: 200,
     padding: 8,
-    margin: 10,
+    marginTop: 10,
   },
   centeredView: {
     flex: 1,
@@ -237,7 +238,6 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
+    marginTop: 10,
     textAlign: 'center',
   },
   allUsersView: {

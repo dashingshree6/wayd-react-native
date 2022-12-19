@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 
 import {API, TOKEN} from '../../backend';
-import axios, {all} from 'axios';
+import axios from 'axios';
 import salesDashImg from './salesDashImg.jpg';
-
+import modalImg from './modalImg.jpg';
 export default function SalesHomepage() {
   const [allOrder, setAllOrder] = useState();
   const [showLiveOrder, setShowLiveOrder] = useState(true);
@@ -21,6 +21,8 @@ export default function SalesHomepage() {
   const [selectedOrder, setSelectedOrder] = useState();
   const [filterOrder, setFilterOrder] = useState();
   const [filterPastOrder, setFilterPastOrder] = useState();
+  const [fetchTrigger, setFetchTrigger] = useState();
+
   let url = `${API}/order/all`;
 
   React.useEffect(() => {
@@ -33,74 +35,107 @@ export default function SalesHomepage() {
       .catch(error => {
         console.log('Error:', error);
       });
-  }, [url]);
+  }, [fetchTrigger, url]);
 
   let getData = () => {
-    console.log(
-      'Api Called for Fetching new Data------------------------------',
-    );
-    axios
-      .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
-      .then(res => {
-        console.log(res.data);
-        setAllOrder(res.data);
-      })
-      .catch(error => {
-        console.log('Error:', error);
-      });
+    setFetchTrigger(Math.floor(Math.random() * 100000));
   };
 
   let acceptOrder = e => {
-    url = `${API}/order/${selectedOrder?._id}/status`;
+    url = `${API}/order/${selectedOrder._id}/status`;
     axios
-      .put(url, {
-        status: 'Accepted',
-        payment_status: 'UNPAID',
-        amount: 0,
-      })
+      .put(
+        url,
+
+        {
+          status: 'Accepted',
+          payment_status: 'UNPAID',
+          amount: 0,
+        },
+        {
+          headers: {Authorization: `Bearer ${TOKEN}`},
+        },
+      )
       .then(res => {
         getData();
+        alert(`Order Accepted Successfully`);
+        setModalVisible(false);
       })
       .catch(error => {
         console.log('Error:', error);
       });
-    setModalVisible(false);
   };
 
   let processOrder = e => {
     url = `${API}/order/${selectedOrder?._id}/status`;
     axios
-      .put(url, {
-        status: 'Processing',
-        payment_status: 'UNPAID',
-        amount: 0,
-        delivey: '5ff9694dbc54c3002478b2de',
-      })
+      .put(
+        url,
+        {
+          status: 'Processing',
+          payment_status: 'UNPAID',
+          amount: 0,
+        },
+        {
+          headers: {Authorization: `Bearer ${TOKEN}`},
+        },
+      )
       .then(res => {
         getData();
+        alert(`Order Processed Successfully`);
+        setModalVisible(false);
       })
       .catch(error => {
         console.log('Error:', error);
       });
-    setModalVisible(false);
   };
 
   let rejectOrder = e => {
     url = `${API}/order/${selectedOrder?._id}/status`;
     axios
-      .put(url, {
-        status: 'Rejected',
-        payment_status: 'UNPAID',
-        amount: 0,
-      })
+      .put(
+        url,
+        {
+          status: 'Cancelled',
+          payment_status: 'UNPAID',
+          amount: 0,
+          delivey: '5ff9694dbc54c3002478b2de',
+        },
+        {
+          headers: {Authorization: `Bearer ${TOKEN}`},
+        },
+      )
       .then(res => {
-        console.log(res);
+        alert(`Order Shipped Successfully`);
         getData();
+        setModalVisible(false);
       })
       .catch(error => {
         console.log(`Error:`, error);
       });
-    setModalVisible(false);
+  };
+  let shipProduct = e => {
+    url = `${API}/order/${selectedOrder?._id}/status`;
+    axios
+      .put(
+        url,
+        {
+          status: 'Shipped',
+          payment_status: 'UNPAID',
+          amount: 0,
+        },
+        {
+          headers: {Authorization: `Bearer ${TOKEN}`},
+        },
+      )
+      .then(res => {
+        alert(`Order Shipped`);
+        getData();
+        setModalVisible(false);
+      })
+      .catch(error => {
+        console.log(`Error:`, error);
+      });
   };
 
   return (
@@ -207,42 +242,41 @@ export default function SalesHomepage() {
           </View>
         )}
 
-        <View style={styles.scrollViewParent}>
-          <ScrollView style={styles.scrollView}>
-            {showLiveOrder &&
-              filterOrder?.map((item, index) => (
-                <View style={styles.liveOrderCard} key={index}>
-                  <Text>Order Id: {item?._id}</Text>
-                  <Text>Status: {item?.status}</Text>
-                  <Text>Payment: {item?.payment_status}</Text>
-                  <Text>Order Date: {item?.ordered}</Text>
-                  <Button
-                    title="Update Order Status"
-                    color="black"
-                    onPress={() => {
-                      setSelectedOrder(item);
-                      setModalVisible(true);
-                    }}
-                  />
-                </View>
-              ))}
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          {showLiveOrder &&
+            filterOrder?.map((item, index) => (
+              <View style={styles.liveOrderCard} key={index}>
+                <Text>Order Id: {item?._id}</Text>
+                <Text>Status: {item?.status}</Text>
+                <Text>Payment: {item?.payment_status}</Text>
+                <Text>Order Date: {item?.ordered}</Text>
+                <Button
+                  title="Update Order Status"
+                  color="#189AB4"
+                  onPress={() => {
+                    setSelectedOrder(item);
+                    setModalVisible(true);
+                  }}
+                />
+              </View>
+            ))}
 
-            {!showLiveOrder &&
-              filterPastOrder?.map((item, index) => (
-                <View style={styles.liveOrderCard} key={index}>
-                  <Text>Order Id: {item?._id}</Text>
-                  <Text>Status: {item?.status}</Text>
-                  <Text>Payment: {item?.payment_status}</Text>
-                  <Text>Order Date: {item?.ordered}</Text>
-                </View>
-              ))}
-          </ScrollView>
-        </View>
+          {!showLiveOrder &&
+            filterPastOrder?.map((item, index) => (
+              <View style={styles.liveOrderCard} key={index}>
+                <Text>Order Id: {item?._id}</Text>
+                <Text>Status: {item?.status}</Text>
+                <Text>Payment: {item?.payment_status}</Text>
+                <Text>Order Date: {item?.ordered}</Text>
+              </View>
+            ))}
+        </ScrollView>
       </View>
       {/* //////////////////////// MODAL /////////////////////////////// */}
       <Modal animationType="slide" transparent={false} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Image source={modalImg} />
             <View style={styles.liveOrderCard}>
               <Text>Order Id: {selectedOrder?._id}</Text>
               <Text>Status: {selectedOrder?.status}</Text>
@@ -295,11 +329,11 @@ export default function SalesHomepage() {
                 <View style={styles.buttonView}>
                   <View style={styles.buttonInnerView}>
                     <Button
-                      title="Assign Delivery"
+                      title="Ship Product"
                       color="green"
                       style={styles.buttonInnerView}
                       onPress={e => {
-                        processOrder();
+                        shipProduct();
                       }}
                     />
                   </View>
@@ -331,7 +365,11 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   scrollViewParent: {paddingTop: 20},
-  scrollView: {backgroundColor: '#94C973', paddingRight: 10, height: '100%'},
+  contentContainer: {
+    backgroundColor: '#94C973',
+    paddingRight: 10,
+    height: '100%',
+  },
   buttonInnerView: {
     width: 150,
     height: 40,
