@@ -30,7 +30,6 @@ import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
 import VendorHomepage from '../../Vendor/Homepage/VendorHomepage';
 import VendorOrderTracking from '../../Vendor/LiveOrderTracking/VendorOrderTracking';
 import VendorsMyOrders from '../../Vendor/MyOrders/VendorsMyOrders';
-import CashCollection from '../../Admin/CashCollection/CashCollection';
 import CreateOrder from '../../Admin/SalesHomepage/CreateOrder';
 import AddProducts from '../../Admin/ProductDetails/AddProducts';
 //

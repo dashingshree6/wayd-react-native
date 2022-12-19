@@ -72,7 +72,7 @@ export default function Customers() {
       .catch(error => {
         console.log(`Error:`, error);
       });
-  }, [selectedUser.Amount]);
+  }, []);
 
   let handlepost = async () => {
     console.log(`---selectedUser`, selectedUser);
@@ -94,16 +94,6 @@ export default function Customers() {
       });
 
     setModalVisible(!modalVisible);
-
-    axios
-      .get(API, {headers: {Authorization: `Bearer ${TOKEN}`}})
-      .then(res => {
-        console.log(res.data);
-        setAllUser(res.data);
-      })
-      .catch(error => {
-        console.log(`Error:`, error);
-      });
   };
   return (
     <>
@@ -233,7 +223,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 10,
-    paddingRight: 10,
   },
   redCard: {
     backgroundColor: 'red',

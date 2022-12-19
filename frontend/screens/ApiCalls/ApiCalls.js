@@ -38,4 +38,8 @@ export const updatePincodes = (data, id) =>
 
 
  
+export const updateCashCollection = (data) =>
+axios.post(`${API}/cashcollection`,data)
+       
 
+  

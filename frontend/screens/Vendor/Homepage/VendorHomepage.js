@@ -23,6 +23,7 @@ import Toast from 'react-native-toast-message'
 
 
 const Item = (props) => (
+  
   <Pressable
   // style={[styles.button, styles.buttonOpen]}
   onPress={() => props.displayModal(props.product)}
@@ -50,7 +51,11 @@ const [orders, setOrders] = useState({
   originalAmount: "",
   user:"",
   address:"",
-  coupon:null
+  coupon:null,
+  productArr: [{name:'apple', quantity: 1}, {
+    
+  }]
+  
 });
 
 const [cartItems, setCartItems] = useState([]);
@@ -166,6 +171,38 @@ const pushItemInCart = (product_id, product_name, product_grade, product_price,p
 const [value,setValue] = useState(0)
 
 
+
+
+ 
+
+
+
+const [productToCart, setProductToCart] = useState([])
+
+const [count, setCount] = useState(1)
+const [count2, setCount2] = useState(0)
+
+
+const increaseValue2 =()=>{
+  setCount2(prevCount2 => prevCount2 +1)
+}
+
+const increaseValue =()=>{
+  setCount(prevCount => prevCount +1)
+}
+const decreseValue =()=>{
+  setCount(prevCount => prevCount -1)
+}
+
+
+
+
+const addProductToCart=()=>{
+
+
+}
+
+
   const renderItem = ({ item }) => (
     <Item 
     product={item}
@@ -222,6 +259,7 @@ const [value,setValue] = useState(0)
     <View>
       <Toast position='top'/>
        <AntDesign
+          
               name='shoppingcart'
               size={50}
               color='gray'
@@ -271,25 +309,20 @@ const [value,setValue] = useState(0)
 
                 <View style={styles.vendor_modal_content}>
                   <View>
-                    <Text style={styles.vendor_modalText}>Grade: {modalProduct.grade} </Text>
-                    <Text style={styles.vendor_modalText}>Quantity: {quantity} </Text>
-                    <Text style={styles.vendor_modalText}>Price: {productPrice} </Text>                    
+                    <Text style={styles.vendor_modalText}>Quantity: {modalProduct.stock} </Text>
+                    <Text style={styles.vendor_modalText}>4 kg </Text>
+                    <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
                   </View>
                   <Button
-                  title={'-'}
+                          title={'-'}
                           // containerStyle={{
                           //   width: 200,
                           //   marginHorizontal: 50,
                           //   marginVertical: 10,
                           // }}
-                   onPress={() => {
-                    if(quantity > 1) {
-                      setQuantity(quantity-1)
-                      let totalPrice = modalProduct.price * (quantity - 1)
-                      setProductPrice(totalPrice)
-                    }
-                  }}
-                  />
+                          
+                    
+                        />
                    <Image
                           source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
                           containerStyle={styles.vendor_img}
@@ -302,13 +335,11 @@ const [value,setValue] = useState(0)
                           //   marginHorizontal: 50,
                           //   marginVertical: 10,
                           // }}
-                          // onPress={() => createCustomerOrder()}
-                          onPress={() => {
-                            setQuantity(quantity+1)
+                          onPress={() => createCustomerOrder()}
 
-                            let totalPrice = modalProduct.price * (quantity + 1)
-                            setProductPrice(totalPrice)
-                          }}
+                            // let totalPrice = modalProduct.price * (quantity + 1)
+                            // setProductPrice(totalPrice)
+                          // }}
                         />
                 </View>
                 <Button
@@ -326,12 +357,30 @@ const [value,setValue] = useState(0)
                 />
 
                     
+                    <Button 
+                    title={'Add Product To Cart'}
+                    containerStyle={{
+                      width: 200,
+                      marginHorizontal: 20,
+                      marginVertical: 10,
+                      marginLeft:169
+                    }}
+                    onPress={() => {
+                      increaseValue2();
+                      hideModal()
+                      
+                      setCount(0)
+                    }}
+                    
+                    />
           
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => hideModal()}
                 >
-                  <Text style={styles.vendor_hide_btn}>Hide Modal</Text>
+                  <Text style={styles.vendor_hide_btn}
+                  
+                  >Hide Modal</Text>
                 </Pressable>
               </View>
               

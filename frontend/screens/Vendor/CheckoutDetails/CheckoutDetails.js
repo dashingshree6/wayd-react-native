@@ -13,14 +13,8 @@ const API="https://e56d-49-205-239-58.in.ngrok.io/api/product/61a8c81b1e5a795016
 
 const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
 
-export default function CheckoutDetails({ navigation, goToFirstTab}) {
-  // const items = SyncStorage.get("cart")
-
-  // const { userId } = route.params;
-  // console.log("CHeckout Details userId",userId)
-
-  // const jwt = SyncStorage.get('jwt')
-  // console.log('Checkout JWT', jwt)
+export default function CheckoutDetails(props) {
+  const items = SyncStorage.get("cart")
 
   const [data,setData] = useState([]);
   const [finalPrice, setFinalPrice] = useState(0)
@@ -203,14 +197,6 @@ export default function CheckoutDetails({ navigation, goToFirstTab}) {
        <Toast position='top'/>
       <ScrollView>
         <Text style={styles.vendor_checkout_head}>Checkout Details</Text>
-        <Button
-                title={'Clear Cart'}
-                containerStyle={{
-                    // width: '100%',
-                    marginVertical: 10,
-                }}
-                onPress={() => clearCart()}
-        />
         <View style={styles.vendor_checkout_btns}>
                 <Button
                 title={'Instant Order'}
