@@ -124,6 +124,8 @@ const SalesHomepage = ({ navigation, route  }) => {
    });
 }
 
+const proceedtoOrder = () => navigation.navigate("SalesVendorForm")
+
 useEffect(()=> {
    getAllProducts()
 },[])
@@ -137,6 +139,7 @@ useEffect(()=> {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
+                          omPress={() => proceedtoOrder()}
                         />
                     </View>
                     <Tab

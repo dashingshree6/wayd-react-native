@@ -1,5 +1,4 @@
-export const API = 'https://de42-49-205-239-58.in.ngrok.io/api';
-// export const API = "https://1bf0-49-205-239-58.in.ngrok.io/api";
+export const API = "https://418a-49-205-239-58.in.ngrok.io/api";
 // export const API =  "https://1819-49-205-239-58.in.ngrok.io" ;
 // export const API = "https://way-d-dev.herokuapp.com/api";
 // export const API = "http://3.108.193.188:8000/api"; // current

@@ -8,15 +8,34 @@ export const getPincodes = () => axios.get(`${API}/pin`);
 
 export const getAllUsers = async () => await axios.get(`${API}/users`)
 
+export const getAllProducts = () => axios.get(`${API}/products`);
+
+export const getCartDetails = (id) => axios.get(`${API}/cart/${id}`);
+
+export const getCartDetailsByUserId = (id) => axios.get(`${API}/cart/user/${id}`)
+
+export const getCategories = () => axios.get(`${API}/categories`)
+
+export const getAllProcurements = () => axios.get(`${API}/order/procure`)
+
 // POST
 
 export const createPincodes = (data) =>
 axios.post(`${API}/pin/create`,  data );
 
+export const addProductToCart = (data, id) =>
+axios.post(`${API}/add/${id}`,  data );
+
+export const createNewOrder = (data) =>
+axios.post(`${API}/order/create`,  data );
+
+export const updateCartDetails = (action, id) => axios.post(`${API}/update/${action}/${id}`)
+
 // PUT
 
 export const updatePincodes = (data, id) =>
   axios.patch(`${API}/pin/${id}`, { percent_add: data });
+
 
  
 export const updateCashCollection = (data) =>

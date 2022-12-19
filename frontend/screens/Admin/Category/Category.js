@@ -2,6 +2,7 @@ import { View, Text, FlatList, StyleSheet,Modal, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { Input, Icon,Button } from '@rneui/themed'
 import axios from 'axios'
+import { getCategories } from '../../ApiCalls/ApiCalls'
 
 const API = 'https://2171-49-205-239-58.in.ngrok.io/api'
 
@@ -14,8 +15,8 @@ export default function Category() {
     const [data, setData] = useState([])
     const [modalData, setModalData] = useState({})
 
-    const getCategories = () => {
-        axios.get(`${API}/categories` , { headers: {"Authorization" : `Bearer ${TOKEN}`} })
+    const getAllCategories = () => {
+      getCategories()
         .then(res => {
         setData(res.data)
         }).catch((error) => {
@@ -58,7 +59,7 @@ export default function Category() {
     }
 
     useEffect(()=> {
-        getCategories()
+      getAllCategories()
     },[])
   return (
     <View>

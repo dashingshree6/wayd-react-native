@@ -107,6 +107,20 @@ return (
             />
           )}
         />
+          <DrawerItem
+          label="Create Sales Order"
+          onPress={() => props.navigation.navigate('SalesVendorForm')}
+          icon={()=> (
+            <AntDesign
+            name='right'
+            size={15}
+            style={{
+              position: "absolute",
+              right: 10,
+            }}
+            />
+          )}
+        />
         <DrawerItem
           label="Procurement Order"
           onPress={() => props.navigation.navigate('ProcurementHomepage')}
