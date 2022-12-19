@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {
-  SafeAreaView,
   ScrollView,
-  StatusBar,
+  Image,
   StyleSheet,
   Text,
   View,
@@ -13,42 +12,11 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import {API} from '../../backend';
+import {API, TOKEN} from '../../backend';
+import CashImg from './cashImg.jpg';
 
 export default function Customers() {
-  const [allUsers, setAllUser] = useState([
-    {
-      due_amount: 0,
-      role: 1,
-      purchases: [],
-      _id: '5ff9694dbc54c3002478b2de',
-      username: 'Krisffdh',
-      phone_number: 9581295811,
-      email: 'krishnan@gmail.com',
-      salt: '2f9c65c6-e858-47eb-906d-7933c8c0fc4b',
-      encry_password:
-        '22f458007d811131cd76cae60b05b5dbcfe80eb234676fa23982f9f9091fe1cb',
-      d_product: [
-        {
-          _id: '5ff9694dbc54c3002478b2e0',
-          name: 'Mango',
-          minprice: '50',
-          maxprice: '60',
-        },
-        {
-          _id: '5ff9694dbc54c3002478b2df',
-          name: 'vegetable',
-          minprice: '56',
-          maxprice: '66',
-        },
-      ],
-      createdAt: '2021-11-27T08:29:01.737Z',
-      updatedAt: '2022-12-16T08:48:12.840Z',
-      __v: 0,
-      photo: '',
-      max_due: 50000,
-    },
-  ]);
+  const [allUsers, setAllUser] = useState();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState({
@@ -58,11 +26,11 @@ export default function Customers() {
     userId: '',
   });
 
-  let url = `${API}/users`;
-  const TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTgxMDF9.ITnJjF8atFSnGl7dwBejIVLRnPantE5F8YWsW1uehHY';
+  // const TOKEN =
+  //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTgxMDF9.ITnJjF8atFSnGl7dwBejIVLRnPantE5F8YWsW1uehHY';
 
   React.useEffect(() => {
+    let url = `${API}/users`;
     axios
       .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
       .then(res => {
@@ -108,67 +76,73 @@ export default function Customers() {
   return (
     <>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        {allUsers
-          .filter((item, index) => item.role == 0)
-          .map((item, key) => (
-            <View style={styles.usersCard}>
-              {item.due_amount > item.max_due ? (
-                <View style={styles.redCard}>
-                  <Text>Role: {item.role}</Text>
-                  <Text>Name: {item.username}</Text>
-                  <Text>User id: {item._id}</Text>
-                  <Text>
-                    Max Due: {item.max_due ? item.max_due : `Not Assigned`}
-                  </Text>
+        <View style={styles.imgView}>
+          <Image style={styles.cashImg} source={CashImg} />
+        </View>
+        <View style={styles.allUsersView}>
+          <Text style={styles.dashboardTitle}>Cash Collection Dashbaord</Text>
+          {allUsers
+            ?.filter((item, index) => item.role == 0)
+            .map((item, key) => (
+              <View style={styles.usersCard}>
+                {item.due_amount > item.max_due ? (
+                  <View style={styles.redCard}>
+                    <Text>Role: {item.role}</Text>
+                    <Text>Name: {item.username}</Text>
+                    <Text>User id: {item._id}</Text>
+                    <Text>
+                      Max Due: {item.max_due ? item.max_due : `Not Assigned`}
+                    </Text>
 
-                  <View>
-                    <Text>Due: {item.due_amount}</Text>
+                    <View>
+                      <Text>Due: {item.due_amount}</Text>
+                    </View>
+
+                    <Button
+                      title="Update"
+                      color="black"
+                      onPress={() => {
+                        setSelectedUser(prev => ({
+                          ...prev,
+                          userId: `${item._id}`,
+                          Amount: item.due_amount,
+                        }));
+                        setModalVisible(true);
+                      }}
+                      id={item._id}
+                    />
                   </View>
-
-                  <Button
-                    title="Update"
-                    color="black"
-                    onPress={() => {
-                      setSelectedUser(prev => ({
-                        ...prev,
-                        userId: `${item._id}`,
-                        Amount: item.due_amount,
-                      }));
-                      setModalVisible(true);
-                    }}
-                    id={item._id}
-                  />
-                </View>
-              ) : (
-                <View>
-                  <Text>Role: {item.role}</Text>
-                  <Text>Name: {item.username}</Text>
-                  <Text>User id: {item._id}</Text>
-                  <Text>
-                    Max Limit: {item.max_due ? item.max_due : `Not Assigned`}
-                  </Text>
-
+                ) : (
                   <View>
-                    <Text>Due: {item.due_amount}</Text>
-                  </View>
+                    <Text>Role: {item.role}</Text>
+                    <Text>Name: {item.username}</Text>
+                    <Text>User id: {item._id}</Text>
+                    <Text>
+                      Max Limit: {item.max_due ? item.max_due : `Not Assigned`}
+                    </Text>
 
-                  <Button
-                    title="Update Due Amount"
-                    color="black"
-                    onPress={() => {
-                      setSelectedUser(prev => ({
-                        ...prev,
-                        userId: `${item._id}`,
-                        Amount: item.due_amount,
-                      }));
-                      setModalVisible(true);
-                    }}
-                    id={item._id}
-                  />
-                </View>
-              )}
-            </View>
-          ))}
+                    <View>
+                      <Text>Due: {item.due_amount}</Text>
+                    </View>
+
+                    <Button
+                      title="Update Due Amount"
+                      color="black"
+                      onPress={() => {
+                        setSelectedUser(prev => ({
+                          ...prev,
+                          userId: `${item._id}`,
+                          Amount: item.due_amount,
+                        }));
+                        setModalVisible(true);
+                      }}
+                      id={item._id}
+                    />
+                  </View>
+                )}
+              </View>
+            ))}
+        </View>
       </ScrollView>
       <Modal
         animationType="slide"
@@ -231,8 +205,18 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
+  cashImg: {
+    width: 400,
+    height: 200,
+  },
   redCard: {
     backgroundColor: 'red',
+  },
+  imgView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   SaveBtn: {
     backgroundColor: 'black',
@@ -286,5 +270,16 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+  allUsersView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dashboardTitle: {
+    fontSize: 20,
+    padding: 5,
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
