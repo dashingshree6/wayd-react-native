@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/drawer';
 
 //Screens
+
 //Admin
 import Login from '../../Login/Login';
 import Signup from '../Signup/Signup';
@@ -39,20 +40,16 @@ import VendorDrawer from './VendorDrawer';
 import DeliveryDrawer from './DeliveryDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
+import {isAuthenticated, setAuthToken} from '../../Login/index';
+import SyncStorage from 'sync-storage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 import Coupon from '../Coupon/Coupon';
 import Coupons from '../Coupon/Coupons';
-
-import {isAuthenticated, setAuthToken} from '../../Login/index';
-import SyncStorage from 'sync-storage';
-
 import {Icon, ListItem} from '@rneui/themed';
 
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      {/* <DrawerItemList {...props} /> */}
-
       {SyncStorage.get('role') === 1 && <AdminDrawer {...props} />}
       {SyncStorage.get('role') === 0 && <VendorDrawer {...props} />}
       {SyncStorage.get('role') === 2 && <DeliveryDrawer {...props} />}
@@ -81,10 +78,6 @@ const MyDrawer = () => {
       setInitialRoute('Login');
     }
   };
-  // useEffect(() => {
-  //   setAuthToken(isAuthenticated().token);
-  //   setInitialRouteName()
-  // }, []);
 
   return (
     <Drawer.Navigator
@@ -95,96 +88,11 @@ const MyDrawer = () => {
         <Drawer.Screen
           name="Login"
           component={Login}
-          // options={{ title: 'Homepage' }}
           options={{
             headerShown: false,
           }}
         />
       )}
-
-      {/* <Drawer.Screen
-                      name="Login"
-                      component={Login}
-                      // options={{ title: 'Homepage' }}
-                      options={{
-                        headerShown: false,
-                      }}
-
-                    /> 
-                    <Drawer.Screen
-                      name="SalesHomepage"
-                      component={SalesHomepage}
-                      // component={CheckoutDetails}
-                      // component={DeliveryHomepage}
-                      // component={DeliverySingleOrderStatus}
-                      options={({ navigation }) => ({
-                        title: ' Sales Homepage',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-                        // drawerIcon: () => (
-                        //   <AntDesign
-                        //   name='right'
-                        //   size={15}
-                        //   />
-                        // )
-
-                      })}
-                    />
-                    <Drawer.Screen
-                      name="SalesLiveOrder"
-                      component={SalesLiveOrder}
-                      options={({ navigation }) => ({
-                        title: ' Sales Live Order',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-                    <Drawer.Screen
-                      name="Customers"
-                      component={Customers}
-                      options={({ navigation }) => ({
-                        title: 'Customers',
-                        headerLeft: () => (
-                          <Ionicons 
-                          name='menu'
-                          size={25}
-                          onPress={()=> navigation.openDrawer()}
-                          />
-                        ),
-
-                      })}
-                    />
-                     {/* replace this component here for testing the page */}
-      {/* <Drawer.Screen
-        name="ProcurementHomepage"
-        // component={CheckoutDetails}
-        // component={VendorHomepage}
-        // component={ProductDetails}
-        component={ProcurementHomepage}
-        // component={Coupons}
-        // component={Tabs}
-        options={({navigation}) => ({
-          title: 'Vendor Homepage',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      /> */}
 
       <Drawer.Screen
         name="SalesHomepage"
@@ -198,12 +106,6 @@ const MyDrawer = () => {
               onPress={() => navigation.openDrawer()}
             />
           ),
-          // drawerIcon: () => (
-          //   <AntDesign
-          //   name='right'
-          //   size={15}
-          //   />
-          // )
         })}
       />
 
@@ -401,26 +303,6 @@ const MyDrawer = () => {
         })}
       />
 
-      {/* <Drawer.Screen
-        name="SalesHomepage"
-        component={SalesHomepage}
-        options={({navigation}) => ({
-          title: ' Sales Homepage',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-          // drawerIcon: () => (
-          //   <AntDesign
-          //   name='right'
-          //   size={15}
-          //   />
-          // )
-        })}
-      /> */}
       <Drawer.Screen
         name="SalesLiveOrder"
         component={SalesLiveOrder}
@@ -449,48 +331,6 @@ const MyDrawer = () => {
           ),
         })}
       />
-      {/* <Drawer.Screen
-        name="ProcurementHomepage"
-        component={ProcurementHomepage}
-        options={({navigation}) => ({
-          title: 'Procurement Homepage',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      /> */}
-      {/* <Drawer.Screen
-        name="ProductDetails"
-        component={ProductDetails}
-        options={({navigation}) => ({
-          title: 'Product Details',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      /> */}
-      {/* <Drawer.Screen
-        name="Suppliers"
-        component={Suppliers}
-        options={{
-          title: 'Suppliers',
-          headerLeft: ({props}) => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => props.navigation.openDrawer()}
-            />
-          ),
-        }}
-      /> */}
     </Drawer.Navigator>
   );
 };

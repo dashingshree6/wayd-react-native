@@ -14,6 +14,8 @@ import {API, TOKEN} from '../../backend';
 import axios from 'axios';
 import salesDashImg from './salesDashImg.jpg';
 import modalImg from './modalImg.jpg';
+import {SelectList} from 'react-native-dropdown-select-list';
+
 export default function SalesHomepage() {
   const [allOrder, setAllOrder] = useState();
   const [showLiveOrder, setShowLiveOrder] = useState(true);
@@ -22,15 +24,43 @@ export default function SalesHomepage() {
   const [filterOrder, setFilterOrder] = useState();
   const [filterPastOrder, setFilterPastOrder] = useState();
   const [fetchTrigger, setFetchTrigger] = useState();
+  const [allDelivery, setAllDelivery] = useState();
+  const [selectedDelivery, setSelectedDelivery] = React.useState();
+
+  // const data = [
+  //   {key: '1', value: 'Mobiles', disabled: true},
+  //   {key: '2', value: 'Appliances'},
+  //   {key: '3', value: 'Cameras'},
+  //   {key: '4', value: 'Computers', disabled: true},
+  //   {key: '5', value: 'Vegetables'},
+  //   {key: '6', value: 'Diary Products'},
+  //   {key: '7', value: 'Drinks'},
+  // ];
+  const data = allDelivery?.map((item, index) => ({
+    key: `${index + 1}`,
+    value: `${item.username}`,
+    disabled: false,
+  }));
 
   let url = `${API}/order/all`;
 
   React.useEffect(() => {
+    // all order api call
     axios
       .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
       .then(res => {
-        console.log(res.data);
         setAllOrder(res.data);
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      });
+
+    // all user api call
+    let allUserUrl = `${API}/users`;
+    axios
+      .get(allUserUrl, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .then(res => {
+        setAllDelivery(res.data.filter((item, index) => item.role == '2'));
       })
       .catch(error => {
         console.log('Error:', error);
@@ -123,12 +153,14 @@ export default function SalesHomepage() {
           status: 'Shipped',
           payment_status: 'UNPAID',
           amount: 0,
+          id: selectedDelivery[0]._id,
         },
         {
           headers: {Authorization: `Bearer ${TOKEN}`},
         },
       )
       .then(res => {
+        console.log(`------shipper details`, res.data);
         alert(`Order Shipped`);
         getData();
         setModalVisible(false);
@@ -276,38 +308,45 @@ export default function SalesHomepage() {
       <Modal animationType="slide" transparent={false} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Image source={modalImg} />
             <View style={styles.liveOrderCard}>
               <Text>Order Id: {selectedOrder?._id}</Text>
               <Text>Status: {selectedOrder?.status}</Text>
               <Text>Payment: {selectedOrder?.payment_status}</Text>
               <Text>Order Date: {selectedOrder?.ordered}</Text>
+              {selectedDelivery && (
+                <Text>
+                  {selectedDelivery[0].username}: {selectedDelivery[0]._id}
+                </Text>
+              )}
             </View>
 
             <View>
               {selectedOrder?.status === 'Placed' && (
-                <View style={styles.buttonView}>
-                  <View style={styles.buttonInnerView}>
-                    <Button
-                      title="Reject Order"
-                      color="red"
-                      style={styles.buttonInnerView}
-                      onPress={() => {
-                        rejectOrder();
-                      }}
-                    />
+                <>
+                  <View style={styles.buttonView}>
+                    {/* <Image source={modalImg} /> */}
+                    <View style={styles.buttonInnerView}>
+                      <Button
+                        title="Reject Order"
+                        color="red"
+                        style={styles.buttonInnerView}
+                        onPress={() => {
+                          rejectOrder();
+                        }}
+                      />
+                    </View>
+                    <View style={styles.buttonInnerView}>
+                      <Button
+                        title="Accept Order"
+                        color="green"
+                        style={styles.buttonInnerView}
+                        onPress={e => {
+                          acceptOrder();
+                        }}
+                      />
+                    </View>
                   </View>
-                  <View style={styles.buttonInnerView}>
-                    <Button
-                      title="Accept Order"
-                      color="green"
-                      style={styles.buttonInnerView}
-                      onPress={e => {
-                        acceptOrder();
-                      }}
-                    />
-                  </View>
-                </View>
+                </>
               )}
 
               {selectedOrder?.status === 'Accepted' && (
@@ -326,18 +365,37 @@ export default function SalesHomepage() {
               )}
 
               {selectedOrder?.status === 'Processing' && (
-                <View style={styles.buttonView}>
-                  <View style={styles.buttonInnerView}>
-                    <Button
-                      title="Ship Product"
-                      color="green"
-                      style={styles.buttonInnerView}
-                      onPress={e => {
-                        shipProduct();
-                      }}
-                    />
+                <ScrollView>
+                  <SelectList
+                    setSelected={val =>
+                      setSelectedDelivery(
+                        allDelivery.filter(
+                          (item, index) => item.username == val,
+                        ),
+                      )
+                    }
+                    data={data}
+                    save="value"
+                    onSelect={() =>
+                      alert(`Shipper ${selectedDelivery[0].username} selected`)
+                    }
+                    boxStyles={{margin: 10}}
+                    dropdownStyles={{margin: 10}}
+                  />
+
+                  <View style={styles.buttonView}>
+                    <View style={styles.buttonInnerView}>
+                      <Button
+                        title="Ship Order"
+                        color="green"
+                        style={styles.buttonInnerView}
+                        onPress={e => {
+                          shipProduct();
+                        }}
+                      />
+                    </View>
                   </View>
-                </View>
+                </ScrollView>
               )}
               <View style={styles.closeBtnView}>
                 <Button

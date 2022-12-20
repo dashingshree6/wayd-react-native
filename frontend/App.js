@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 // import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -15,7 +7,8 @@ import {
   StyleSheet,
   Text,
   useColorScheme,
-  View, Button
+  View,
+  Button,
 } from 'react-native';
 
 import {
@@ -29,8 +22,8 @@ import {
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 // const Stack = createNativeStackNavigator();
 
@@ -40,7 +33,6 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-
 
 //Screens
 
@@ -60,28 +52,26 @@ import VendorHomepage from './screens/Vendor/Homepage/VendorHomepage';
 import VendorOrderTracking from './screens/Vendor/LiveOrderTracking/VendorOrderTracking';
 import VendorsMyOrders from './screens/Vendor/MyOrders/VendorsMyOrders';
 //
-import { Icon } from '@rneui/themed';
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {Icon} from '@rneui/themed';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeliveryHomepage from './screens/Delivery/DeliveryHomepage';
 import SyncStorage from 'sync-storage';
 
-import { setAuthToken, isAuthenticated } from './screens/Login'; 
+import {setAuthToken, isAuthenticated} from './screens/Login';
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 // const App: () => Node = () => {
 const App = () => {
-
-  useEffect(()=>{
+  useEffect(() => {
     // setAuthToken(SyncStorage.get("jwt"))
     setAuthToken(isAuthenticated().token);
+  });
 
-  })
-  
   return (
-        <NavigationContainer>
-          <MyDrawer/>
-        </NavigationContainer>
-  )
+    <NavigationContainer>
+      <MyDrawer />
+    </NavigationContainer>
+  );
 };
 
 const styles = StyleSheet.create({
