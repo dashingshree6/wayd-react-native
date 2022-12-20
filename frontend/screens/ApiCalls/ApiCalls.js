@@ -18,6 +18,8 @@ export const getCategories = () => axios.get(`${API}/categories`)
 
 export const getAllProcurements = () => axios.get(`${API}/order/procure`)
 
+export const getAllOrders = () => axios.get(`${API}/order/all`)
+
 // POST
 
 export const createPincodes = (data) =>

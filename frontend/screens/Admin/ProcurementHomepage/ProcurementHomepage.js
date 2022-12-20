@@ -12,10 +12,10 @@ import {
     ActivityIndicator,
     Modal,
     Pressable,
-    TextInput
+    TextInput,
   } from 'react-native';
-  import { Icon, Input, Button, Tab, TabView } from '@rneui/themed';
-import { getAllProcurements } from '../../ApiCalls/ApiCalls';
+  import { Icon, Input, Button, Tab, TabView, Divider } from '@rneui/themed';
+import { getAllProcurements, getAllOrders } from '../../ApiCalls/ApiCalls';
   //
   import axios from 'axios';
 
@@ -52,16 +52,20 @@ import { getAllProcurements } from '../../ApiCalls/ApiCalls';
     style={styles.sales_live_button}
     // onPress={onPress}
     >
+          <Text>Order Id: {props.procurement._id}</Text>
+          <Divider width={2}/>
           <FlatList
-          data={props.procurement.list}
+          data={props.procurement.products.details}
           keyExtractor={item => item._id}
           renderItem={({item}) => (
             <View 
             // style={styles.item}
             >
               <Text style={styles.title}>Product Name: {item.name}</Text>
-              <Text style={styles.title}>Available Stock: {item.extra_stock}</Text>
-              <Text style={styles.title}>Count : {item.count}</Text>
+              <Text style={styles.title}>Grade: {item.grade}</Text>
+              <Text style={styles.title}>Price: {item.price}</Text>
+              <Text style={styles.title}>Quantity : {item.Selectedquantity}</Text>
+              <Divider width={2}/>
             </View>
           )}
           />
@@ -79,7 +83,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
     _id: "61a8c7b51e5a79501663f911",
     name: "",
     count: 0
-})
+  })
 
   const renderItem = ({ item }) => (
     <Item 
@@ -123,10 +127,10 @@ const ProcurementHomepage = ({ navigation, route  }) => {
 
   const getAllProcurementsData = () => {
     setLoading(true)
-    getAllProcurements()
+    getAllOrders()
     .then(res => {
     console.log(res.data);
-    setData(res.data)
+    setData(res.data.filter(i => i.userType === "Supplier"))
     setLoading(false)
     }).catch((error) => {
     console.log(error)
@@ -148,7 +152,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
-                          onPress={() => navigation.navigate("SelectCustomerForm")}
+                          onPress={() => navigation.navigate("SelectSupplierForm")}
                         />
                     </View>
                     <Tab
@@ -161,12 +165,12 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                       variant="primary"
                     >
                         <Tab.Item
-                          title="Fruits"
+                          title="Live"
                           titleStyle={{ fontSize: 12 }}
                           // icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
                         />
                         <Tab.Item
-                          title="Vegetables"
+                          title="Past"
                           titleStyle={{ fontSize: 12 }}
                           // icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
                         />

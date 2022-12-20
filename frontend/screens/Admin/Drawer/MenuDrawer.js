@@ -24,7 +24,7 @@ import PriceAddition from '../PriceAddition.js/PriceAddition';
 import Stock from '../Stock/Stock';
 import OrderStatus from '../OrderStatus/OrderStatus';
 import SalesVendorForm from '../SalesHomepage/SalesVendorForm';
-import SelectCustomerForm from '../ProcurementHomepage/SelectCustomerForm';
+import SelectSupplierForm from '../ProcurementHomepage/SelectSupplierForm';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -110,7 +110,7 @@ const MyDrawer = () => {
                   /> 
                   }
    
-     
+              
                     <Drawer.Screen
                       name="SalesHomepage"
                       component={SalesHomepage}
@@ -135,6 +135,7 @@ const MyDrawer = () => {
 
                       })}
                     />
+                 
                       
                     <Drawer.Screen
                       name="SalesLiveOrder"
@@ -177,7 +178,7 @@ const MyDrawer = () => {
                       // component={Coupons}
                       // component={Tabs}
                       options={({ navigation }) => ({
-                        title: 'Vendor Homepage',
+                        title: 'Procurement Homepage',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
@@ -331,10 +332,10 @@ const MyDrawer = () => {
                     /> 
 
                   <Drawer.Screen
-                      name="SelectCustomerForm"
-                      component={SelectCustomerForm}
+                      name="SelectSupplierForm"
+                      component={SelectSupplierForm}
                       options={({ navigation }) => ({
-                        title: 'Select Customer Form',
+                        title: 'Select Supplier Form',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'
@@ -345,6 +346,8 @@ const MyDrawer = () => {
 
                       })}
                     /> 
+            
+           
 
 
                     {/* Vendor */}

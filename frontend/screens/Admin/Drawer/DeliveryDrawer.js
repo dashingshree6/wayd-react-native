@@ -64,7 +64,7 @@ export default function DeliveryDrawer(props) {
   
         <DrawerItem
           label="Home"
-          onPress={() => props.navigation.navigate('SalesHomepage')}
+          onPress={() => props.navigation.navigate('DeliveryHomepage')}
           icon={()=> (
             <AntDesign
             name='right'
