@@ -231,6 +231,21 @@ return (
           )}
         />
 
+      <DrawerItem
+          label="Coupons"
+          onPress={() => props.navigation.navigate('Stock')}
+          icon={()=> (
+            <AntDesign
+            name='right'
+            size={15}
+            style={{
+              position: "absolute",
+              right: 10,
+            }}
+            />
+          )}
+        />
+
         { SyncStorage.get("jwt") && (
 
         <DrawerItem

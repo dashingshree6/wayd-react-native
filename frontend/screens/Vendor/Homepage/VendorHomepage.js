@@ -195,14 +195,6 @@ const decreseValue =()=>{
 }
 
 
-
-
-const addProductToCart=()=>{
-
-
-}
-
-
   const renderItem = ({ item }) => (
     <Item 
     product={item}
@@ -314,33 +306,40 @@ const addProductToCart=()=>{
                     <Text style={styles.vendor_modalText}>{modalProduct.description} </Text>                    
                   </View>
                   <Button
-                          title={'-'}
-                          // containerStyle={{
-                          //   width: 200,
-                          //   marginHorizontal: 50,
-                          //   marginVertical: 10,
-                          // }}
-                          
-                    
-                        />
-                   <Image
-                          source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
-                          containerStyle={styles.vendor_img}
-                          // PlaceholderContent={<ActivityIndicator />}
-                        />
-                     <Button
-                          title={'+'}
-                          // containerStyle={{
-                          //   width: 200,
-                          //   marginHorizontal: 50,
-                          //   marginVertical: 10,
-                          // }}
-                          onPress={() => createCustomerOrder()}
-
-                            // let totalPrice = modalProduct.price * (quantity + 1)
-                            // setProductPrice(totalPrice)
-                          // }}
-                        />
+                    title={'-'}
+                            // containerStyle={{
+                            //   width: 200,
+                            //   marginHorizontal: 50,
+                            //   marginVertical: 10,
+                            // }}
+                     onPress={() => {
+                      if(quantity > 1) {
+                        setQuantity(quantity-1)
+                        let totalPrice = modalProduct.price * (quantity - 1)
+                        setProductPrice(totalPrice)
+                      }
+                    }}
+                    />
+                     <Image
+                            source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tomato.jpg/220px-Tomato.jpg" }}
+                            containerStyle={styles.vendor_img}
+                            // PlaceholderContent={<ActivityIndicator />}
+                          />
+                       <Button
+                            title={'+'}
+                            // containerStyle={{
+                            //   width: 200,
+                            //   marginHorizontal: 50,
+                            //   marginVertical: 10,
+                            // }}
+                            // onPress={() => createCustomerOrder()}
+                            onPress={() => {
+                              setQuantity(quantity+1)
+  
+                              let totalPrice = modalProduct.price * (quantity + 1)
+                              setProductPrice(totalPrice)
+                            }}
+                          />
                 </View>
                 <Button
                 title={"Add to cart"}
@@ -355,24 +354,6 @@ const addProductToCart=()=>{
                   )
                 }}
                 />
-
-                    
-                    <Button 
-                    title={'Add Product To Cart'}
-                    containerStyle={{
-                      width: 200,
-                      marginHorizontal: 20,
-                      marginVertical: 10,
-                      marginLeft:169
-                    }}
-                    onPress={() => {
-                      increaseValue2();
-                      hideModal()
-                      
-                      setCount(0)
-                    }}
-                    
-                    />
           
                 <Pressable
                   style={[styles.button, styles.buttonClose]}

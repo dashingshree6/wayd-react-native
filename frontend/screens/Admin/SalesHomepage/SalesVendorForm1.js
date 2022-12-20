@@ -98,7 +98,7 @@ import {
       // // if(props.manualOrder)
       // if(id) {
         // props.navigation.navigate("CheckoutDetails", { userId: id })
-        navigation.navigate("SalesVendorForm2")
+        navigation.navigate("SelectCustomerForm")
       // } 
     }
   

@@ -24,6 +24,7 @@ import PriceAddition from '../PriceAddition.js/PriceAddition';
 import Stock from '../Stock/Stock';
 import OrderStatus from '../OrderStatus/OrderStatus';
 import SalesVendorForm from '../SalesHomepage/SalesVendorForm';
+import SelectCustomerForm from '../ProcurementHomepage/SelectCustomerForm';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -318,6 +319,22 @@ const MyDrawer = () => {
                       component={SalesVendorForm}
                       options={({ navigation }) => ({
                         title: 'Create Sales Order',
+                        headerLeft: () => (
+                          <Ionicons 
+                          name='menu'
+                          size={25}
+                          onPress={()=> navigation.openDrawer()}
+                          />
+                        ),
+
+                      })}
+                    /> 
+
+                  <Drawer.Screen
+                      name="SelectCustomerForm"
+                      component={SelectCustomerForm}
+                      options={({ navigation }) => ({
+                        title: 'Select Customer Form',
                         headerLeft: () => (
                           <Ionicons 
                           name='menu'

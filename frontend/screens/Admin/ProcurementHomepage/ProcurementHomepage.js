@@ -148,7 +148,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                             marginHorizontal: 50,
                             marginVertical: 10,
                           }}
-                          onPress={() => setModalVisible(true)}
+                          onPress={() => navigation.navigate("SelectCustomerForm")}
                         />
                     </View>
                     <Tab
