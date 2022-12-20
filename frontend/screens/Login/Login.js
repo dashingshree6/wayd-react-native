@@ -32,10 +32,10 @@ const Login = ({navigation}) => {
 
   const onSubmit = () => {
     setValues({...values, error: false, loading: true});
+
     signin({phone_number, password})
       .then(data => {
         console.log(data.data);
-
         if (data.error) {
           setValues({...values, error: data.data.error, loading: false});
         } else {
@@ -47,48 +47,49 @@ const Login = ({navigation}) => {
               password: '',
             });
           });
-          //new added
+
           SyncStorage.set('role', data.data.user.role);
           SyncStorage.set('userToken', data.data.token);
+          SyncStorage.set('userId', data.data.user._id);
           let userRole = SyncStorage.get('role');
           let userToken = SyncStorage.get('userToken');
           console.log('Signin Role', SyncStorage.get('role'));
           console.log('Signin Token', SyncStorage.get('userToken'));
-          // if (data.data.token) {
-          //     if (data.data.user && data.data.user.role === 1) {
-          //       // return <Redirect to="/admin/dashboard" />;
-          //       return navigation.navigate("PriceAddition")
-          //     } else {
-          //       return navigation.navigate("VendorHomepage")
-          //     }
-          //   }
-          //   if (isAuthenticated() && user.role === 1) {
-          //     return navigation.navigate("SalesHomepage")
-          //   }
-          //   if (isAuthenticated() && user.role === 0) {
-          //       return navigation.navigate("VendorHomepage")
-          //   }
+          console.log('Signin User Id', SyncStorage.get('userId'));
 
-          // if (didRedirect) {
-          //   if (user && user.role === 1) {
-          //     return navigation.navigate("PriceAddition")
-          //   } else {
-          //     return navigation.navigate("VendorHomepage")
-          //   }
-          // }
-          if (userToken) {
-            if (userRole === 1) {
-              return navigation.navigate('SalesHomepage');
-            } else if (userRole === 0) {
-              return navigation.navigate('VendorHomepage');
-            } else {
-              return navigation.navigate('DeliveryHomepage');
-            }
+          if (data.error) {
+            setValues({...values, error: data.data.error, loading: false});
           } else {
-            return navigation.navigate('Login');
+            authenticate(data.data, () => {
+              setValues({
+                ...values,
+                didRedirect: true,
+                phone_number: '',
+                password: '',
+              });
+            });
+            //new added
+            SyncStorage.set('role', data.data.user.role);
+            SyncStorage.set('userToken', data.data.token);
+            let userRole = SyncStorage.get('role');
+            let userToken = SyncStorage.get('userToken');
+            console.log('Signin Role', SyncStorage.get('role'));
+            console.log('Signin Token', SyncStorage.get('userToken'));
+
+            if (userToken) {
+              if (userRole === 1) {
+                return navigation.navigate('SalesHomepage');
+              } else if (userRole === 0) {
+                return navigation.navigate('VendorHomepage');
+              } else {
+                return navigation.navigate('DeliveryHomepage');
+              }
+            } else {
+              return navigation.navigate('Login');
+            }
           }
+          //
         }
-        //
       })
       .catch(err =>
         setValues({
@@ -141,15 +142,6 @@ const Login = ({navigation}) => {
             placeholder="Enter your phonenumber"
             keyboardType="numeric"
             value={phone_number}
-            // leftIcon={{ type: 'Feather', name: 'phone' }}
-            // onChangeText={value => this.setState({ comment: value })}
-            // leftIcon={
-            //     <Icon
-            //     name='phone'
-            //     size={24}
-            //     color='black'
-            //     />
-            //     }
             onChangeText={value =>
               setValues({...values, error: false, phone_number: value})
             }
@@ -159,15 +151,6 @@ const Login = ({navigation}) => {
             placeholder="Enter your password"
             secureTextEntry={true}
             value={password}
-            // leftIcon={{ type: 'Feather', name: 'phone' }}
-            // onChangeText={value => this.setState({ comment: value })}
-            // leftIcon={
-            //     <Icon
-            //     name='phone'
-            //     size={24}
-            //     color='black'
-            //     />
-            //     }
             onChangeText={value =>
               setValues({...values, error: false, password: value})
             }

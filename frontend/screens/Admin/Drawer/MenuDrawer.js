@@ -24,6 +24,7 @@ import Category from '../Category/Category';
 import PriceAddition from '../PriceAddition.js/PriceAddition';
 import Stock from '../Stock/Stock';
 import OrderStatus from '../OrderStatus/OrderStatus';
+import SalesVendorForm from '../SalesHomepage/SalesVendorForm';
 
 //Vendor
 import CheckoutDetails from '../../Vendor/CheckoutDetails/CheckoutDetails';
@@ -99,6 +100,50 @@ const MyDrawer = () => {
         component={SalesHomepage}
         options={({navigation}) => ({
           title: ' Sales Homepage',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+
+      <Drawer.Screen
+        name="SalesLiveOrder"
+        component={SalesLiveOrder}
+        options={({navigation}) => ({
+          title: ' Sales Live Order',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="Customers"
+        component={Customers}
+        options={({navigation}) => ({
+          title: 'Customers',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+
+      <Drawer.Screen
+        name="ProcurementHomepage"
+        component={ProcurementHomepage}
+        options={({navigation}) => ({
+          title: 'Vendor Homepage',
           headerLeft: () => (
             <Ionicons
               name="menu"
@@ -226,6 +271,21 @@ const MyDrawer = () => {
         })}
       />
 
+      <Drawer.Screen
+        name="SalesVendorForm"
+        component={SalesVendorForm}
+        options={({navigation}) => ({
+          title: 'Create Sales Order',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+
       {/* Vendor */}
 
       <Drawer.Screen
@@ -293,35 +353,6 @@ const MyDrawer = () => {
         component={DeliveryHomepage}
         options={({navigation}) => ({
           title: 'Delivery Homepage',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      />
-
-      <Drawer.Screen
-        name="SalesLiveOrder"
-        component={SalesLiveOrder}
-        options={({navigation}) => ({
-          title: ' Sales Live Order',
-          headerLeft: () => (
-            <Ionicons
-              name="menu"
-              size={25}
-              onPress={() => navigation.openDrawer()}
-            />
-          ),
-        })}
-      />
-      <Drawer.Screen
-        name="Customers"
-        component={Customers}
-        options={({navigation}) => ({
-          title: 'Customers',
           headerLeft: () => (
             <Ionicons
               name="menu"
