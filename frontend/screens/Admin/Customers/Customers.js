@@ -1,493 +1,278 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
-    ActivityIndicator,
-    FlatList,
-    Alert,
-    Modal,
-    Pressable,
-    ImageBackground
-  } from 'react-native';
-import { Input, Button, Tab, TabView} from '@rneui/themed';
-import { getAllUsers, updateCashCollection } from '../../ApiCalls/ApiCalls';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Alert,
+  Modal,
+  Pressable,
+  TextInput,
+} from 'react-native';
 
-const Item = (props) => (
-        <View style={{ flexDirection: 'row' }}>
-           <View style={{ width: '33%',}}>
-               <Text style={{ fontSize: 16, textAlign: 'center'}}>{props.user.username}</Text>
-           
-           </View>
-           <View style={{ width: '33%'}}>
-               <Text style={{ fontSize: 16, textAlign: 'center'}}>Rs.2500</Text>
-           </View>
-           <View style={{ width: '33%'}}>
-               <Text style={{ fontSize: 16, textAlign: 'center'}}>15 days</Text>
-           </View>
-       </View>
-  );
+export default function Customers() {
+  const [allUsers, setAllUser] = useState([
+    {
+      due_amount: 0,
+      role: 1,
+      purchases: [],
+      _id: '5ff9694dbc54c3002478b2de',
+      username: 'Krisffdh',
+      phone_number: 9581295811,
+      email: 'krishnan@gmail.com',
+      salt: '2f9c65c6-e858-47eb-906d-7933c8c0fc4b',
+      encry_password:
+        '22f458007d811131cd76cae60b05b5dbcfe80eb234676fa23982f9f9091fe1cb',
+      d_product: [
+        {
+          _id: '5ff9694dbc54c3002478b2e0',
+          name: 'Mango',
+          minprice: '50',
+          maxprice: '60',
+        },
+        {
+          _id: '5ff9694dbc54c3002478b2df',
+          name: 'vegetable',
+          minprice: '56',
+          maxprice: '66',
+        },
+      ],
+      createdAt: '2021-11-27T08:29:01.737Z',
+      updatedAt: '2022-12-16T08:48:12.840Z',
+      __v: 0,
+      photo: '',
+      max_due: 50000,
+    },
+  ]);
 
-const Customers = ({ navigation, route  }) => {
-    //due
-  const [reload, setReload] = useState(false)  
- const [id, setId] = useState("")   
- const [values, setValues] = useState({
-        Amount:'',
-        Date:'',
-        time:'',
-        // isCashCollected:'',
-        // orderId:'',
-      
- })
- const [] = useState('')
-    const [modalVisible, setModalVisible] = useState(false);
-    const [index, setIndex] = useState(0);
-    const [users, setUsers] = useState([])
-    const [userList, setUsersList] =  useState([])
-    const { role } = route.params;
-const [modalCustomer, setModalCustomer] = useState({})
-const [selectedUser, SetSelectedUser] = useState()
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({
+    Amount: 0,
+    time: '19:30 ',
+    isCashCollected: true,
+    userId: '',
+  });
 
+  let dynamicAPI = 'https://de42-49-205-239-58.in.ngrok.io/api';
+  let API = `${dynamicAPI}/users`;
+  const TOKEN =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTgxMDF9.ITnJjF8atFSnGl7dwBejIVLRnPantE5F8YWsW1uehHY';
 
+  React.useEffect(() => {
+    axios
+      .get(API, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .then(res => {
+        console.log(res.data);
+        setAllUser(res.data);
+      })
+      .catch(error => {
+        console.log(`Error:`, error);
+      });
+  }, []);
 
+  let handlepost = async () => {
+    console.log(`---selectedUser`, selectedUser);
 
-    const renderItem = ({ item }) => (
-        <Item 
-        user={item}
-        />
-    );
-    //
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(true)
+    let options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(selectedUser), // body data type must match "Content-Type" header
+    };
 
-    const doDisable =val =>{
-        if (id) {
-            if (id !== val){
-                return true;
-            }
-        }
-        return false
-    }
+    let url = `${dynamicAPI}/cashcollection`;
+    await fetch(url, options)
+      .then(res => res.json())
+      .then(data => {
+        console.clear();
+        console.log(`-----response data-------`, data);
+      });
 
-    const onChangeAmount=(value) =>{
-        setValues({...values, Amount: value});
-    }
+    setModalVisible(!modalVisible);
+  };
+  return (
+    <>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        {allUsers
+          .filter((item, index) => item.role == 0)
+          .map((item, key) => (
+            <View style={styles.usersCard}>
+              {item.due_amount > item.max_due ? (
+                <View style={styles.redCard}>
+                  <Text>Role: {item.role}</Text>
+                  <Text>Name: {item.username}</Text>
+                  <Text>User id: {item._id}</Text>
+                  <Text>
+                    Max Due: {item.max_due ? item.max_due : `Not Assigned`}
+                  </Text>
 
-    const onChangeDate =(value) => {
-        setValues({...values, Date: value})
-    }
+                  <View>
+                    <Text>Due: {item.due_amount}</Text>
+                  </View>
 
-    const onChangeTime =(value) => {
-        setValues({...values, time: value})
-    }
-    // const onChangeisCashCollected =(value) => {
-    //     setValues({...values, isCashCollected: value})
-    // }
-    // const onChangeOrderId =(value) => {
-    //     setValues({...values, orderId: value})
-    // }
-  
-    
+                  <View style={styles.greenCard}>
+                    <Text>Due: {item.due_amount}</Text>
+                  </View>
 
-    const getUsersList = () => {
-        setLoading(true)
-        getAllUsers("get")
-          .then((res) => {
-            if (res.error) {
-              console.log(res.error);
-              setLoading(false)
-            } else {
-              setUsers(res.data);
-              
-              setUsersList(res.data.filter(i => i.role === 0))
-
-             
-              setLoading(false)
-            }
-          })
-          .catch((err) => console.log(err));
-      };
-      console.log(`---USERS-----`,users)
-      console.log(`------`,userList)
-
-
-
-
-//log cash collection
-var newUserId;
-const userIdhandler = (id) => {
-    // var newUserId; 
-  newUserId = id
-  console.log("/////////////////////////////",newUserId)
-  return newUserId = id;
-}
-
-React.useEffect(()=>{
-    console.log("------------------------Effect newUseID----------------------",newUserId)
-},[])
-
-
-
-console.log("------------------------var newUseID----------------------",newUserId)
-const logCashCollection = (data) => {
-    setReload(false);
-    if(data.Amount !== "" && data.Date !== "" && data.time){ 
-        updateCashCollection(data)
-        .then(res => {
-        //     Toast.show({
-        //         type:'success',
-        //         text1:'Cash Collected successfully'
-        // });
-        setReload(true);
-        setValues({
-            Amount:'',
-            Date:'',
-            time:'',
-            // userId:newUserId,
-            userId:'',
-            // isCashCollected:'',
-            // orderId:'',
-          
-        })
-        })
-        .catch(err =>
-           
-            
-            console.log(err))
-    }
-}
-
-
-
-    const filterList = (userRole) => {
-        let arr = []
-        arr = users.filter(user => user.role === userRole)
-        // setUsersList(arr)
-        console.log(arr)
-    }
-
-    const setTab = (e) => {
-        setIndex(e)
-        if(e == 0){
-            filterList(0)
-        } else if(e == 1) {
-            filterList(3)
-        } else {
-            filterList(2)
-        }
-        console.log(e)
-    }
-    
-    useEffect(()=> {
-        getUsersList()
-       
-        console.log("Customers Role",role)
-    },[])
-    //
-    useEffect(()=>{ setTab(role)},[role])
-    return (
-        <SafeAreaView>
+                  <Button
+                    title="Update"
+                    color="black"
+                    onPress={() => {
+                      setSelectedUser(prev => ({
+                        ...prev,
+                        userId: `${item._id}`,
+                        Amount: item.due_amount,
+                      }));
+                      setModalVisible(true);
+                    }}
+                    id={item._id}
+                  />
+                </View>
+              ) : (
                 <View>
-                <Tab
-                value={index}
-                onChange={(e) => {
-                    setIndex(e)
-                    if(e == 0){
-                        filterList(0)
-                    } else if(e == 1) {
-                        filterList(3)
-                    } else {
-                        filterList(2)
-                    }
-                    console.log(e)
-                }}
-                indicatorStyle={{
-                    backgroundColor: 'white',
-                    height: 3,
-                }}
-                variant="primary"
-                >
-                    <Tab.Item
-                        title="Customers"
-                        titleStyle={{ fontSize: 12 }}
-                        // icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
-                    />
-                    <Tab.Item
-                        title="Suppliers"
-                        titleStyle={{ fontSize: 12 }}
-                        // icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
+                  <Text>Role: {item.role}</Text>
+                  <Text>Name: {item.username}</Text>
+                  <Text>User id: {item._id}</Text>
+                  <Text>
+                    Max Limit: {item.max_due ? item.max_due : `Not Assigned`}
+                  </Text>
 
-                    />
-                    <Tab.Item
-                        title="Delivery"
-                        titleStyle={{ fontSize: 12 }}
-                        // icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
-                    />
-                </Tab>
+                  <View>
+                    <Text>Due: {item.due_amount}</Text>
+                  </View>
 
-                <TabView value={index} onChange={setIndex} animationType="spring">
-                <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
-                  <View><Text>Helo</Text></View>
-                
-                </TabView.Item>
-                <TabView.Item style={{ backgroundColor: 'blue', width: '100%' }}>
-                    <Text>Favorite</Text>
-                </TabView.Item>
-                <TabView.Item style={{ backgroundColor: 'green', width: '100%' }}>
-                    <Text>Cart</Text>
-                </TabView.Item>
-                </TabView>
-
-                    {/* <View style={styles.customers_table_header}>
-                        <View style={{ width: '33%'}}>
-                            <Text style={styles.customers_table_header_cell}>Name</Text>
-                        </View>
-                        <View style={{ width: '33%'}}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' , textAlign: 'center'}}>Due</Text>
-                        </View>
-                        <View style={{ width: '33%'}}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' , textAlign: 'center'}}>CC</Text>
-                        </View>
-                    </View> */}
-
-                    {
-                        loading ?
-                        <ActivityIndicator size="large" />
-                        :
-                        
-                        <FlatList
-                        data={userList}
-                        
-                        // renderItem={renderItem}
-                        keyExtractor={item => item._id}
-                        renderItem={({item})=> (
-                            
-
-
-                            
-                            <View style={styles.customers_card}>
-                            { item.role === 0 && 
-
-                               <View style={styles.centeredView}>
-                               <Pressable
-                                   style={[styles.button, styles.buttonOpen]}
-                                   onPress={() => {
-                                    // setModalVisible(true);
-                                    userIdhandler(item._id)
-                                    
-                            }
-                                
-
-                                }
-                                   
-                               >
-                                   <Text style={styles.textStyle}>LOG CASH COLLECTED</Text>
-                               </Pressable>
-                               </View>
-
-                             }
-                         
-
-                                
-                                    <Text style={{ fontSize: 16, textAlign: 'center'}}>Username: {item.username}</Text>
-                             
-                                    <Text style={{ fontSize: 16, textAlign: 'center'}}>Email: {item.email}</Text>
-                                    <Text style={{ fontSize: 16, textAlign: 'center'}}>Due Amount: {item.due_amount}</Text>
-                                    <Text style={{ fontSize: 16, textAlign: 'center'}} >Id: {item._id}</Text>
-                                    {/* <Button title='loadPop' id={item._id} onPress={(e)=>{
-                                        
-                                        let selectId = e.target.id
-                                        SetSelectedUser(item)    
-                                        setModalVisible(true);                    
-                                        
-                                   }}/> */}
-                                    {/* Button for Update */}
-                                    {/* <Button
-                                    title={'Update'}
-                                    containerStyle={{
-                                                                width: 80,
-                                                                height:50,
-                                                                marginHorizontal: 20,
-                                                                marginVertical: 10,
-                                                                marginBottom:10,
-                                                                position:'absolute'
-                                                              }}
-                                    
-                                    /> */}
-
-    {/* <Text style={{ fontSize: 16, textAlign: 'center'}}>{item && item["address"]["pincode"]}</Text> */}
-                             
-     </View>
-    )}
-
-    
-    />
-    }
-   <Modal
+                  <Button
+                    title="Update"
+                    color="black"
+                    onPress={() => {
+                      setSelectedUser(prev => ({
+                        ...prev,
+                        userId: `${item._id}`,
+                        Amount: item.due_amount,
+                      }));
+                      setModalVisible(true);
+                    }}
+                    id={item._id}
+                  />
+                </View>
+              )}
+            </View>
+          ))}
+      </ScrollView>
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView2}>
+        }}>
+        <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Log Cash Collected</Text>
-           
-                <Input 
-                placeholder='Enter the Amount'
-                onChangeText={(value) => onChangeAmount(value)}
-                />
-                <Input 
-                placeholder='Enter the Date'
-                keyboardType='phone-pad'
-                onChangeText={(value) => onChangeDate(value)}
-                />
-                <Input 
-                placeholder='Enter the Time'
-                onChangeText={(value) => onChangeTime(value)}
-                />
-                {/* <Input 
-                placeholder='Enter the isCollected'
-                onChangeText={(value) => onChangeisCashCollected(value)}
-                /> */}
-                {/* <Input 
-                placeholder='Enter the orderId'
-                onChangeText={(value) => onChangeOrderId(value)}
-                /> */}
-              
-               
+            <Text style={styles.modalText}>
+              User Id {`${selectedUser.userId}`}
+            </Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Cash Colllected"
+              id="Amount"
+              onChangeText={val => {
+                setSelectedUser(prev => ({
+                  ...prev,
+                  Amount: val,
+                }));
+              }}
+              value={selectedUser.Amount}
+            />
+
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle2}
-               onPress={() => {
-                
-                // let id = selectedUser._id
-
-                // setUsersList(prev=>{
-                    
-                //     pre
-
-                // })
-
-                
-                
-                logCashCollection(values);
-                setModalVisible(!modalVisible)
-               }}
-              >Submit</Text>
+              onPress={() => {
+                handlepost();
+              }}>
+              <Text style={styles.textStyle}>Update Details</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle2}>Close</Text>
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}>
+              <Text style={styles.textStyle}>Close</Text>
             </Pressable>
           </View>
         </View>
       </Modal>
-  
-
-                </View>
-        </SafeAreaView>
-    )
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
-    centeredView2: {
-        flex: 1,
-        justifyContent: "center",
-        height:100,
-        
-      },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        
-        // marginTop: 22
-        position:'relative'
-      },
-      modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.75,
-        shadowRadius: 4,
-        elevation: 5
-      },
-      button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-      },
-      buttonOpen: {
-        backgroundColor: "#000",
-      },
-      buttonClose: {
-        backgroundColor: "#2196F3",
-      },
-      textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center",
-      },
-      textStyle2: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center",
-        width:75
-      },
-      modalText: {
-        marginBottom: 15,
-        textAlign: "center",
-     
-        color:'#000'
-      },
-    sales_cont: {
-      padding:10
+  usersCard: {
+    width: '90%',
+    margin: 10,
+    backgroundColor: '#189AB4',
+    borderRadius: 10,
+    shadowColor: 'black',
+    textAlign: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+  },
+  redCard: {
+    backgroundColor: 'red',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'grey',
+    width: 200,
+    padding: 8,
+    margin: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    customers_btn: {
-      alignItems:'center'
-    },
-    customers_table_header:{
-        flexDirection:"row",
-        borderBottomColor:'black',
-        borderBottomWidth: 1,
-        margin: 6
-    },
-    customers_table_header_cell: {
-        fontWeight:'bold',
-        marginBottom: 5,
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    customers_table_row:{
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:'space-around'
-    },
-    customers_card: {
-        backgroundColor:'silver',
-        padding: 10,
-        margin: 5
-    }
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
 });
-
-export default Customers;
