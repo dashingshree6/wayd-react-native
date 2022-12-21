@@ -136,7 +136,7 @@ React.useEffect(()=>{
 console.log("------------------------var newUseID----------------------",newUserId)
 const logCashCollection = (data) => {
     setReload(false);
-    if(data.Amount !== "" && data.Date !== "" && data.time){
+    if(data.Amount !== "" && data.Date !== "" && data.time){ 
         updateCashCollection(data)
         .then(res => {
         //     Toast.show({
