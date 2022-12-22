@@ -8,6 +8,7 @@ import {
   Button,
   Modal,
   Image,
+  Alert,
 } from 'react-native';
 
 import {API, TOKEN} from '../../backend';
@@ -15,39 +16,43 @@ import axios from 'axios';
 import salesDashImg from './salesDashImg.jpg';
 import modalImg from './modalImg.jpg';
 import {SelectList} from 'react-native-dropdown-select-list';
+import SyncStorage from 'sync-storage';
 
 export default function SalesHomepage() {
   const [allOrder, setAllOrder] = useState();
   const [showLiveOrder, setShowLiveOrder] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState();
+  const [selectedOrder, setSelectedOrder] = useState(
+    allOrder?.filter((item, index) => item.status === 'Placed'),
+  );
   const [filterOrder, setFilterOrder] = useState();
   const [filterPastOrder, setFilterPastOrder] = useState();
   const [fetchTrigger, setFetchTrigger] = useState();
   const [allDelivery, setAllDelivery] = useState();
   const [selectedDelivery, setSelectedDelivery] = React.useState();
-
-  // const data = [
-  //   {key: '1', value: 'Mobiles', disabled: true},
-  //   {key: '2', value: 'Appliances'},
-  //   {key: '3', value: 'Cameras'},
-  //   {key: '4', value: 'Computers', disabled: true},
-  //   {key: '5', value: 'Vegetables'},
-  //   {key: '6', value: 'Diary Products'},
-  //   {key: '7', value: 'Drinks'},
-  // ];
-  const data = allDelivery?.map((item, index) => ({
-    key: `${index + 1}`,
-    value: `${item.username}`,
-    disabled: false,
-  }));
-
-  let url = `${API}/order/all`;
+  const [syncStorageState, setSyncStorageState] = useState({
+    token: '',
+    user: {
+      _id: '',
+      username: '',
+      phone_number: 3490579639,
+      location: '',
+      email: '',
+      role: 2,
+    },
+  });
 
   React.useEffect(() => {
-    // all order api call
+    const userDetail = SyncStorage.get('userDetail');
+    setSyncStorageState(userDetail);
+  }, []);
+
+  React.useEffect(() => {
+    let allOrderAPI = `${API}/order/all`;
     axios
-      .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .get(allOrderAPI, {
+        headers: {Authorization: `Bearer ${syncStorageState.token}`},
+      })
       .then(res => {
         setAllOrder(res.data);
       })
@@ -56,23 +61,32 @@ export default function SalesHomepage() {
       });
 
     // all user api call
-    let allUserUrl = `${API}/users`;
+    let allUserAPI = `${API}/users`;
     axios
-      .get(allUserUrl, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .get(allUserAPI, {
+        headers: {Authorization: `Bearer ${syncStorageState.token}`},
+      })
       .then(res => {
         setAllDelivery(res.data.filter((item, index) => item.role == '2'));
       })
       .catch(error => {
         console.log('Error:', error);
       });
-  }, [fetchTrigger, url]);
+  }, [fetchTrigger, syncStorageState]);
 
+  const data = allDelivery?.map((item, index) => ({
+    key: `${index + 1}`,
+    value: `${item.username}`,
+    disabled: false,
+  }));
   let getData = () => {
     setFetchTrigger(Math.floor(Math.random() * 100000));
   };
 
   let acceptOrder = e => {
-    url = `${API}/order/${selectedOrder._id}/status`;
+    let url = `${API}/order/${selectedOrder._id}/status`;
+    console.log(syncStorageState.token);
+    console.log(url);
     axios
       .put(
         url,
@@ -92,12 +106,13 @@ export default function SalesHomepage() {
         setModalVisible(false);
       })
       .catch(error => {
+        Alert(`error`);
         console.log('Error:', error);
       });
   };
 
   let processOrder = e => {
-    url = `${API}/order/${selectedOrder?._id}/status`;
+    let url = `${API}/order/${selectedOrder?._id}/status`;
     axios
       .put(
         url,
@@ -121,7 +136,8 @@ export default function SalesHomepage() {
   };
 
   let rejectOrder = e => {
-    url = `${API}/order/${selectedOrder?._id}/status`;
+    let url = `${API}/order/${selectedOrder?._id}/status`;
+    console.log(url);
     axios
       .put(
         url,
@@ -129,7 +145,6 @@ export default function SalesHomepage() {
           status: 'Cancelled',
           payment_status: 'UNPAID',
           amount: 0,
-          delivey: '5ff9694dbc54c3002478b2de',
         },
         {
           headers: {Authorization: `Bearer ${TOKEN}`},
@@ -145,20 +160,19 @@ export default function SalesHomepage() {
       });
   };
   let shipProduct = e => {
-    url = `${API}/order/${selectedOrder?._id}/status`;
+    let url = `${API}/assigndelivery/${selectedOrder?._id}`;
+    console.log(`----url---`, url);
+    let body = {
+      amount: 0,
+      delivery: selectedDelivery[0]._id,
+      payment_status: 'UNPAID',
+      status: 'Shipped',
+    };
+
     axios
-      .put(
-        url,
-        {
-          status: 'Shipped',
-          payment_status: 'UNPAID',
-          amount: 0,
-          id: selectedDelivery[0]._id,
-        },
-        {
-          headers: {Authorization: `Bearer ${TOKEN}`},
-        },
-      )
+      .put(url, body, {
+        headers: {Authorization: `Bearer ${syncStorageState.token}`},
+      })
       .then(res => {
         console.log(`------shipper details`, res.data);
         alert(`Order Shipped`);
@@ -166,12 +180,13 @@ export default function SalesHomepage() {
         setModalVisible(false);
       })
       .catch(error => {
+        alert(`Error`);
         console.log(`Error:`, error);
       });
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       {/* Top Hero Image */}
       <View style={styles.salesDashImgView}>
         <Image source={salesDashImg} style={styles.salesDashImg} />
@@ -183,8 +198,11 @@ export default function SalesHomepage() {
           onPress={() => {
             setShowLiveOrder(true);
             getData();
+            setFilterPastOrder(
+              allOrder?.filter((item, index) => item.status === 'Delivered'),
+            );
           }}>
-          <Text>Live Order</Text>
+          <Text style={{fontFamily: 'Poppins'}}>Live Order</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.pastOrderBtn}
@@ -218,6 +236,7 @@ export default function SalesHomepage() {
             <TouchableOpacity
               style={styles.tab}
               onPress={e => {
+                getData();
                 setFilterOrder(
                   allOrder?.filter((item, index) => item.status === 'Accepted'),
                 );
@@ -227,6 +246,7 @@ export default function SalesHomepage() {
             <TouchableOpacity
               style={styles.tab}
               onPress={e => {
+                getData();
                 setFilterOrder(
                   allOrder?.filter(
                     (item, index) => item.status === 'Processing',
@@ -238,6 +258,7 @@ export default function SalesHomepage() {
             <TouchableOpacity
               style={styles.tab}
               onPress={e => {
+                getData();
                 setFilterOrder(
                   allOrder?.filter((item, index) => item.status === 'Shipped'),
                 );
@@ -252,6 +273,7 @@ export default function SalesHomepage() {
             <TouchableOpacity
               style={styles.tab}
               onPress={e => {
+                getData();
                 setFilterPastOrder(
                   allOrder?.filter(
                     (item, index) => item.status === 'Delivered',
@@ -273,36 +295,45 @@ export default function SalesHomepage() {
             </TouchableOpacity>
           </View>
         )}
+        <View style={{flex: 1}}>
+          <ScrollView
+            style={{
+              paddingRight: 10,
+              paddingBottom: 50,
+              marginBottom: 140,
+              marginTop: 20,
+              paddingTop: 10,
+              backgroundColor: '#f2f2f2',
+            }}>
+            {showLiveOrder &&
+              filterOrder?.map((item, index) => (
+                <View style={styles.liveOrderCard} key={index}>
+                  <Text>Order Id: {item?._id}</Text>
+                  <Text>Status: {item?.status}</Text>
+                  <Text>Payment: {item?.payment_status}</Text>
+                  <Text>Order Date: {item?.ordered}</Text>
+                  <Button
+                    title="Update Order Status"
+                    color="#26b50f"
+                    onPress={() => {
+                      setSelectedOrder(item);
+                      setModalVisible(true);
+                    }}
+                  />
+                </View>
+              ))}
 
-        <ScrollView contentContainerStyle={styles.contentContainer}>
-          {showLiveOrder &&
-            filterOrder?.map((item, index) => (
-              <View style={styles.liveOrderCard} key={index}>
-                <Text>Order Id: {item?._id}</Text>
-                <Text>Status: {item?.status}</Text>
-                <Text>Payment: {item?.payment_status}</Text>
-                <Text>Order Date: {item?.ordered}</Text>
-                <Button
-                  title="Update Order Status"
-                  color="#189AB4"
-                  onPress={() => {
-                    setSelectedOrder(item);
-                    setModalVisible(true);
-                  }}
-                />
-              </View>
-            ))}
-
-          {!showLiveOrder &&
-            filterPastOrder?.map((item, index) => (
-              <View style={styles.liveOrderCard} key={index}>
-                <Text>Order Id: {item?._id}</Text>
-                <Text>Status: {item?.status}</Text>
-                <Text>Payment: {item?.payment_status}</Text>
-                <Text>Order Date: {item?.ordered}</Text>
-              </View>
-            ))}
-        </ScrollView>
+            {!showLiveOrder &&
+              filterPastOrder?.map((item, index) => (
+                <View style={styles.liveOrderCard} key={index}>
+                  <Text>Order Id: {item?._id}</Text>
+                  <Text>Status: {item?.status}</Text>
+                  <Text>Payment: {item?.payment_status}</Text>
+                  <Text>Order Date: {item?.ordered}</Text>
+                </View>
+              ))}
+          </ScrollView>
+        </View>
       </View>
       {/* //////////////////////// MODAL /////////////////////////////// */}
       <Modal animationType="slide" transparent={false} visible={modalVisible}>
@@ -423,11 +454,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   scrollViewParent: {paddingTop: 20},
-  contentContainer: {
-    backgroundColor: '#94C973',
-    paddingRight: 10,
-    height: '100%',
-  },
+
   buttonInnerView: {
     width: 150,
     height: 40,
@@ -441,7 +468,7 @@ const styles = StyleSheet.create({
   },
   liveOrderBtn: {
     padding: 10,
-    backgroundColor: '#94C973',
+    backgroundColor: '#26b50f',
     borderRadius: 5,
     marginTop: 10,
     marginLeft: 10,
@@ -451,7 +478,7 @@ const styles = StyleSheet.create({
   },
   pastOrderBtn: {
     padding: 10,
-    backgroundColor: '#C0C0C0',
+    backgroundColor: '#f10606',
     borderRadius: 5,
     marginTop: 10,
     marginRight: 10,
@@ -461,9 +488,10 @@ const styles = StyleSheet.create({
   },
   liveOrderCard: {
     padding: 10,
-    backgroundColor: '#DDFFE7',
+    backgroundColor: '#ffffff',
     borderRadius: 5,
     marginTop: 10,
+    marginBottom: 20,
     marginLeft: 10,
   },
 
@@ -485,7 +513,7 @@ const styles = StyleSheet.create({
   },
   orderListView: {
     marginTop: 50,
-    backgroundColor: '#B1D4E0',
+    backgroundColor: '#f2f2f2',
     height: '100%',
   },
   tabView: {

@@ -35,7 +35,7 @@ const Login = ({navigation}) => {
 
     signin({phone_number, password})
       .then(data => {
-        console.log(data.data);
+        console.log(`---------data-----`, data.data);
         if (data.error) {
           setValues({...values, error: data.data.error, loading: false});
         } else {
@@ -51,6 +51,7 @@ const Login = ({navigation}) => {
           SyncStorage.set('role', data.data.user.role);
           SyncStorage.set('userToken', data.data.token);
           SyncStorage.set('userId', data.data.user._id);
+          SyncStorage.set('userDetail', data.data);
           let userRole = SyncStorage.get('role');
           let userToken = SyncStorage.get('userToken');
           console.log('Signin Role', SyncStorage.get('role'));

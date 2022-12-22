@@ -7,8 +7,9 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator
-} from 'react-native';import React, {useEffect, useState} from 'react';
+  ActivityIndicator,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {Icon, Input, Button, Text, ListItem, Tab, TabView} from '@rneui/themed';
 import axios from 'axios';
 
@@ -18,37 +19,26 @@ const API =
 const TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTgxMDF9.ITnJjF8atFSnGl7dwBejIVLRnPantE5F8YWsW1uehHY';
 
-
-
-
-
-  const Item = (props) => (
-    <TouchableOpacity
+const Item = props => (
+  <TouchableOpacity
     style={styles.sales_live_button}
     // onPress={onPress}
+  >
+    <View
+    // style={styles.item}
     >
-          <View 
-          // style={styles.item}
-          >
-            <Text style={styles.title}>Id: {props.order._id} </Text>
-            <Text style={styles.title}>Order Status: {props.order.status}</Text>
-           
-          </View>
-    </TouchableOpacity>
-  );
-
+      <Text style={styles.title}>Id: {props.order._id} </Text>
+      <Text style={styles.title}>Order Status: {props.order.status}</Text>
+    </View>
+  </TouchableOpacity>
+);
 
 export default function VendorsMyOrders({navigation, route}) {
-
-
-  
   const [index, setIndex] = React.useState(0);
   const [data, setData] = React.useState([]);
-  const [loading, setLoading] = useState(true)
-  const [liveOrdersDisplay, setLiveOrdersDisplay] = useState(true)
-  const renderItem = ({ item }) => (
-    <Item order={item} />
-  );
+  const [loading, setLoading] = useState(true);
+  const [liveOrdersDisplay, setLiveOrdersDisplay] = useState(true);
+  const renderItem = ({item}) => <Item order={item} />;
   const getUserOrdersList = () => {
     axios
       .get(API, {headers: {Authorization: `Bearer ${TOKEN}`}})
@@ -113,41 +103,32 @@ export default function VendorsMyOrders({navigation, route}) {
     //   </TabView>
     // </View>
 
+    <View style={styles.sales_cont}>
+      <View style={styles.sales_btn}></View>
+      <Tab
+        value={index}
+        onChange={e => {
+          setIndex(e);
+          setLiveOrdersDisplay(!liveOrdersDisplay);
+        }}
+        indicatorStyle={{
+          backgroundColor: 'white',
+          height: 3,
+        }}
+        variant="primary">
+        <Tab.Item
+          title="Live Orders"
+          titleStyle={{fontSize: 12}}
+          // icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
+        />
+        <Tab.Item
+          title="Past Orders"
+          titleStyle={{fontSize: 12}}
+          // icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
+        />
+      </Tab>
 
-
-
-
-
-
-<View style={styles.sales_cont}>
-<View style={styles.sales_btn}>
-    
-  </View>
-  <Tab
-    value={index}
-    onChange={(e) => {
-      setIndex(e)
-      setLiveOrdersDisplay(!liveOrdersDisplay)
-    }}
-    indicatorStyle={{
-      backgroundColor: 'white',
-      height: 3,
-    }}
-    variant="primary"
-  >
-      <Tab.Item
-        title="Live Orders"
-        titleStyle={{ fontSize: 12 }}
-        // icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
-      />
-      <Tab.Item
-        title="Past Orders"
-        titleStyle={{ fontSize: 12 }}
-        // icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
-      />
-  </Tab>
-
-  {/* <TabView value={index} onChange={setIndex} animationType="spring">
+      {/* <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
         <FlatList
           data={DATA}
@@ -159,22 +140,20 @@ export default function VendorsMyOrders({navigation, route}) {
         <Text h1>Favorite</Text>
       </TabView.Item>
   </TabView> */}
-  {
-    liveOrdersDisplay ?
-    <FlatList
-    data={data}
-    renderItem={renderItem}
-    keyExtractor={item => item._id}
-  />
-    :
-    <FlatList
-    data={data}
-    renderItem={renderItem}
-    keyExtractor={item => item._id}
-  />
-  }
-
-</View>
+      {liveOrdersDisplay ? (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+        />
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item._id}
+        />
+      )}
+    </View>
   );
 }
 

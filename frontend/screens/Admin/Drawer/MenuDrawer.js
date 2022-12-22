@@ -98,6 +98,7 @@ const MyDrawer = () => {
       <Drawer.Screen
         name="SalesHomepage"
         component={SalesHomepage}
+        // component={DeliveryHomepage}
         options={({navigation}) => ({
           title: ' Sales Homepage',
           headerLeft: () => (
