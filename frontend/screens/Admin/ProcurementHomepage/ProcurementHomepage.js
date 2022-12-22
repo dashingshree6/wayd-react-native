@@ -293,11 +293,11 @@ const styles = StyleSheet.create({
       textAlign:'center'
   
   },
-  centeredView:{
-    backgroundColor:'#f2f2f2',
-    padding: 10
-  },
-
+   centeredView:{
+      backgroundColor:'#f2f2f2',
+      padding: 10
+    },
+  
     sales_cont: {
       padding:10,
       backgroundColor:"#fccf9a",
