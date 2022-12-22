@@ -17,21 +17,21 @@ import {
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      name: 'Charan',
+      name: 'Hari',
       ph_no: 9034505345,
       rating: 4.6
     },
     {
       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
       name: 'Charan',
-      ph_no: 9034505345,
-      rating: 4.6
+      ph_no: 883505345,
+      rating: 4.5
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      name: 'Charan',
-      ph_no: 9034505345,
-      rating: 4.6
+      name: 'Amrut',
+      ph_no: 9037742845,
+      rating: 3.9
     },
   ];
   
@@ -41,11 +41,20 @@ import {
     // onPress={onPress}
     >
           <View 
-          // style={styles.item}
+          style={styles.parent}
           >
-            <Text style={styles.title}>Product Name: {name}</Text>
-            <Text style={styles.title}>Available Stock: {ph_no}</Text>
-            <Text style={styles.title}>Grade : {rating}</Text>
+            <Text style={{
+                fontWeight:'bold',
+                fontSize: 19,
+                color:'black'
+              }}>Supplier Name: {name}</Text>
+            <Text style={{
+                
+                fontSize: 17,
+                color:'black'
+              }}>Phone Number: {ph_no}</Text>
+            <Text style={styles.title}>Rating : 
+            <Text style={styles.sup_rating}>  {rating}</Text></Text>
           </View>
           <View>
             <Image
@@ -73,7 +82,7 @@ const Suppliers = ({ navigation, route  }) => {
     return (
         <SafeAreaView>
               <View style={styles.suppliers_cont}>
-                    <Text style={styles.suppliers_head}>Suppliers</Text>
+                    <Text style={styles.suppliers_head}>SUPPLIERS</Text>
                     <FlatList
                       data={DATA}
                       renderItem={renderItem}
@@ -88,25 +97,40 @@ const styles = StyleSheet.create({
     suppliers_head:{
         textAlign:'center',
         fontWeight:"bold",
-        fontSize: 20
+        fontSize: 20,
+        color:'black',
+        padding:18,
+        
+        
+        // backgroundColor:""
     },
     suppliers_cont: {
-      padding:10
+      padding:8,
+      backgroundColor:'#fccf9a',
+      height:'100%',
+      borderRadius:10
     },
+    
     suppliers_button: {
       display:'flex',
       flexDirection:'row',
       justifyContent:'space-around',
-      // alignItems: "center",
-      backgroundColor: "#DDDDDD",
+      alignItems: "center",
+      backgroundColor: "#fff",
       padding: 10,
-      margin: 2,
+      margin: 18,
+      // width:350
+      height:110
     },
     suppliers_img: {
         // borderRadius: 20
-        width: 30,
+        width: 40,
         aspectRatio: 1,
         borderRadius: 10
+    },
+    sup_rating:{
+      color:'#26b50f',
+      fontWeight:'bold'
     }
 });
 

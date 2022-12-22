@@ -144,7 +144,9 @@ const MyDrawer = () => {
         name="ProcurementHomepage"
         component={ProcurementHomepage}
         options={({navigation}) => ({
-          title: 'Vendor Homepage',
+          title: 'PROCUREMENT',
+          headerStyle: { textAlign:'center' },
+          headerTitleStyle: { color: 'black', fontWeight: 'bold' },
           headerLeft: () => (
             <Ionicons
               name="menu"

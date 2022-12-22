@@ -10,14 +10,12 @@ import {
   Image,
   Alert,
 } from 'react-native';
-
 import {API, TOKEN} from '../../backend';
 import axios from 'axios';
 import salesDashImg from './salesDashImg.jpg';
 import modalImg from './modalImg.jpg';
 import {SelectList} from 'react-native-dropdown-select-list';
 import SyncStorage from 'sync-storage';
-
 export default function SalesHomepage() {
   const [allOrder, setAllOrder] = useState();
   const [showLiveOrder, setShowLiveOrder] = useState(true);
@@ -41,12 +39,10 @@ export default function SalesHomepage() {
       role: 2,
     },
   });
-
   React.useEffect(() => {
     const userDetail = SyncStorage.get('userDetail');
     setSyncStorageState(userDetail);
   }, []);
-
   React.useEffect(() => {
     let allOrderAPI = `${API}/order/all`;
     axios
@@ -59,7 +55,6 @@ export default function SalesHomepage() {
       .catch(error => {
         console.log('Error:', error);
       });
-
     // all user api call
     let allUserAPI = `${API}/users`;
     axios
@@ -73,7 +68,6 @@ export default function SalesHomepage() {
         console.log('Error:', error);
       });
   }, [fetchTrigger, syncStorageState]);
-
   const data = allDelivery?.map((item, index) => ({
     key: `${index + 1}`,
     value: `${item.username}`,
@@ -82,7 +76,6 @@ export default function SalesHomepage() {
   let getData = () => {
     setFetchTrigger(Math.floor(Math.random() * 100000));
   };
-
   let acceptOrder = e => {
     let url = `${API}/order/${selectedOrder._id}/status`;
     console.log(syncStorageState.token);
@@ -90,7 +83,6 @@ export default function SalesHomepage() {
     axios
       .put(
         url,
-
         {
           status: 'Accepted',
           payment_status: 'UNPAID',
@@ -110,7 +102,6 @@ export default function SalesHomepage() {
         console.log('Error:', error);
       });
   };
-
   let processOrder = e => {
     let url = `${API}/order/${selectedOrder?._id}/status`;
     axios
@@ -134,7 +125,6 @@ export default function SalesHomepage() {
         console.log('Error:', error);
       });
   };
-
   let rejectOrder = e => {
     let url = `${API}/order/${selectedOrder?._id}/status`;
     console.log(url);
@@ -168,7 +158,6 @@ export default function SalesHomepage() {
       payment_status: 'UNPAID',
       status: 'Shipped',
     };
-
     axios
       .put(url, body, {
         headers: {Authorization: `Bearer ${syncStorageState.token}`},
@@ -184,7 +173,6 @@ export default function SalesHomepage() {
         console.log(`Error:`, error);
       });
   };
-
   return (
     <View style={{flex: 1}}>
       {/* Top Hero Image */}
@@ -213,7 +201,6 @@ export default function SalesHomepage() {
           <Text>Past Order</Text>
         </TouchableOpacity>
       </View>
-
       <View style={styles.orderListView}>
         {/* Live order tab and Past Order Tab */}
         {showLiveOrder ? (
@@ -267,7 +254,6 @@ export default function SalesHomepage() {
             </TouchableOpacity>
           </View>
         )}
-
         {!showLiveOrder && (
           <View style={styles.tabView}>
             <TouchableOpacity
@@ -322,7 +308,6 @@ export default function SalesHomepage() {
                   />
                 </View>
               ))}
-
             {!showLiveOrder &&
               filterPastOrder?.map((item, index) => (
                 <View style={styles.liveOrderCard} key={index}>
@@ -350,7 +335,6 @@ export default function SalesHomepage() {
                 </Text>
               )}
             </View>
-
             <View>
               {selectedOrder?.status === 'Placed' && (
                 <>
@@ -379,7 +363,6 @@ export default function SalesHomepage() {
                   </View>
                 </>
               )}
-
               {selectedOrder?.status === 'Accepted' && (
                 <View style={styles.buttonView}>
                   <View style={styles.buttonInnerView}>
@@ -394,7 +377,6 @@ export default function SalesHomepage() {
                   </View>
                 </View>
               )}
-
               {selectedOrder?.status === 'Processing' && (
                 <ScrollView>
                   <SelectList
@@ -413,7 +395,6 @@ export default function SalesHomepage() {
                     boxStyles={{margin: 10}}
                     dropdownStyles={{margin: 10}}
                   />
-
                   <View style={styles.buttonView}>
                     <View style={styles.buttonInnerView}>
                       <Button
@@ -444,7 +425,6 @@ export default function SalesHomepage() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   upperTabView: {
     flex: 1,
@@ -454,7 +434,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   scrollViewParent: {paddingTop: 20},
-
   buttonInnerView: {
     width: 150,
     height: 40,
@@ -494,7 +473,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 10,
   },
-
   salesDashImg: {
     height: 300,
   },
@@ -503,7 +481,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   orderTitle: {
     fontSize: 20,
     textAlign: 'center',
