@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -18,6 +18,7 @@ import {
      from '@rneui/themed';
 import { signin, authenticate, isAuthenticated } from '.';
 import SyncStorage from 'sync-storage';
+import { AuthContext } from '../../App';
 
 const Login = ({ navigation  }) => {
     const [values, setValues] = useState({
@@ -35,6 +36,7 @@ const Login = ({ navigation  }) => {
         setValues({ ...values, error: false, [name]: event.target.value });
     }; 
 
+    const { signInContext } = useContext(AuthContext)
     const onSubmit = () => {
         setValues({ ...values, error: false, loading: true });
         signin({ phone_number, password })
@@ -61,6 +63,7 @@ const Login = ({ navigation  }) => {
                 console.log("Signin Role",SyncStorage.get("role"))
                 console.log("Signin Token",SyncStorage.get("userToken"))
                 console.log("Signin User Id",SyncStorage.get("userId"))
+                signInContext(userToken,userRole)
                 // if (data.data.token) {
                 //     if (data.data.user && data.data.user.role === 1) {
                 //       // return <Redirect to="/admin/dashboard" />;
@@ -83,17 +86,19 @@ const Login = ({ navigation  }) => {
                 //     return navigation.navigate("VendorHomepage")
                 //   }
                 // }
-                if(userToken) {
-                  if ( userRole === 1) {
-                    return navigation.navigate("SalesHomepage")
-                  } else if ( userRole === 0) {
-                    return navigation.navigate("VendorHomepage")
-                  } else {
-                    return navigation.navigate("DeliveryHomepage")
-                  }
-                } else {
-                  return navigation.navigate("Login")
-                }      
+
+
+                // if(userToken) {
+                //   if ( userRole === 1) {
+                //     return navigation.navigate("SalesHomepage")
+                //   } else if ( userRole === 0) {
+                //     return navigation.navigate("VendorHomepage")
+                //   } else {
+                //     return navigation.navigate("DeliveryHomepage")
+                //   }
+                // } else {
+                //   return navigation.navigate("Login")
+                // }      
 
               }
               //

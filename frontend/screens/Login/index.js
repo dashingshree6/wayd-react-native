@@ -39,20 +39,26 @@ export const authenticate = (data, next) => {
 
 //
 
-export const signout = (next) => {
-    // if (typeof window !== "undefined") {
-    if (global.window !== undefined) {
-    //   localStorage.removeItem("jwt");
-      SyncStorage.remove("jwt");
-      next();
+// export const signout = (next) => {
+//     // if (typeof window !== "undefined") {
+//     if (global.window !== undefined) {
+//     //   localStorage.removeItem("jwt");
+//       SyncStorage.remove("jwt");
+//       next();
   
-      return fetch(`${API}/signout`, {
-        method: "GET",
-      })
-        .then((response) => console.log("signout success"))
-        .catch((err) => console.log(err));
-    }
-  };
+//       return fetch(`${API}/signout`, {
+//         method: "GET",
+//       })
+//         .then((response) => console.log("signout success"))
+//         .catch((err) => console.log(err));
+//     }
+//   };
+
+  export const signout = () => {
+    axios.get(`${API}/signout`)
+    .then((response) => console.log("signout success"))
+    .catch((err) => console.log(err));
+  }
 
   export const isAuthenticated = () => {
     // if (typeof window == "undefined") {

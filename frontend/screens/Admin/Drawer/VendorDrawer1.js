@@ -1,4 +1,4 @@
-import  React,{useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { Text, View } from 'react-native';
 import {
   DrawerItem,
@@ -9,12 +9,14 @@ import SyncStorage from 'sync-storage';
 import { signout, isAuhenticated } from '../../Login/index';
 import { AuthContext } from '../../../App';
 
-const API="https://e56d-49-205-239-58.in.ngrok.io/api/user/6396be811f1893235c9b2661"
+const API="https://f5b6-49-205-239-58.in.ngrok.io/api/user/636e0bf09598d4489cdb1ff4"
 
-const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTAzODd9.jIhWWHg1Zh3nChGzUZbgMiGj3oVcrQkVbwEUz-PTtyc"
 
-export default function DeliveryDrawer(props) {
-  const { signOutContext } = useContext(AuthContext)  
+export default function VendorDrawer(props) {
+  const { signOutContext } = useContext(AuthContext)
+
+
   const [data,setData] = React.useState({});
 
 
@@ -39,9 +41,9 @@ export default function DeliveryDrawer(props) {
     getUser()
   },[])
   
-  
-  
-  return (
+
+
+    return (
       <>
       <Text
       style={{
@@ -49,22 +51,22 @@ export default function DeliveryDrawer(props) {
         fontWeight: 'bold',
         marginLeft: 5
       }}
-      >User Details x</Text>
-            <View
-                style={{
-                    backgroundColor:'silver',
-                    padding: 20,
-                    margin: 10
-                }}
-                >
-                <Text style={{marginLeft: 15}}>Name :{data.username}</Text>
-                <Text style={{marginLeft: 15}}>Phone Number : {data.phone_number}</Text>
-                <Text style={{marginLeft: 15}}>Due Amount :{data.email}</Text>
-            </View>
-  
+      >User Details</Text>
+        <View
+        style={{
+            backgroundColor:'silver',
+            padding: 20,
+            margin: 10
+        }}
+        >
+          <Text style={{marginLeft: 15}}>Name :{data.phone_number}</Text>
+          <Text style={{marginLeft: 15}}>Phone Number :</Text>
+          <Text style={{marginLeft: 15}}>Due Amount :</Text>
+        </View>
+
         <DrawerItem
           label="Home"
-          onPress={() => props.navigation.navigate('DeliveryHomepage')}
+          onPress={() => props.navigation.navigate('VendorHomepage')}
           icon={()=> (
             <AntDesign
             name='right'
@@ -76,9 +78,22 @@ export default function DeliveryDrawer(props) {
             />
           )}
         />
-
-        <DrawerItem
+           <DrawerItem
           label="My Orders"
+          onPress={() => props.navigation.navigate('VendorsMyOrders')}
+          icon={()=> (
+            <AntDesign
+            name='right'
+            size={15}
+            style={{
+              position: "absolute",
+              right: 10,
+            }}
+            />
+          )}
+        />
+        <DrawerItem
+          label="Credit Cycle Time Remaining"
           onPress={() => props.navigation.navigate('ProcurementHomepage')}
           icon={()=> (
             <AntDesign
@@ -92,7 +107,7 @@ export default function DeliveryDrawer(props) {
           )}
         />
   
-  { SyncStorage.get("jwt") && (
+      { SyncStorage.get("jwt") && (
 
         <DrawerItem
         label="Logout"
@@ -112,8 +127,9 @@ export default function DeliveryDrawer(props) {
           />
         )}
         />
-        )}
-     
+       )}
+       
+  
       </>
     )
   }

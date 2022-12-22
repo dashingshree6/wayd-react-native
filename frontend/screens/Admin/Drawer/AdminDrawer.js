@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Text, View } from 'react-native';
 import {
   DrawerItem,
@@ -7,7 +7,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import axios from 'axios';
 import SyncStorage from 'sync-storage';
 import { signout, isAuhenticated } from '../../Login/index';
-
+import { AuthContext } from '../../../App';
 
 
 const API="https://e56d-49-205-239-58.in.ngrok.io/api/user/636a56f35c526e4144ad5773"
@@ -16,7 +16,7 @@ const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMT
 
 
 export default function AdminDrawer(props) {
-
+const { signOutContext } = useContext(AuthContext)
 
 
 const [data,setData] = useState({});
@@ -233,7 +233,7 @@ return (
 
       <DrawerItem
           label="Coupons"
-          onPress={() => props.navigation.navigate('Stock')}
+          onPress={() => props.navigation.navigate('AddCoupon')}
           icon={()=> (
             <AntDesign
             name='right'
@@ -251,9 +251,9 @@ return (
         <DrawerItem
         label="Logout"
         onPress={() => {
-          signout(() => {
-            props.navigation.navigate('Login')
-          })
+          props.navigation.closeDrawer();
+          signOutContext()
+          signout()
         }}
         icon={()=> (
           <AntDesign
