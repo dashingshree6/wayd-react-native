@@ -149,12 +149,12 @@ const ProcurementHomepage = ({ navigation, route  }) => {
   },[])
  
 
-  // Primary Color: #26b50f
+  // Primary Color: #26b50f green
   // Secondary Color: #f10606 red
   // Card Background: #ffffff
   // Card Secondary BG: #f2f2f2  white
   // Card & Product Shadow
-  // Color : #fccf9a
+  // Color : #fccf9a pale orange
   // Opacity: 50%
   // Distance: 30 px
   // Size: 60 px

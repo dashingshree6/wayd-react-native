@@ -213,9 +213,10 @@ const MyDrawer = () => {
           ),
         })}
       />
+      {/* screen test here change */}
       <Drawer.Screen
         name="Category"
-        component={Category}
+        component={Suppliers}
         options={({navigation}) => ({
           title: 'Category',
           headerLeft: () => (
