@@ -284,7 +284,7 @@ export default function SalesHomepage() {
                 <Text>Order Date: {item?.ordered}</Text>
                 <Button
                   title="Update Order Status"
-                  color="#189AB4"
+                  color="#4E6C50"
                   onPress={() => {
                     setSelectedOrder(item);
                     setModalVisible(true);
@@ -414,6 +414,12 @@ export default function SalesHomepage() {
   );
 }
 
+// #395144 -> dark green
+// #4E6C50 -> medium green
+// #AA8B56 -> mud
+// #F0EBCE -> pale yellow
+
+
 const styles = StyleSheet.create({
   upperTabView: {
     flex: 1,
@@ -424,9 +430,10 @@ const styles = StyleSheet.create({
   },
   scrollViewParent: {paddingTop: 20},
   contentContainer: {
-    backgroundColor: '#94C973',
+    backgroundColor: '#395144',
     paddingRight: 10,
     height: '100%',
+    textcol:'#F0EBCE'
   },
   buttonInnerView: {
     width: 150,
@@ -441,7 +448,7 @@ const styles = StyleSheet.create({
   },
   liveOrderBtn: {
     padding: 10,
-    backgroundColor: '#94C973',
+    backgroundColor: '#F0EBCE',
     borderRadius: 5,
     marginTop: 10,
     marginLeft: 10,
@@ -451,7 +458,7 @@ const styles = StyleSheet.create({
   },
   pastOrderBtn: {
     padding: 10,
-    backgroundColor: '#C0C0C0',
+    backgroundColor: '#F0EBCE',
     borderRadius: 5,
     marginTop: 10,
     marginRight: 10,
@@ -461,7 +468,7 @@ const styles = StyleSheet.create({
   },
   liveOrderCard: {
     padding: 10,
-    backgroundColor: '#DDFFE7',
+    backgroundColor: '#EEF2E6',
     borderRadius: 5,
     marginTop: 10,
     marginLeft: 10,
@@ -499,7 +506,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 90,
     height: 40,
-    backgroundColor: 'black',
+    backgroundColor: '#395144',
     borderRadius: 5,
   },
   tabText: {
