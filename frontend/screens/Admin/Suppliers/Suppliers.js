@@ -99,19 +99,18 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         fontSize: 20,
         color:'black',
-        padding:20
+        padding:18,
+        
         
         // backgroundColor:""
     },
     suppliers_cont: {
-      padding:10,
+      padding:8,
       backgroundColor:'#fccf9a',
-      height:'100%'
-      
+      height:'100%',
+      borderRadius:10
     },
-    parent:{
-        
-    },
+    
     suppliers_button: {
       display:'flex',
       flexDirection:'row',

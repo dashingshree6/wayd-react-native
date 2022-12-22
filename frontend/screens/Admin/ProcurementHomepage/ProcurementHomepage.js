@@ -238,6 +238,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
+                    <Text style={styles.proc_header}>Log Procurement</Text>
                   <Input
                     placeholder="Product Name"
                     // leftIcon={{ type: 'font-awesome', name: 'comment' }}
@@ -264,6 +265,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                     <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => createProcurement()}
+                      
                     >
                       <Text style={styles.textStyle}>Submit</Text>
                     </Pressable>
@@ -276,6 +278,25 @@ const ProcurementHomepage = ({ navigation, route  }) => {
 }
 
 const styles = StyleSheet.create({
+  textStyle:{
+    width: 100,
+    marginHorizontal: 150,
+    marginVertical: 10,
+    backgroundColor:'#26b50f',
+    textAlign:'center',
+    height:20,
+    borderRadius: 10
+  },
+  proc_header:{
+      fontSize: 25,
+      fontWeight: 'bold',
+      textAlign:'center'
+  
+  },
+  centeredView:{
+    backgroundColor:'#f2f2f2',
+    padding: 10
+  },
 
     sales_cont: {
       padding:10,
@@ -315,9 +336,8 @@ const styles = StyleSheet.create({
       borderRadius: 10
 
     },
-    procurement_modal : {
-      backgroundColor:'silver'
-    }
+  
+ 
 });
 
 export default ProcurementHomepage;
