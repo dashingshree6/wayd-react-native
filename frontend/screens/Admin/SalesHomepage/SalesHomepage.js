@@ -371,7 +371,8 @@ export default function SalesHomepage() {
                           flex: 1,
                           flexDirection: 'row',
                           alignItems: 'center',
-                        }}>
+                        }}
+                        key={index}>
                         <Text
                           style={{
                             fontWeight: 'bold',
