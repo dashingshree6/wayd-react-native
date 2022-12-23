@@ -10,34 +10,14 @@ import {
     FlatList,
     TouchableOpacity
   } from 'react-native';
-  import { Icon, Input, Button, Tab, TabView, Image, Badge } from '@rneui/themed';
+  import { Icon, Input, Button, Tab, TabView, Image, Badge, FAB } from '@rneui/themed';
 import axios from 'axios';
 
 
-const API ="https://2093-49-205-239-58.in.ngrok.io/api/products"
-const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE3MzQxODR9.0JlAS4NXTF6n33h7-YGNZZ0BcV1CtUDveOlC9B2Hlw4"
+const API ="https://27dc-49-205-239-58.in.ngrok.io/api/products"
+const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE4MTg2MDB9.QqYBuZs4YIbqsOOUsR1rD61mMNP0Bgxjo4-cc0P0H5U"
 
-  // const DATA = [
-  //   {
-  //     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-  //     title: 'Potato',
-  //     stock: 10,
-  //     grade: "A"
-  //   },
-  //   {
-  //     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-  //     title: 'Carrot',
-  //     stock: 10,
-  //     grade: "A"
-  //   },
-  //   {
-  //     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-  //     title: 'Spinach',
-  //     stock: 10,
-  //     grade: "A"
-  //   },
-  // ];
-  
+
   const Item = ({ name,stock,grade, price }) => (
     <TouchableOpacity
     style={styles.product_details_button}
@@ -45,26 +25,30 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
     >
           <View // style={styles.item}
 >
-  {/* <View>
-    <Badge style={styles.badge}><Text>A</Text></Badge>
-  </View> */}
-            <Text style={{
+
+          <View style={styles.content}>
+          <Text style={{
               fontWeight:'bold',
               fontSize:19,
               color:'black',
-              marginLeft:6
+              marginLeft:40,
             }}>{name} ({grade})</Text>
-            <Text style={styles.title}>Stock: {stock} </Text>
-            <Text style={styles.title}>Unit Price : {price}(kg)</Text>
+            
+            <Text style={styles.title}>Stock  {stock} </Text>
+            <Text style={styles.title}>Unit Price  {price}(kg)</Text>
+          </View>
             {/* <Text style={styles.title}>Grade : {grade}</Text> */}
-            <Image 
+           <View style={{ backgroundColor:'#000000'}}>
+           <Image 
              source={{ 
               uri: "https://imgs.search.brave.com/PFNx-57BW20BmkUQx3msbeUT6MQonwZtNnI0klGB1AE/rs:fit:720:403:1/g:ce/aHR0cHM6Ly9kYWls/eWJhemFyLmNvbS5i/ZC93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MS8wMi9SYW1idXRh/bi01MDAtZ20tNzIw/eDQwMy5qcGc" 
           }}
           containerStyle={styles.product_img}
             />
+           </View>
             
           </View>
+          
     </TouchableOpacity>
   );
   
@@ -97,30 +81,11 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
   );
     return (
         <SafeAreaView>
+        <View style={{position:'relative'}}>
               <View style={styles.product_details_cont}>
-                    {/* <Text style={styles.product_details_head}>Product Details</Text> */}
-                    {/* <Tab
-                      value={index}
-                      onChange={(e)     => setIndex(e)}
-                      indicatorStyle={{
-                        backgroundColor: 'white',
-                        height: 3,
-                      }}
-                      variant="primary"
-                    >
-                        <Tab.Item
-                          title="Fruits"
-                          titleStyle={{ fontSize: 12 }}
-                          // icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
-                        />
-                        <Tab.Item
-                          title="Vegetables"
-                          titleStyle={{ fontSize: 12 }}
-                          // icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
-                        />
-                    </Tab> */}
-
-                    <TabView value={index} onChange={setIndex} animationType="spring">
+      
+            
+              <TabView value={index} onChange={setIndex} animationType="spring">
                         <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
                           <Text h1>Recent</Text>
                         </TabView.Item>
@@ -132,14 +97,52 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
                       data={data}
                       renderItem={renderItem}
                       keyExtractor={item => item.id}
-                    />
+                      />
+                     <TouchableOpacity style={styles.fab}>
+                     {/* <FAB title="+" style={styles.fabIcon}
+        //    containerStyle={{
+        //   // position:"absolute",
+        // // top:20,
+        //   bottom:0,
+        //   right:0,
+        //   zIndex:200,}}
+          /> */}
+           <Text style={styles.fabIcon}>+</Text>
+                     </TouchableOpacity>
+                    
               </View>
+                      </View>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#03A9F4',
+    borderRadius: 20,
+    elevation: 28,
+
+    shadowColor: 'gray',
+    
+  },
+  fabIcon: {
+    fontSize: 40,
+    color: 'white'
+  },
+  content:{
+    // backgroundColor:'silver', 
+    width:'65%', 
+textAlign:'center'
+  },
   title:{
+    marginLeft:35,
       padding:5,
       color:'black'
   },
@@ -151,8 +154,7 @@ const styles = StyleSheet.create({
     },
     product_details_cont: {
       padding:10,
-      
-    },
+      },
     product_details_btn: {
       alignItems:'center'
     },
@@ -171,6 +173,7 @@ const styles = StyleSheet.create({
       borderRadius:20
     },
     product_details_button: {
+      positon:"relative",
       // alignItems: "center",
       justifyContent:"space-around",
       backgroundColor: "#DDDDDD",
@@ -189,9 +192,9 @@ const styles = StyleSheet.create({
       aspectRatio:1,
       borderRadius: 10,
       marginLeft:220,
-      // marginBottom:100,
+      // marginBottom:200,
       position:'absolute',
-      marginTop:0
+      marginTop:-90
 
     },
 });
