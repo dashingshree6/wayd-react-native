@@ -41,6 +41,7 @@ import VendorDrawer from './VendorDrawer';
 import DeliveryDrawer from './DeliveryDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
+import Delivery from '../../Delivery/Delivery';
 import {isAuthenticated, setAuthToken} from '../../Login/index';
 import SyncStorage from 'sync-storage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
@@ -147,9 +148,6 @@ const MyDrawer = () => {
         // component={AddProducts}
         // component={ProcurementHomepage}
         options={({navigation}) => ({
-          title: 'PROCUREMENT',
-          headerStyle: {textAlign: 'center'},
-          headerTitleStyle: {color: 'black', fontWeight: 'bold'},
           // title: 'PROCUREMENT',
           title: 'PRODUCTS',
           headerStyle: {textAlign: 'center'},
@@ -212,6 +210,20 @@ const MyDrawer = () => {
         component={DeliveryLocation}
         options={({navigation}) => ({
           title: 'Delivery Location',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="Delivery"
+        component={Delivery}
+        options={({navigation}) => ({
+          title: 'Delivery',
           headerLeft: () => (
             <Ionicons
               name="menu"

@@ -13,10 +13,10 @@ import {
   Button,
 } from 'react-native';
 import SyncStorage from 'sync-storage';
-import {API, TOKEN} from '../../backend';
-import foodImg from '../../../assets/images/food.jpg';
+import {API, TOKEN} from '../backend';
+import foodImg from '../../assets/images/food.jpg';
 
-export default function Customers() {
+export default function Delivery() {
   const [syncStorageState, setSyncStorageState] = useState({
     token: '',
     user: {
@@ -34,7 +34,7 @@ export default function Customers() {
     setSyncStorageState(userDetail);
   }, []);
 
-  const [allSuppliers, setAllSuppliers] = useState();
+  const [allDelivery, setAllDelivery] = useState();
   const [apiTrigger, setApiTrigger] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState({
@@ -50,7 +50,7 @@ export default function Customers() {
     axios
       .get(url, {headers: {Authorization: `Bearer ${syncStorageState?.token}`}})
       .then(res => {
-        setAllSuppliers(res.data.filter(item => item.role === 3));
+        setAllDelivery(res.data.filter(item => item.role === 2));
         console.log(`all Customer -----`, allCustomer);
       })
       .catch(error => {
@@ -61,7 +61,7 @@ export default function Customers() {
   return (
     <>
       <ScrollView style={{backgroundColor: 'white'}}>
-        {allSuppliers?.map((item, index) => (
+        {allDelivery?.map((item, index) => (
           <View
             style={{
               flex: 1,

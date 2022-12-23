@@ -10,300 +10,558 @@ import {
   Modal,
   Pressable,
   TextInput,
+  Button,
 } from 'react-native';
+import SyncStorage from 'sync-storage';
 import {API, TOKEN} from '../../backend';
-import CashImg from './cashImg.jpg';
-import modalImg from './modalImg.jpg';
-import { Button } from '@rneui/themed';
+import foodImg from '../../../assets/images/food.jpg';
+import CallImg from '../../../assets/images/call.png';
+import messageImg from '../../../assets/images/message.png';
+import videoCallImg from '../../../assets/images/video.png';
+import pencilImg from '../../../assets/images/pencil.png';
 
+import {PhoneOutlined} from '@rneui/themed';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 export default function Customers() {
-  const [allUsers, setAllUser] = useState();
-  const [apiTrigger, setApiTrigger] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({
-    Amount: 0,
-    time: '19:30 ',
-    isCashCollected: true,
-    userId: '',
+  const [syncStorageState, setSyncStorageState] = useState({
+    token: '',
+    user: {
+      _id: '',
+      username: '',
+      phone_number: 3490579639,
+      location: '',
+      email: '',
+      role: 2,
+    },
   });
 
   React.useEffect(() => {
-    let url = `${API}/users`;
-    axios
-      .get(url, {headers: {Authorization: `Bearer ${TOKEN}`}})
-      .then(res => {
-        console.log(res.data);
-        setAllUser(res.data);
-      })
-      .catch(error => {
-        console.log(`Error:`, error);
-      });
-  }, [apiTrigger]);
+    const userDetail = SyncStorage.get('userDetail');
+    setSyncStorageState(userDetail);
+  }, []);
 
-  let handlepost = () => {
-    let url = `${API}/cashcollection`;
+  const [allCustomer, setAllCustomer] = useState();
+  const [apiTrigger, setApiTrigger] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedDetail, setSelectedDetail] = useState();
+  const [showDetailEditModal, setShowDetailEditModal] = useState(false);
+  React.useEffect(() => {
+    let url = `${API}/users`;
+
     axios
-      .post(url, selectedUser, {headers: {Authorization: `Bearer ${TOKEN}`}})
+      .get(url, {headers: {Authorization: `Bearer ${syncStorageState?.token}`}})
       .then(res => {
-        console.log(`---------------`, res.data);
-        alert(`Cash Details Updated Successfully!`);
-        setModalVisible(!modalVisible);
-        setApiTrigger(Math.floor(Math.random() * 100000));
+        setAllCustomer(res.data.filter(item => item.role === 0));
+        console.log(`all Customer -----`, allCustomer);
       })
       .catch(error => {
         console.log(`Error:`, error);
       });
+  }, [apiTrigger, syncStorageState.token]);
+  let postForm = () => {
+    let url = `${API}/update/user/${selectedDetail._id}`;
+    axios
+      .post(url, selectedDetail, {
+        headers: {Authorization: `Bearer ${syncStorageState?.token}`},
+      })
+      .then(res => {
+        setAllCustomer(res.data.filter(item => item.role === 0));
+        setSelectedDetail(
+          setAllCustomer.filter(item => item._id === selectedDetail._id),
+        );
+      })
+      .then(err => console.log(err));
   };
+
   return (
     <>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View style={styles.imgView}>
-          {/* <Image style={styles.cashImg} source={CashImg} /> */}
-        </View>
-        <View style={styles.allUsersView}>
-          <Text style={styles.dashboardTitle}>Cash Collection</Text>
-          {allUsers
-            ?.filter((item, index) => item.role === 0)
-            .map((item, key) => (
-              <View style={styles.usersCard}>
-                {item.due_amount > item.max_due ? (
-                  <View style={styles.redCard}>
-                    <Text>Role: {item.role}</Text>
-                    <Text>Name: {item.username}</Text>
-                    <Text>User id: {item._id}</Text>
-                    <Text>
-                      Max Due: {item.max_due ? item.max_due : `Not Assigned`}
+      <SafeAreaProvider>
+        <ScrollView style={{backgroundColor: 'white'}}>
+          {allCustomer?.map((item, index) => (
+            <Pressable
+              onPress={() => {
+                setShowDetailModal(true);
+                setSelectedDetail(item);
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginTop: 5,
+                  marginBottom: 5,
+                  paddingLeft: 30,
+                }}>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    backgroundColor: 'white',
+                  }}>
+                  <Image
+                    source={foodImg}
+                    style={{
+                      resizeMode: 'cover',
+                      width: 50,
+                      height: 50,
+                      borderRadius: 50,
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <View style={{padding: 10, marginLeft: 10}}>
+                    <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                      {item.username}
                     </Text>
-
                     <View>
-                      <Text>Due: {item.due_amount}</Text>
+                      <Text>{item.phone_number}</Text>
                     </View>
-
-                    <Button
-                      title="Update"
-                      color="black"
-                      onPress={() => {
-                        setSelectedUser({
-                          userId: `${item._id}`,
-                          Amount: item.due_amount,
-                          time: '19:30',
-                          isCashCollected: true,
-                        });
-                        setModalVisible(true);
-                      }}
-                      id={item._id}
-                    />
                   </View>
-                ) : (
-                  <View>
-                    {/* <Text>Role: {item.role}</Text> */}
-              <View style={styles.cash_head}>
-              <Text style={styles.cash_head_2}>{item.username}</Text>
-              <Text style={styles.due_max_limit}>Due <Text style={styles._ui_username}>{item.due_amount}</Text></Text>
-                    {/* <Text>User id: {item._id}</Text> */}
-              <Text style={styles.due_max_limit}>Max Limit: {item.max_due ? item.max_due : `Not Assigned`}</Text></View>
-                      <Button
-                      title="Update Due Amount"
-                      color="#0F4C75"
-                      
-                      containerStyle={{
-                        width: 190,
-                        marginHorizontal: 90,
-                        marginVertical: 10,  
-                        borderRadius:10
-                      }}
-                     
-                      onPress={() => {
-                        setSelectedUser({
-                          userId: `${item._id}`,
-                          Amount: item.due_amount,
-                          time: '19:30 ',
-                          isCashCollected: true,
-                        });
-                        setModalVisible(true);
-                      }}
-                      id={item._id}
-                    />
-                   
-                  </View>
-                )}
+                </View>
               </View>
-            ))}
-        </View>
-      </ScrollView>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Image source={modalImg} style={{height: 100}} />
-
-            <Text style={{paddingTop: 10}}>User id: {selectedUser.userId}</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Cash Colllected"
-              id="Amount"
-              onChangeText={val => {
-                setSelectedUser(prev => ({
-                  ...prev,
-                  Amount: val,
-                }));
-              }}
-              value={selectedUser.Amount}
-            />
-
-            <View style={styles.postCancelView}>
-              <View style={{width: 100, height: 50}}>
-                <Button
-                  title="Save"
-                  onPress={() => {
-                    handlepost();
+            </Pressable>
+          ))}
+        </ScrollView>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={showDetailModal}>
+          <View
+            style={{
+              flex: 0.4,
+              justifyContent: 'flex-start',
+            }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-start',
+              }}>
+              <View
+                style={{
+                  width: `100%`,
+                  height: 50,
+                  backgroundColor: 'white',
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={foodImg}
+                  style={{
+                    resizeMode: 'cover',
+                    width: 75,
+                    height: 75,
+                    borderRadius: 50,
                   }}
-                  
                 />
               </View>
-              <View style={{width: 100, height: 50}}>
-                <Button
-                  title="Close"
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}
-                  color="black"
-                />
+              <View
+                style={{
+                  flex: 0.4,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'relative',
+                  top: -40,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 'bold',
+                  }}>
+                  {selectedDetail?.username}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  flex: 0.4,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  alignItems: 'center',
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                  position: 'relative',
+                  top: -40,
+                }}>
+                <Pressable onPress={() => alert(`Call`)}>
+                  <Image
+                    source={CallImg}
+                    style={{
+                      resizeMode: 'cover',
+                      width: 40,
+                      height: 40,
+                      borderRadius: 50,
+                    }}
+                  />
+                </Pressable>
+                <Pressable onPress={() => alert(`Mesage`)}>
+                  <Image
+                    source={messageImg}
+                    style={{
+                      resizeMode: 'cover',
+                      width: 50,
+                      height: 50,
+                      borderRadius: 50,
+                    }}
+                  />
+                </Pressable>
+                <Pressable onPress={() => alert(`Video`)}>
+                  <Image
+                    source={videoCallImg}
+                    style={{
+                      resizeMode: 'cover',
+                      width: 42,
+                      height: 42,
+                      borderRadius: 50,
+                    }}
+                  />
+                </Pressable>
               </View>
             </View>
           </View>
-        </View>
-      </Modal>
+
+          <View
+            style={{flex: 0.5, marginLeft: 15, position: 'relative', top: -15}}>
+            <View style={{flex: 1, marginTop: 10}}>
+              <Text style={{fontSize: 15}}>Role</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  paddingTop: 4,
+                  color: 'grey',
+                }}>
+                {selectedDetail?.role == 0 ? 'Customer' : 'Wrong Data'}
+              </Text>
+            </View>
+            <View style={{flex: 1, marginTop: 10}}>
+              <Text>Shop Name</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  paddingTop: 4,
+                  color: 'grey',
+                }}>
+                {selectedDetail?.shop ? selectedDetail.shop : `Not Found`}
+              </Text>
+            </View>
+            <View style={{flex: 1, marginTop: 10}}>
+              <Text>Mobile</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  paddingTop: 4,
+                  color: 'grey',
+                }}>
+                {selectedDetail?.phone_number}
+              </Text>
+            </View>
+            <View style={{flex: 1, marginTop: 10}}>
+              <Text style={{paddingTop: 4}}>Email</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  paddingTop: 4,
+                  color: 'grey',
+                }}>
+                {selectedDetail?.email ? selectedDetail.email : 'Not Found'}
+              </Text>
+            </View>
+            <View style={{flex: 1, marginTop: 10}}>
+              <Text>Address</Text>
+              <Text style={{fontSize: 18, fontWeight: 'bold', paddingTop: 4}}>
+                {` ${selectedDetail?.address?.street}, ${selectedDetail?.address?.area}, India - ${selectedDetail?.address?.pincode} `}{' '}
+              </Text>
+            </View>
+          </View>
+          <Pressable
+            style={{
+              position: 'absolute',
+              bottom: 110,
+              right: 0,
+
+              borderRadius: 50,
+              width: 50,
+              height: 50,
+              marginRight: 5,
+              top: 10,
+              right: 5,
+            }}
+            onPress={() => {
+              setShowDetailModal(false);
+              setShowDetailEditModal(true);
+            }}>
+            <Image
+              source={pencilImg}
+              style={{
+                width: 40,
+                height: 40,
+                resizeMode: 'center',
+                position: 'relative',
+              }}
+            />
+            <Text style={{paddingTop: 5, paddingLeft: 8}}>Edit </Text>
+          </Pressable>
+          <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+            <Button title="Go back" onPress={() => setShowDetailModal(false)} />
+          </View>
+        </Modal>
+        {/* //////////////////////////// */}
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={showDetailEditModal}>
+          <View
+            style={{
+              flex: 0.4,
+              justifyContent: 'flex-start',
+            }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-start',
+              }}>
+              <View
+                style={{
+                  width: `100%`,
+                  height: 50,
+                  backgroundColor: 'white',
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={foodImg}
+                  style={{
+                    resizeMode: 'cover',
+                    width: 75,
+                    height: 75,
+                    borderRadius: 50,
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flex: 0.4,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'relative',
+                  top: -40,
+                }}>
+                <TextInput
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 'bold',
+                  }}
+                  placeholder={selectedDetail?.username}
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({...prev, username: val}));
+                  }}
+                  value={selectedDetail?.username}></TextInput>
+              </View>
+            </View>
+          </View>
+
+          <View
+            style={{
+              flex: 0.5,
+              marginLeft: 15,
+              position: 'relative',
+              top: -15,
+            }}>
+            <ScrollView>
+              <View style={{flex: 1, marginTop: 10}}>
+                <Text style={{fontSize: 15}}>Role</Text>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.role == 0
+                      ? 'Customer'
+                      : 'Enter Customer Role'
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({...prev, role: val}));
+                  }}
+                  value={selectedDetail?.role}></TextInput>
+              </View>
+              <View style={{flex: 1, marginTop: 10}}>
+                <Text>Shop Name</Text>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.shop
+                      ? selectedDetail.shop
+                      : `Enter Shop Name`
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({...prev, shop: val}));
+                  }}
+                  value={selectedDetail?.shop}></TextInput>
+              </View>
+              <View style={{flex: 1, marginTop: 10}}>
+                <Text>Mobile</Text>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.phone_number
+                      ? `${selectedDetail.phone_number}`
+                      : `Enter Shop Name`
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({...prev, phone_number: val}));
+                  }}
+                  value={selectedDetail?.phone_number}></TextInput>
+              </View>
+              <View style={{flex: 1, marginTop: 10}}>
+                <Text style={{paddingTop: 4}}>Email</Text>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.email
+                      ? `${selectedDetail.email}`
+                      : `Enter Shop Name`
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({...prev, email: val}));
+                  }}
+                  value={selectedDetail?.email}></TextInput>
+              </View>
+              <View style={{flex: 1, marginTop: 10}}>
+                <Text>Address</Text>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.address?.area
+                      ? `${selectedDetail?.address?.area}`
+                      : `Enter City`
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({
+                      ...prev,
+                      address: {
+                        ...prev.address,
+                        area: val,
+                      },
+                    }));
+                  }}
+                  value={selectedDetail?.address?.area}></TextInput>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.address?.street
+                      ? `${selectedDetail?.address?.street}`
+                      : `Enter Street Address`
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({
+                      ...prev,
+                      address: {
+                        ...prev.address,
+                        street: val,
+                      },
+                    }));
+                  }}
+                  value={selectedDetail?.address?.street}></TextInput>
+                <TextInput
+                  style={{
+                    fontSize: 18,
+                    paddingTop: 4,
+                    color: 'grey',
+                  }}
+                  placeholder={
+                    selectedDetail?.address?.pincode
+                      ? `${selectedDetail?.address?.pincode}`
+                      : `Enter Pincode`
+                  }
+                  onChangeText={val => {
+                    setSelectedDetail(prev => ({
+                      ...prev,
+                      address: {
+                        ...prev.address,
+                        pincode: val,
+                      },
+                    }));
+                  }}
+                  value={selectedDetail?.address?.pincode}></TextInput>
+              </View>
+            </ScrollView>
+          </View>
+
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
+            <View style={{width: '50%'}}>
+              <Button
+                title="Go back"
+                onPress={() => {
+                  setShowDetailModal(true);
+                  setShowDetailEditModal(false);
+                }}
+              />
+            </View>
+
+            <View style={{width: '50%'}}>
+              <Button
+                title="Save Details"
+                color="green"
+                onPress={() => {
+                  setShowDetailModal(true);
+                  setShowDetailEditModal(false);
+                  postForm();
+                }}
+              />
+            </View>
+          </View>
+        </Modal>
+      </SafeAreaProvider>
     </>
   );
 }
 
-const styles = StyleSheet.create({
-  usersCard: {
-    width: '90%',
-    margin: 20,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    shadowColor: 'black',
-    textAlign: 'center',
-    paddingTop: 23,
-    height:170,
-    paddingLeft: 10,
-    paddingRight: 10,
-    elevation:10,
-    shadowColor:'black'
-  },
-  _ui_username:{
-      color:"green",
-      },
-  cash_head:{
-marginLeft:20
-  },
-  cash_head_2:{
-fontWeight:'bold',
-fontSize:19,
-color:'black',
-  },
-  postCancelView: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    width: '95%',
-    height: 100,
-  },
-  due_max_limit:{
-    color:'black',
-    fontSize:14,
-    padding:2
-  },
-  cashImg: {
-    width: 400,
-    height: 200,
-  },
-  redCard: {
-    backgroundColor: 'red',
-  },
-  imgView: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  SaveBtn: {
-    backgroundColor: 'black',
-    padding: 10,
-    borderRadius: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: 'grey',
-    width: 200,
-    padding: 8,
-    marginTop: 10,
-  },
-  // update_due_btn:{
-  //   borderRadius:20,
-  //   color:'red'
-    
-
-  // },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginTop: 10,
-    textAlign: 'center',
-  },
-  allUsersView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dashboardTitle: {
-    fontSize: 20,
-    padding: 5,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-});
+const styles = StyleSheet.create({});
