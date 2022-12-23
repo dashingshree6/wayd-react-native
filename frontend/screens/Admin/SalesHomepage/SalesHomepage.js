@@ -10,12 +10,14 @@ import {
   Image,
   Alert,
 } from 'react-native';
+
 import {API, TOKEN} from '../../backend';
 import axios from 'axios';
-import salesDashImg from './salesDashImg.jpg';
-import modalImg from './modalImg.jpg';
+import foodImg from '../../../assets/images/food.jpg';
+
 import {SelectList} from 'react-native-dropdown-select-list';
 import SyncStorage from 'sync-storage';
+
 export default function SalesHomepage() {
   const [allOrder, setAllOrder] = useState();
   const [showLiveOrder, setShowLiveOrder] = useState(true);
@@ -39,18 +41,21 @@ export default function SalesHomepage() {
       role: 2,
     },
   });
+
   React.useEffect(() => {
     const userDetail = SyncStorage.get('userDetail');
     setSyncStorageState(userDetail);
   }, []);
   React.useEffect(() => {
     let allOrderAPI = `${API}/order/all`;
+
     axios
       .get(allOrderAPI, {
         headers: {Authorization: `Bearer ${syncStorageState.token}`},
       })
       .then(res => {
         setAllOrder(res.data);
+        console.log(`--all order`, allOrder);
       })
       .catch(error => {
         console.log('Error:', error);
@@ -68,6 +73,7 @@ export default function SalesHomepage() {
         console.log('Error:', error);
       });
   }, [fetchTrigger, syncStorageState]);
+
   const data = allDelivery?.map((item, index) => ({
     key: `${index + 1}`,
     value: `${item.username}`,
@@ -173,16 +179,15 @@ export default function SalesHomepage() {
         console.log(`Error:`, error);
       });
   };
+
+  let pastButtonColor = showLiveOrder ? 'grey' : 'black';
+  let activeButtonColor = !showLiveOrder ? 'grey' : 'black';
   return (
-    <View style={{flex: 1}}>
-      {/* Top Hero Image */}
-      <View style={styles.salesDashImgView}>
-        <Image source={salesDashImg} style={styles.salesDashImg} />
-      </View>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       {/* Top Tab  */}
       <View style={styles.upperTabView}>
         <TouchableOpacity
-          style={styles.liveOrderBtn}
+          style={[styles.liveOrderBtn]}
           onPress={() => {
             setShowLiveOrder(true);
             getData();
@@ -190,24 +195,28 @@ export default function SalesHomepage() {
               allOrder?.filter((item, index) => item.status === 'Delivered'),
             );
           }}>
-          <Text style={{fontFamily: 'Poppins'}}>Live Order</Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              color: activeButtonColor,
+              fontSize: 18,
+            }}>
+            Active Order
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.pastOrderBtn}
+          style={[styles.pastOrderBtn]}
           onPress={() => {
             setShowLiveOrder(false);
             getData();
           }}>
-          <Text>Past Order</Text>
+          <Text
+            style={{textAlign: 'center', color: pastButtonColor, fontSize: 18}}>
+            Past Order
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.orderListView}>
-        {/* Live order tab and Past Order Tab */}
-        {showLiveOrder ? (
-          <Text style={styles.orderTitle}>Live Order</Text>
-        ) : (
-          <Text style={styles.orderTitle}>Past Order</Text>
-        )}
         {/* Dynamic Tab Rendering */}
         {showLiveOrder && (
           <View style={styles.tabView}>
@@ -289,15 +298,124 @@ export default function SalesHomepage() {
               marginBottom: 140,
               marginTop: 20,
               paddingTop: 10,
-              backgroundColor: '#f2f2f2',
+              backgroundColor: 'white',
             }}>
             {showLiveOrder &&
               filterOrder?.map((item, index) => (
-                <View style={styles.liveOrderCard} key={index}>
-                  <Text>Order Id: {item?._id}</Text>
-                  <Text>Status: {item?.status}</Text>
-                  <Text>Payment: {item?.payment_status}</Text>
-                  <Text>Order Date: {item?.ordered}</Text>
+                <View style={styles.orderCard} key={index}>
+                  <View style={styles.firstRowCard}>
+                    <View
+                      style={{
+                        width: 50,
+                        height: 50,
+                        backgroundColor: 'white',
+                      }}>
+                      <Image
+                        source={foodImg}
+                        style={{
+                          resizeMode: 'cover',
+                          width: 50,
+                          height: 50,
+                          borderRadius: 50,
+                        }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingLeft: 10,
+                        paddingRigt: 5,
+                      }}>
+                      <View>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: 'black',
+                          }}>
+                          {item.user.username
+                            ? item.user.username
+                            : 'Admin Order'}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                            color: '#979797',
+                          }}>
+                          {item?.user?.address?.area
+                            ? `${item.user.address.area}, India`
+                            : 'Address Not Found'}
+                        </Text>
+                      </View>
+                      <View style={{padding: 5, backgroundColor: '#dfdfdf'}}>
+                        <Text style={{color: '#696969'}}>{item.status}</Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'column',
+                      borderBottomWidth: 0.5,
+                      borderColor: '#696969',
+                      borderStyle: 'dashed',
+                      margin: 10,
+                      paddingBottom: 10,
+                    }}>
+                    {item.products.details.map((elem, index) => (
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}
+                        key={index}>
+                        <Text
+                          style={{
+                            fontWeight: 'bold',
+                            color: '#3B3B3B',
+                            fontSize: 13,
+                          }}>
+                          {`${index + 1}) ${elem.name} x `}
+                        </Text>
+                        <Text style={{fontWeight: 'bold'}}>
+                          {elem.Selectedquantity} Kg
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      margin: 10,
+                    }}>
+                    <Text style={{fontSize: 12}}>
+                      {item.status == 'Placed'
+                        ? `Placed on ${item.createdAt.slice(
+                            8,
+                            10,
+                          )}-${item.createdAt.slice(
+                            5,
+                            7,
+                          )}-${item.createdAt.slice(
+                            0,
+                            4,
+                          )} at ${item.createdAt.slice(12, 16)}  ${
+                            item.createdAt.charAt(12) <= 11 ? `AM` : `PM`
+                          }`
+                        : `Placed data not available`}
+                    </Text>
+                    <Text style={{fontWeight: 'bold', color: '#3B3B3B'}}>
+                      ₹ {item.products.cost}
+                    </Text>
+                  </View>
+
                   <Button
                     title="Update Order Status"
                     color="#26b50f"
@@ -339,7 +457,6 @@ export default function SalesHomepage() {
               {selectedOrder?.status === 'Placed' && (
                 <>
                   <View style={styles.buttonView}>
-                    {/* <Image source={modalImg} /> */}
                     <View style={styles.buttonInnerView}>
                       <Button
                         title="Reject Order"
@@ -429,58 +546,47 @@ const styles = StyleSheet.create({
   upperTabView: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 20,
   },
   scrollViewParent: {paddingTop: 20},
-  buttonInnerView: {
-    width: 150,
-    height: 40,
-  },
-  buttonView: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'flex-start',
-    padding: 10,
-  },
   liveOrderBtn: {
     padding: 10,
-    backgroundColor: '#26b50f',
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 10,
-    marginBottom: 2,
-    width: 100,
+    width: '50%',
     height: 40,
+
+    backgroundColor: 'white',
   },
   pastOrderBtn: {
     padding: 10,
-    backgroundColor: '#f10606',
-    borderRadius: 5,
-    marginTop: 10,
-    marginRight: 10,
-    marginBottom: 2,
-    width: 100,
+    width: '50%',
     height: 40,
+    backgroundColor: 'white',
   },
-  liveOrderCard: {
+  orderCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    margin: 10,
+    borderWidth: 1,
+    borderColor: '#dfdfdf',
+    marginRight: 5,
+    elevation: 10,
+    shadowColor: 'grey',
+  },
+  firstRowCard: {
     padding: 10,
-    backgroundColor: '#ffffff',
-    borderRadius: 5,
-    marginTop: 10,
-    marginBottom: 20,
-    marginLeft: 10,
-  },
-  salesDashImg: {
-    height: 300,
-  },
-  salesDashImgView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 0.3,
+    borderStyle: 'solid',
+    borderColor: 'grey',
+    borderBottomColor: 'grey',
   },
+
   orderTitle: {
     fontSize: 20,
     textAlign: 'center',
@@ -490,7 +596,7 @@ const styles = StyleSheet.create({
   },
   orderListView: {
     marginTop: 50,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: 'white',
     height: '100%',
   },
   tabView: {
@@ -504,7 +610,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 90,
     height: 40,
-    backgroundColor: 'black',
+    backgroundColor: 'orange',
     borderRadius: 5,
   },
   tabText: {
@@ -518,5 +624,10 @@ const styles = StyleSheet.create({
     height: 70,
     marginTop: 50,
     marginLeft: 150,
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
   },
 });
