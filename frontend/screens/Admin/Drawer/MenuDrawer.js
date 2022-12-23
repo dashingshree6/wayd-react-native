@@ -142,9 +142,12 @@ const MyDrawer = () => {
 
       <Drawer.Screen
         name="ProcurementHomepage"
-        component={ProcurementHomepage}
+        component={ProductDetails}
+        // component={ProcurementHomepage}
+        // component={AddProducts}
         options={({navigation}) => ({
-          title: 'PROCUREMENT',
+          // title: 'PROCUREMENT',
+          title: 'PRODUCTS',
           headerStyle: { textAlign:'center' },
           headerTitleStyle: { color: 'black', fontWeight: 'bold' },
           headerLeft: () => (
