@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -13,6 +13,7 @@ import {
   import { Icon, Input, Button, Tab, TabView, Image } from '@rneui/themed';
   import AntDesign from "react-native-vector-icons/AntDesign";
   import Ionicons from "react-native-vector-icons/Ionicons";
+import { API, TOKEN } from '../../backend';
 
   const DATA = [
     {
@@ -53,11 +54,22 @@ import {
     },
   ];
   
-  const Item = ({ name,ph_no,rating }) => (
+
+
+
+
+ const Item = ({ name,ph_no,rating }) => (
     <TouchableOpacity
     style={styles.suppliers_button}
     // onPress={onPress}
     >
+       <Image
+                source={{ 
+                    uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" 
+                }}
+                containerStyle={styles.suppliers_img}
+                // PlaceholderContent={<ActivityIndicator />}
+            />
           <View 
           style={styles.parent}
           >
@@ -72,24 +84,22 @@ import {
                 color:'black'
               }}>{ph_no}</Text>
             <Text style={{marginLeft:-6}}>
-            <Text style={styles.sup_rating}>  {rating}</Text>
+            {/* <Text style={styles.sup_rating}>  {rating}</Text> */}
             </Text>
           </View>
           <View>
-            <Image
-                source={{ 
-                    uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDJzEaxLN-jGRYYUO65pWu7Q9GXoNt4LUSSA&usqp=CAU" 
-                }}
-                containerStyle={styles.suppliers_img}
-                // PlaceholderContent={<ActivityIndicator />}
-            />
+           
           </View>
     </TouchableOpacity>
   );
   
 
 const Suppliers = ({ navigation, route  }) => {
+  const [ allUsers, setAllUser] = useState();
   const [index, setIndex] = useState(0);
+
+ 
+
 
   const renderItem = ({ item }) => (
     <Item 

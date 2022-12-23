@@ -4,10 +4,10 @@ import {Input, Icon, Button} from '@rneui/themed';
 import axios from 'axios';
 import {getCategories} from '../../ApiCalls/ApiCalls';
 
-const API = 'https://2171-49-205-239-58.in.ngrok.io/api';
+const API = 'https://27dc-49-205-239-58.in.ngrok.io/api';
 
 const TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4MjY5NDB9.IjTKrEnXuu3d_aiUUIG5LrSu3v3XZfgFrT7kkQXkFps';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE4MTg2MDB9.QqYBuZs4YIbqsOOUsR1rD61mMNP0Bgxjo4-cc0P0H5U';
 
 export default function Category() {
   const [categoryName, setCategoryName] = useState('');
@@ -84,19 +84,22 @@ export default function Category() {
       />
 
       <Text style={styles.category_list_head}>Category List</Text>
+      <View style={styles.category_container}>
       <FlatList
         data={data}
         keyExtractor={item => item._id}
         renderItem={({item}) => (
           <View style={styles.category_item}>
             {/* <Text>Id: {item._id}</Text> */}
-            <Text>Name: {item.name}</Text>
+            <Text style={styles.category_name}>{item.name}</Text>
             <Button
               title={'Update'}
               containerStyle={
                 {
-                  // width: 200,
-                  // marginHorizontal: 50,
+                  marginHorizontal: 50,
+                  marginVertical: 10,  
+                  // borderRadius:10
+                  // marginHorizontal: 20,
                   // marginVertical: 10,
                 }
               }
@@ -104,10 +107,12 @@ export default function Category() {
                 setModalData(item);
                 setModalVisible(true);
               }}
+              color="#0F4C75"
             />
           </View>
         )}
       />
+      </View>
 
       <Modal
         animationType="slide"
@@ -131,6 +136,7 @@ export default function Category() {
               title={'Update'}
               containerStyle={{
                 width: 200,
+                
                 // marginHorizontal: 50,
                 // marginVertical: 10,
               }}
@@ -149,12 +155,27 @@ const styles = StyleSheet.create({
     margin: 5,
     fontSize: 25,
     textAlign: 'center',
+    fontWeight:'bold'
+    ,color:'#252A34'
   },
   category_item: {
-    backgroundColor: 'silver',
-    padding: 10,
-    margin: 2,
+    marginTop:30,
+    backgroundColor: '#fff',
+    padding: 20,
+    width:350,
+    margin: 6,
+    height:110,
+    marginLeft:'9%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    borderRadius: 20,
+    elevation: 8,
+    shadowColor: 'black',
   },
+  category_name:{
+    padding:22,
+    color:'#252A34',
+    // fontWeight:'bold',
+    fontSize:15
+  }
 });

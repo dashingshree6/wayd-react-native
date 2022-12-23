@@ -220,7 +220,10 @@ const MyDrawer = () => {
       <Drawer.Screen
         name="Category"
         // component={Category}
-        component={Suppliers}
+          component={Suppliers}
+          // component={Stock}
+        // component={DeliveryHomepage}
+        // component={DeliverySingleOrderStatus}
         options={({navigation}) => ({
           title: 'Category',
           headerLeft: () => (
