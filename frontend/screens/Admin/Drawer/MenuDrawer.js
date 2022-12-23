@@ -100,7 +100,8 @@ const MyDrawer = () => {
         component={SalesHomepage}
         // component={DeliveryHomepage}
         options={({navigation}) => ({
-          title: ' Sales Homepage',
+          title:
+            '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0 Customer Orders',
           headerLeft: () => (
             <Ionicons
               name="menu"
@@ -145,8 +146,8 @@ const MyDrawer = () => {
         component={ProcurementHomepage}
         options={({navigation}) => ({
           title: 'PROCUREMENT',
-          headerStyle: { textAlign:'center' },
-          headerTitleStyle: { color: 'black', fontWeight: 'bold' },
+          headerStyle: {textAlign: 'center'},
+          headerTitleStyle: {color: 'black', fontWeight: 'bold'},
           headerLeft: () => (
             <Ionicons
               name="menu"
