@@ -33,6 +33,24 @@ import {
       ph_no: 9037742845,
       rating: 3.9
     },
+    {
+      id: '58694a0f-3da1-471f-bd96-005571e29d72',
+      name: 'Shreyas',
+      ph_no: 9037742845,
+      rating: 3.9
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145573249d72',
+      name: 'Parvej',
+      ph_no: 9037742845,
+      rating: 3.9
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145571229d72',
+      name: 'Amrut',
+      ph_no: 9037742845,
+      rating: 3.9
+    },
   ];
   
   const Item = ({ name,ph_no,rating }) => (
@@ -47,14 +65,15 @@ import {
                 fontWeight:'bold',
                 fontSize: 19,
                 color:'black'
-              }}>Supplier Name: {name}</Text>
+              }}>{name}</Text>
             <Text style={{
                 
                 fontSize: 17,
                 color:'black'
-              }}>Phone Number: {ph_no}</Text>
-            <Text style={styles.title}>Rating : 
-            <Text style={styles.sup_rating}>  {rating}</Text></Text>
+              }}>{ph_no}</Text>
+            <Text style={{marginLeft:-6}}>
+            <Text style={styles.sup_rating}>  {rating}</Text>
+            </Text>
           </View>
           <View>
             <Image
@@ -102,36 +121,46 @@ const styles = StyleSheet.create({
         padding:18,
         
         
+        
         // backgroundColor:""
     },
     suppliers_cont: {
       padding:8,
-      backgroundColor:'#fccf9a',
+      backgroundColor:'#ffffff',
       height:'100%',
       borderRadius:10
     },
     
     suppliers_button: {
+      position:'relative',
       display:'flex',
       flexDirection:'row',
       justifyContent:'space-around',
       alignItems: "center",
-      backgroundColor: "#fff",
+      backgroundColor: "#ffffff",
       padding: 10,
       margin: 18,
-      // width:350
-      height:110
+      borderRadius:20,
+      elevation:14,
+      shadowColor: 'black',
+      width:350,
+      height:125,
+      marginLeft:33
     },
     suppliers_img: {
         // borderRadius: 20
-        width: 40,
+        width: 60,
         aspectRatio: 1,
         borderRadius: 10
     },
     sup_rating:{
       color:'#26b50f',
-      fontWeight:'bold'
-    }
+      fontWeight:'bold',
+      
+    },
+    title:{
+      color:'red'
+    },
 });
 
 export default Suppliers;

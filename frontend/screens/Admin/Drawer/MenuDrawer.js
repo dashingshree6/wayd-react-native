@@ -143,8 +143,8 @@ const MyDrawer = () => {
       <Drawer.Screen
         name="ProcurementHomepage"
         component={ProductDetails}
-        // component={ProcurementHomepage}
         // component={AddProducts}
+        // component={ProcurementHomepage}
         options={({navigation}) => ({
           // title: 'PROCUREMENT',
           title: 'PRODUCTS',
@@ -219,7 +219,8 @@ const MyDrawer = () => {
       />
       <Drawer.Screen
         name="Category"
-        component={Category}
+        // component={Category}
+        component={Suppliers}
         options={({navigation}) => ({
           title: 'Category',
           headerLeft: () => (
