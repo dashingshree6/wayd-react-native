@@ -27,17 +27,28 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
 >
 
           <View style={styles.content}>
+          {/* <Text style={styles.textStyle}>
+              {'\u20B9'}
+            </Text> */}
           <Text style={{
               fontWeight:'bold',
               fontSize:19,
               color:'black',
-              marginLeft:40,
-            }}>{name} ({grade})</Text>
-            
-            <Text style={styles.title}>Stock  {stock} </Text>
-            <Text style={styles.title}>Unit Price  {price}(kg)</Text>
+              textAlign:'center'              
+              // marginLeft:20,
+            }}>{name} 
+                <Badge 
+           
+             value={grade} status="primary" 
+            />
+            </Text>
+            <View style={styles.title}>
+            <Text >{stock}(kg) <Text style={styles.textStyle}>
+              {'\u20B9'}
+            </Text>{price}/(kg)</Text></View>
+            {/* <Text style={styles.title}>Unit Price  </Text> */}
           </View>
-            {/* <Text style={styles.title}>Grade : {grade}</Text> */}
+            {/* <Te   xt style={styles.title}>Grade : {grade}</Text> */}
            <View style={{ backgroundColor:'#000000'}}>
            <Image 
              source={{ 
@@ -136,15 +147,18 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: 'white'
   },
+  
   content:{
-    // backgroundColor:'silver', 
+    backgroundColor:'#ffff', 
     width:'65%', 
 textAlign:'center'
   },
   title:{
-    marginLeft:35,
-      padding:5,
-      color:'black'
+    //must immediately change this -> not applicable
+    marginLeft:50,
+      // padding:5,
+      // color:'black',
+      // textAlign:'center'
   },
     product_details_head:{
         textAlign:'center',
@@ -157,6 +171,11 @@ textAlign:'center'
       },
     product_details_btn: {
       alignItems:'center'
+    },
+    textStyle: {
+      marginTop: 10,
+      color: '#646464',
+      fontSize: 16,
     },
     product_details_type: {
       display:'flex',
@@ -181,7 +200,7 @@ textAlign:'center'
       margin: 25,
       height:110,
       textAlign:'center',
-      backgroundColor:'#ffffff',
+      backgroundColor:'silver',
          
       elevation:30,
       shadowColor: 'gray',
