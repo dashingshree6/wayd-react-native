@@ -125,31 +125,43 @@ const Item = (props) => (
                             padding: 0
                           }}
                           >
-                            {/* <Text style={{ color: 'green',
-                              fontWeight:'800'}}>ADD</Text> */}
-                              <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
-                                <Pressable>
-                                      <Ionicons
-                                        name='close'
-                                        size={20}
-                                        color='green'
-                                        />
-                                  </Pressable>
-                                  <Input
-                                    placeholder='Qty'
-                                    containerStyle={{width: 55,height: 48 }}
-                                    // inputContainerStyle={{padding: 0}}
-                                    inputStyle={{padding: 0}}
-                                  />
-                                  <Pressable>
-                                      <Ionicons
-                                        name='checkmark-sharp'
-                                        size={20}
-                                        color='green'
-                                        />
-                                  </Pressable>
-                              
-                              </View>
+                           
+                           {/* {isProductInCart ? () : ()} */}
+                            
+                            <Pressable
+                            onPress={() => setIsProductInCart(!isProductInCart)}
+                            >
+                                <Text style={{ color: 'green',fontWeight:'800'}}>ADD</Text> 
+                            </Pressable>
+                         
+
+                        
+                                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
+                            
+                                    <Pressable>
+                                          <Ionicons
+                                            name='close'
+                                            size={20}
+                                            color='green'
+                                            />
+                                      </Pressable>
+                                      <Input
+                                        placeholder='Qty'
+                                        containerStyle={{width: 55,height: 48 }}
+                                        // inputContainerStyle={{padding: 0}}
+                                        inputStyle={{padding: 0}}
+                                      />
+                                      <Pressable>
+                                          <Ionicons
+                                            name='checkmark-sharp'
+                                            size={20}
+                                            color='green'
+                                            />
+                                      </Pressable>
+                                  
+                                  </View>
+                           
+                             
                             
                           </TouchableOpacity>
               </View>
@@ -185,6 +197,8 @@ const [productPrice, setProductPrice] = useState(1)
 const [cartQuantity, setCartQuantity] = useState(0)
 const [modalVisible, setModalVisible] = useState(false);
 const [cartModalVisible, setCartModalVisible] = useState(false);
+const [cartProducts, setCartProducts] = useState([])
+const [isProductInCart, setIsProductInCart] = useState(false)
 
 
 const pushItemInCart = (product_id, product_name, product_grade, product_price,product_quantity) => {
@@ -262,6 +276,7 @@ const pushItemInCart = (product_id, product_name, product_grade, product_price,p
         SyncStorage.set("cartId",res.data.cartDetails[0]["_id"])
         SyncStorage.set("noOfItems", res.data.cartDetails[0]["numberOfItem"])
         setCartQuantity( res.data.cartDetails[0]["numberOfItem"])
+        setCartProducts( res.data.cartDetails[0]["details"])
         console.log(res.data.cartDetails[0]["_id"])
       })
       .catch((err) => {
@@ -314,6 +329,7 @@ const decreseValue =()=>{
     product={item}
     // photo={item.photo} 
     displayModal={displayModal}
+    cartProducts={cartProducts}
     />
   );
 
