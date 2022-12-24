@@ -3,11 +3,11 @@ import React, {useEffect, useState} from 'react'
 import { Button, Image, Input } from '@rneui/themed';
 import axios from 'axios';
 import SyncStorage from 'sync-storage';
-import { getCartDetails, createNewOrder,updateCartItems, getCartDetailsByUserId, updateCartDetails } from '../../ApiCalls/ApiCalls';
+import { getCartDetails, createNewOrder, updateCartItems, getCartDetailsByUserId, updateCartDetails } from '../../ApiCalls/ApiCalls';
 import Toast from 'react-native-toast-message'
 
 
-export default function SalesVendorForm2({ navigation, goToFirstTab}) {
+export default function Checkout({ navigation, goToFirstTab}) {
   // const items = SyncStorage.get("cart")
 
   // const { userId } = route.params;
@@ -78,7 +78,7 @@ export default function SalesVendorForm2({ navigation, goToFirstTab}) {
       user: SyncStorage.get("manual_order_userId"),
       address: 'Hyderabad',
       coupon:null,
-      userType: "Customer",
+      userType: "Supplier",
       customerId: SyncStorage.get("manual_order_userId")
     }
     console.log("Create Order data", obj)
@@ -159,7 +159,7 @@ const updateCart = (action, product_id) => {
         );
   }
 
-  const updateCartDet = ( product_id, newQuantity) => {
+   const updateCartDet = ( product_id, newQuantity) => {
     setLoading(true)
     let data = {
       quantity: newQuantity.quantity,
@@ -255,30 +255,30 @@ const updateCart = (action, product_id) => {
                             onPress={() => updateCart('increase',data._id)}
                             /> */}
                     </View>
-                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                      <View style={{flexDirection:'row', alignItems:'center'}}>
                         
-                        <Input
-                        placeholder="Quantity"
-                        // leftIcon={{ type: 'font-awesome', name: 'comment' }}
-                        onChangeText={value =>setProductQuantity({quantity: value })}
-                        containerStyle={{width: '40%',marginTop: 10}}
-                        keyboardType='numeric'
-                        value={productQantity.quantity == 1 ? '' : productQantity.quantity }
-                        />
-                  
-                        <Button
-                        title={'Add'}
-                        containerStyle={{
-                            width: "30%",
-                        }}
-                        onPress={() => {
-                          if(productQantity.quantity >= 1) {
-                            updateCartDet(data._id, productQantity)
-                          }
-
-                        }}
-                        />
-                </View>
+                                <Input
+                                placeholder="Quantity"
+                                // leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                                onChangeText={value =>setProductQuantity({quantity: value })}
+                                containerStyle={{width: '40%',marginTop: 10}}
+                                keyboardType='numeric'
+                                value={''}
+                                />
+                          
+                                <Button
+                                title={'Add'}
+                                containerStyle={{
+                                    width: "30%",
+                                }}
+                                onPress={() => {
+                                  if(productQantity.quantity >= 1) {
+                                    updateCartDet(data._id, productQantity)
+                                  }
+   
+                                }}
+                                />
+                        </View>
                     <Button
                     title={'Remove'}
                     containerStyle={{

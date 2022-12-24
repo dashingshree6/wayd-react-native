@@ -1,4 +1,12 @@
-import React, {useEffect} from 'react';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
+
+import React,{useEffect, useReducer, createContext, useMemo} from 'react';
 // import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -59,19 +67,73 @@ import SyncStorage from 'sync-storage';
 
 import {setAuthToken, isAuthenticated} from './screens/Login';
 
-const Stack = createNativeStackNavigator();
+export const AuthContext = createContext();
+
+const Stack = createNativeStackNavigator()
 // const App: () => Node = () => {
 const App = () => {
-  useEffect(() => {
-    // setAuthToken(SyncStorage.get("jwt"))
-    setAuthToken(isAuthenticated().token);
-  });
 
-  return (
-    <NavigationContainer>
-      <MyDrawer />
-    </NavigationContainer>
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+          return {
+            ...prevState,
+            userToken: action.token,
+            isLoading: false,
+          };
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignout: false,
+            userToken: action.token,
+            userRole: action.role,
+          };
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignout: true,
+            userToken: null,
+            userRole: null
+          };
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: true,
+      userToken: null,
+      userRole: null
+    }
   );
+
+  const authContext = React.useMemo(
+    () => ({
+      signInContext: (Token, Role) => {
+        dispatch({ type: 'SIGN_IN', token: Token, role: Role });
+      },
+      signOutContext: () => dispatch({ type: 'SIGN_OUT' }),
+      signUp: async (data) => {
+        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+      },
+    }),
+    []
+  );
+
+
+  useEffect(()=>{
+    // setAuthToken(SyncStorage.get("jwt"))
+    // setAuthToken(isAuthenticated().token); //Before auth context implementation
+    setAuthToken(state.userToken); //After auth context implementation
+    console.log("context value",state)
+  },[state.userToken])
+  
+  return (
+    <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+          <MyDrawer state={state}/>
+        </NavigationContainer>
+    </AuthContext.Provider>
+  )
 };
 
 const styles = StyleSheet.create({

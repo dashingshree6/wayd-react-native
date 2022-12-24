@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -13,6 +13,7 @@ import {
 import {Input, Icon, Button} from '@rneui/themed';
 import {signin, authenticate, isAuthenticated} from '.';
 import SyncStorage from 'sync-storage';
+import { AuthContext } from '../../App';
 
 const Login = ({navigation}) => {
   const [values, setValues] = useState({
@@ -30,75 +31,88 @@ const Login = ({navigation}) => {
     setValues({...values, error: false, [name]: event.target.value});
   };
 
-  const onSubmit = () => {
-    setValues({...values, error: false, loading: true});
+    const { signInContext } = useContext(AuthContext)
+    const onSubmit = () => {
+        setValues({ ...values, error: false, loading: true });
+        signin({ phone_number, password })
+          .then((data) => {
+            console.log(data.data);
+    
+            if (data.error) {
+              setValues({ ...values, error: data.data.error, loading: false });
+            } else {
+                authenticate(data.data, () => {
+                  setValues({
+                    ...values,
+                    didRedirect: true,
+                    phone_number: "",
+                    password: "",
+                  });
+                });
+                //new added
+                SyncStorage.set("role",data.data.user.role)
+                SyncStorage.set("userToken",data.data.token)
+                SyncStorage.set("userId", data.data.user._id)
+                SyncStorage.set("userName",data.data.user.username)
+                SyncStorage.set("userPhone",data.data.user.phone_number)
+                SyncStorage.set("userEmsil",data.data.user.email)
 
-    signin({phone_number, password})
-      .then(data => {
-        console.log(`---------data-----`, data.data);
-        if (data.error) {
-          setValues({...values, error: data.data.error, loading: false});
-        } else {
-          authenticate(data.data, () => {
+
+                let userRole = SyncStorage.get("role")
+                let userToken = SyncStorage.get("userToken")
+                console.log("Signin Role",SyncStorage.get("role"))
+                console.log("Signin Token",SyncStorage.get("userToken"))
+                console.log("Signin User Id",SyncStorage.get("userId"))
+                signInContext(userToken,userRole)
+                // if (data.data.token) {
+                //     if (data.data.user && data.data.user.role === 1) {
+                //       // return <Redirect to="/admin/dashboard" />;
+                //       return navigation.navigate("PriceAddition")
+                //     } else {
+                //       return navigation.navigate("VendorHomepage")
+                //     }
+                //   }
+                //   if (isAuthenticated() && user.role === 1) {
+                //     return navigation.navigate("SalesHomepage")
+                //   }
+                //   if (isAuthenticated() && user.role === 0) {
+                //       return navigation.navigate("VendorHomepage")
+                //   }
+
+                // if (didRedirect) {
+                //   if (user && user.role === 1) {
+                //     return navigation.navigate("PriceAddition")
+                //   } else {
+                //     return navigation.navigate("VendorHomepage")
+                //   }
+                // }
+
+
+                // if(userToken) {
+                //   if ( userRole === 1) {
+                //     return navigation.navigate("SalesHomepage")
+                //   } else if ( userRole === 0) {
+                //     return navigation.navigate("VendorHomepage")
+                //   } else {
+                //     return navigation.navigate("DeliveryHomepage")
+                //   }
+                // } else {
+                //   return navigation.navigate("Login")
+                // }      
+
+              }
+              //
+            
+          })
+          .catch((err) =>
             setValues({
               ...values,
               didRedirect: true,
               phone_number: '',
               password: '',
-            });
-          });
-
-          SyncStorage.set('role', data.data.user.role);
-          SyncStorage.set('userToken', data.data.token);
-          SyncStorage.set('userId', data.data.user._id);
-          SyncStorage.set('userDetail', data.data);
-          let userRole = SyncStorage.get('role');
-          let userToken = SyncStorage.get('userToken');
-          console.log('Signin Role', SyncStorage.get('role'));
-          console.log('Signin Token', SyncStorage.get('userToken'));
-          console.log('Signin User Id', SyncStorage.get('userId'));
-
-          if (data.error) {
-            setValues({...values, error: data.data.error, loading: false});
-          } else {
-            authenticate(data.data, () => {
-              setValues({
-                ...values,
-                didRedirect: true,
-                phone_number: '',
-                password: '',
-              });
-            });
-            //new added
-            SyncStorage.set('role', data.data.user.role);
-            SyncStorage.set('userToken', data.data.token);
-            let userRole = SyncStorage.get('role');
-            let userToken = SyncStorage.get('userToken');
-            console.log('Signin Role', SyncStorage.get('role'));
-            console.log('Signin Token', SyncStorage.get('userToken'));
-
-            if (userToken) {
-              if (userRole === 1) {
-                return navigation.navigate('SalesHomepage');
-              } else if (userRole === 0) {
-                return navigation.navigate('VendorHomepage');
-              } else {
-                return navigation.navigate('DeliveryHomepage');
-              }
-            } else {
-              return navigation.navigate('Login');
-            }
-          }
-          //
-        }
-      })
-      .catch(err =>
-        setValues({
-          ...values,
-          error: err.response.data.error,
-          loading: false,
-        }),
-      );
+            })
+          )
+         
   };
 
   const performRedirect = () => {

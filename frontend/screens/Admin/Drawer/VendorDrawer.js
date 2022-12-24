@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { Text, View } from 'react-native';
 import {
   DrawerItem,
@@ -7,14 +7,15 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import axios from 'axios';
 import SyncStorage from 'sync-storage';
 import { signout, isAuhenticated } from '../../Login/index';
-
+import { AuthContext } from '../../../App';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const API="https://f5b6-49-205-239-58.in.ngrok.io/api/user/636e0bf09598d4489cdb1ff4"
 
 const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA3MTAzODd9.jIhWWHg1Zh3nChGzUZbgMiGj3oVcrQkVbwEUz-PTtyc"
 
 export default function VendorDrawer(props) {
-
+  const { signOutContext } = useContext(AuthContext)
 
 
   const [data,setData] = React.useState({});
@@ -45,65 +46,158 @@ export default function VendorDrawer(props) {
 
     return (
       <>
-      <Text
-      style={{
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 5
-      }}
-      >User Details</Text>
         <View
         style={{
-            backgroundColor:'silver',
-            padding: 20,
-            margin: 10
+            padding: 10,
         }}
         >
-          <Text style={{marginLeft: 15}}>Name :{data.phone_number}</Text>
-          <Text style={{marginLeft: 15}}>Phone Number :</Text>
-          <Text style={{marginLeft: 15}}>Due Amount :</Text>
+          <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Hey</Text>
+          <Text 
+          style={{
+            fontSize: 25,
+            fontWeight:'bold',
+            color:'black'
+          }}
+          >{ SyncStorage.get("userName") }</Text>
+             <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Have a nice day !!</Text>
+        </View>
+
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+              <Ionicons
+                  name='call'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  }}>
+                  { SyncStorage.get("userPhone")}
+                </Text>
+
+        </View>
+
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center'
+        }}
+        >
+              <Ionicons
+                  name='reader-outline'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15
+                  }}>
+                  Rs.456
+                </Text>
+
         </View>
 
         <DrawerItem
           label="Home"
           onPress={() => props.navigation.navigate('VendorHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='home'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
            <DrawerItem
           label="My Orders"
           onPress={() => props.navigation.navigate('VendorsMyOrders')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='menu'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
         <DrawerItem
           label="Credit Cycle Time Remaining"
           onPress={() => props.navigation.navigate('ProcurementHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='ellipsis-vertical-circle'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
   
@@ -112,19 +206,32 @@ export default function VendorDrawer(props) {
         <DrawerItem
         label="Logout"
         onPress={() => {
-          signout(() => {
-            props.navigation.navigate('Login')
-          })
+          props.navigation.closeDrawer();
+          signOutContext()
+          signout()
+        }}
+        labelStyle={{
+          fontSize: 15,
+          color:'black'
         }}
         icon={()=> (
-          <AntDesign
-          name='right'
-          size={15}
+          // <AntDesign
+          // name='right'
+          // size={15}
+          // style={{
+          //   position: "absolute",
+          //   right: 10,
+          // }}
+          // />
+          <Ionicons
+          name='log-out'
+          color={'green'}
+          size={25}
           style={{
             position: "absolute",
-            right: 10,
+            left: 0,
           }}
-          />
+        />
         )}
         />
        )}

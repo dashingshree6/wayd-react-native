@@ -41,7 +41,7 @@ import {
     </Pressable>
   );
   
-  export default function SalesVendorForm1({navigation}) {
+  export default function AddProducts({navigation}) {
   const jwt = JSON.parse(SyncStorage.get("jwt"));
   console.log("Vendor Homepage jwt",jwt)
   

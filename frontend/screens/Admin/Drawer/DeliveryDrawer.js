@@ -1,14 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View} from 'react-native';
-import {DrawerItem} from '@react-navigation/drawer';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import  React,{useState, useEffect, useContext} from 'react';
+import { Text, View } from 'react-native';
+import {
+  DrawerItem,
+} from '@react-navigation/drawer';
+import AntDesign from "react-native-vector-icons/AntDesign";
 import axios from 'axios';
 import SyncStorage from 'sync-storage';
-import {signout, isAuhenticated} from '../../Login/index';
-import {API} from '../../backend';
+import { signout, isAuhenticated } from '../../Login/index';
+import { AuthContext } from '../../../App';
+import Ionicons from "react-native-vector-icons/Ionicons";
+
+const API="https://e56d-49-205-239-58.in.ngrok.io/api/user/6396be811f1893235c9b2661"
+
+const TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzA4NzQzODN9.p2pTjEY0jEMGK7qhJYDTRrpqS5mAQgv5Weo-QPRNi_4"
 
 export default function DeliveryDrawer(props) {
-  const [data, setData] = React.useState({});
+  const { signOutContext } = useContext(AuthContext)  
+  const [data,setData] = React.useState({});
 
   const [syncStorageState, setSyncStorageState] = useState({
     token: '',
@@ -38,62 +46,172 @@ export default function DeliveryDrawer(props) {
   }, []);
 
   return (
-    <>
-      <Text
+      <>
+           <View
         style={{
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginLeft: 5,
-        }}>
-        User Details x
-      </Text>
-      <View
-        style={{
-          backgroundColor: 'silver',
-          padding: 20,
-          margin: 10,
-        }}>
-        <Text style={{marginLeft: 15}}>Id:{syncStorageState.user._id}</Text>
-        <Text style={{marginLeft: 15}}>
-          Name :{syncStorageState.user.username}
-        </Text>
-        <Text style={{marginLeft: 15}}>
-          Phone Number : {syncStorageState.user.phone_number}
-        </Text>
-        <Text style={{marginLeft: 15}}>
-          Email :{syncStorageState.user.email}
-        </Text>
-      </View>
+            padding: 10,
+        }}
+        >
+          <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Hey</Text>
+          <Text 
+          style={{
+            fontSize: 25,
+            fontWeight:'bold',
+            color:'black'
+          }}
+          >{ SyncStorage.get("userName") }</Text>
+             <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Have a nice day !!</Text>
+        </View>
 
-      <DrawerItem
-        label="Home"
-        onPress={() => props.navigation.navigate('DeliveryHomepage')}
-        icon={() => (
-          <AntDesign
-            name="right"
-            size={15}
+  
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+              <Ionicons
+                  name='call'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  }}>
+                  { SyncStorage.get("userPhone") }
+                </Text>
+
+        </View>
+
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center'
+        }}
+        >
+              <Ionicons
+                  name='reader-outline'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15
+                  }}>
+                  Rs.456
+                </Text>
+
+        </View>
+  
+        <DrawerItem
+          label="Home"
+          onPress={() => props.navigation.navigate('DeliveryHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
+          icon={()=> (
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='home'
+            color={'green'}
+            size={25}
             style={{
-              position: 'absolute',
-              right: 10,
+              position: "absolute",
+              left: 0,
             }}
           />
-        )}
-      />
+          )}
+        />
 
-      <DrawerItem
+        <DrawerItem
+          label="My Orders"
+          onPress={() => props.navigation.navigate('ProcurementHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
+          icon={()=> (
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='menu'
+            color={'green'}
+            size={25}
+            style={{
+              position: "absolute",
+              left: 0,
+            }}
+          />
+          )}
+        />
+  
+  { SyncStorage.get("jwt") && (
+
+        <DrawerItem
         label="Logout"
-        onPress={() => props.navigation.navigate('Login')}
-        icon={() => (
-          <AntDesign
-            name="right"
-            size={15}
-            style={{
-              position: 'absolute',
-              right: 10,
-            }}
-          />
+        onPress={() => {
+          props.navigation.closeDrawer();
+          signOutContext()
+          signout()
+        }}
+        labelStyle={{
+          fontSize: 15,
+          color:'black'
+        }}
+        icon={()=> (
+          // <AntDesign
+          // name='right'
+          // size={15}
+          // style={{
+          //   position: "absolute",
+          //   right: 10,
+          // }}
+          // />
+          <Ionicons
+          name='log-out'
+          color={'green'}
+          size={25}
+          style={{
+            position: "absolute",
+            left: 0,
+          }}
+        />
         )}
       />
+      )}
+
     </>
   );
 }

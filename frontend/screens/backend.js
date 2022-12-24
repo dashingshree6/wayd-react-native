@@ -1,4 +1,7 @@
-export const API = ' https://2a4a-49-205-239-58.in.ngrok.io/api';
-
-export const TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE4MTg2MDB9.QqYBuZs4YIbqsOOUsR1rD61mMNP0Bgxjo4-cc0P0H5U';
+export const API = "https://fda9-49-205-239-58.in.ngrok.io/api";
+// export const API =  "https://1819-49-205-239-58.in.ngrok.io" ;
+// export const API = "https://way-d-dev.herokuapp.com/api";
+// export const API = "http://3.108.193.188:8000/api"; // current
+// export const API = "https://ed5f-49-205-236-112.in.ngrok.io/api";
+// export const API = "http://localhost:80";
+// export const API = " http://127.0.0.1:4040";
