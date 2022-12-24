@@ -126,6 +126,20 @@ const MyDrawer = () => {
         })}
       />
       <Drawer.Screen
+        name="AddProducts"
+        component={AddProducts}
+        options={({navigation}) => ({
+          title: 'Create Product',
+          headerLeft: () => (
+            <Ionicons
+              name="menu"
+              size={25}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
         name="Customers"
         component={Customers}
         options={({navigation}) => ({

@@ -279,13 +279,14 @@ const ProcurementHomepage = ({ navigation, route  }) => {
 
 const styles = StyleSheet.create({
   textStyle:{
-    width: 100,
+    width: 140,
     marginHorizontal: 150,
     marginVertical: 10,
     backgroundColor:'#26b50f',
     textAlign:'center',
     height:20,
-    borderRadius: 10
+    borderRadius: 10,
+
   },
   proc_header:{
       fontSize: 25,

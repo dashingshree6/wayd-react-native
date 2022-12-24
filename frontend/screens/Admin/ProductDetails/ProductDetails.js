@@ -8,16 +8,45 @@ import {
     useColorScheme,
     View,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    TextInput
   } from 'react-native';
   import { Icon, Input, Button, Tab, TabView, Image, Badge, FAB } from '@rneui/themed';
 import axios from 'axios';
 
 
-const API ="https://27dc-49-205-239-58.in.ngrok.io/api/products"
-const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE4MTg2MDB9.QqYBuZs4YIbqsOOUsR1rD61mMNP0Bgxjo4-cc0P0H5U"
+const API ="https://b8a3-49-205-239-58.in.ngrok.io/api/products"
+const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwYjJlZTAxMzNhZmQiLCJpYXQiOjE2NzE5MTI3ODV9.chdwqefITwSPwybND146mVXVxC64YiDtqjMxPNKZ2hU"
 
 
+  const ProductDetails = (props) => {
+
+  // const [query, setQuery] = useState("")
+  const [data,setData] = useState();
+  const [searchValue, setSearchValue]=useState()
+  
+  // const filterData=()=>{
+  //   let filtered = data.filter((item) => item.name === 'Plum')
+  //   console.log(filtered,`''''''''''''''''''''''''''''`)
+  //   console.log(filterData,`'''''''''''''''''''''''''''`)
+  //   return filtered;
+  // }
+
+  const getAllProducts =()=>{
+   axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
+    .then(res => {
+      console.log(res.data)
+      setData(res.data)
+    }).catch((error) => {
+      console.log(error)
+    });
+      }
+  useEffect(() => {
+    getAllProducts()
+    },[])
+  
+
+  const [index, setIndex] = useState(0);
   const Item = ({ name,stock,grade, price }) => (
     <TouchableOpacity
     style={styles.product_details_button}
@@ -35,8 +64,9 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
               fontSize:19,
               color:'black',
               textAlign:'center',
-              marginRight:10              
+              // marginRight:10              
             }}>{name}</Text>
+
             <Badge value={grade} status="primary"/></View>
           <View style={{flexDirection:'row',
           justifyContent:"space-evenly", 
@@ -46,6 +76,7 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
             </View>
             </View>
            <View style={{ backgroundColor:'#000000'}}>
+         
            <Image 
              source={{ 
               uri: "https://imgs.search.brave.com/PFNx-57BW20BmkUQx3msbeUT6MQonwZtNnI0klGB1AE/rs:fit:720:403:1/g:ce/aHR0cHM6Ly9kYWls/eWJhemFyLmNvbS5i/ZC93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MS8wMi9SYW1idXRh/bi01MDAtZ20tNzIw/eDQwMy5qcGc" 
@@ -56,25 +87,6 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
           </View>
           </TouchableOpacity>
   );
-  
-  const ProductDetails = ({ navigation, route  }) => {
-  
-  const [data,setData] = useState();
-  const getAllProducts =()=>{
-   axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
-    .then(res => {
-      console.log(res.data)
-      setData(res.data)
-    }).catch((error) => {
-      console.log(error)
-    });
-      }
-  useEffect(() => {
-    getAllProducts()
-  },[])
-  
-
-  const [index, setIndex] = useState(0);
   const renderItem = ({ item }) => (
     <Item 
     name={item.name} 
@@ -83,7 +95,8 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
     price={item.price}
     />
   );
-    return (
+
+  return (
         <SafeAreaView>
         <View style={{position:'relative'}}>
               <View style={styles.product_details_cont}>
@@ -97,12 +110,23 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
                           <Text h1>Favorite</Text>
                         </TabView.Item>
                     </TabView>
+                    {/* <TextInput
+                    onChange={event => setQuery(event.target.value)}
+        style={styles.textInputStyle}
+        underlineColorAndroid="transparent"
+        placeholder="Search Here"
+      /> */}
+
                     <FlatList
                       data={data}
+                      searchValue={searchValue}
                       renderItem={renderItem}
                       keyExtractor={item => item.id}
                       />
-                     <TouchableOpacity style={styles.fab}>
+                      
+                     <TouchableOpacity 
+                     onPress={() => props.navigation.navigate('AddProducts')} 
+                     style={styles.fab}>
            <Text style={styles.fabIcon}>+</Text>
                      </TouchableOpacity>
                     
@@ -113,6 +137,15 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
 }
 
 const styles = StyleSheet.create({
+  
+  textInputStyle: {
+    height: 40,
+    borderWidth: 1,
+    paddingLeft: 20,
+    margin: 5,
+    borderColor: '#009688',
+    backgroundColor: '#FFFFFF',
+  },
   fab: {
     position: 'absolute',
     width: 56,
@@ -187,7 +220,7 @@ padding:5
       backgroundColor: "#DDDDDD",
       padding: 20,
       margin: 25,
-      height:110,
+      height:90,
       textAlign:'center',
       backgroundColor:'#fff',
          
@@ -202,7 +235,7 @@ padding:5
       marginLeft:220,
       // marginBottom:200,
       position:'absolute',
-      marginTop:-75
+      marginTop:-95
 
     },
 });
