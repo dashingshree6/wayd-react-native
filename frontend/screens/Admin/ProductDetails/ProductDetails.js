@@ -22,33 +22,29 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
     <TouchableOpacity
     style={styles.product_details_button}
     // onPress={onPress}
-    >
-          <View // style={styles.item}
->
-
-          <View style={styles.content}>
-          {/* <Text style={styles.textStyle}>
-              {'\u20B9'}
-            </Text> */}
-          <Text style={{
+    ><View>
+      <View style={styles.content}>
+          <View style={{
+          flexDirection:'row',
+      justifyContent:'center',
+          alignItems:'center',
+          
+          }}>
+            <Text style={{
               fontWeight:'bold',
               fontSize:19,
               color:'black',
-              textAlign:'center'              
-              // marginLeft:20,
-            }}>{name} 
-                <Badge 
-           
-             value={grade} status="primary" 
-            />
-            </Text>
-            <View style={styles.title}>
-            <Text >{stock}(kg) <Text style={styles.textStyle}>
-              {'\u20B9'}
-            </Text>{price}/(kg)</Text></View>
-            {/* <Text style={styles.title}>Unit Price  </Text> */}
-          </View>
-            {/* <Te   xt style={styles.title}>Grade : {grade}</Text> */}
+              textAlign:'center',
+              marginRight:10              
+            }}>{name}</Text>
+            <Badge value={grade} status="primary"/></View>
+          <View style={{flexDirection:'row',
+          justifyContent:"space-evenly", 
+          alignItems:'center',padding:5, fontWeight:'bold'}}>
+            <Text style={{fontWeight:'bold',fontSize:16, color:'#7C203A'}}>{stock}kg</Text> 
+            <Text style={{fontWeight:'bold',fontSize:16, color:'green'}}>{'\u20B9'}{price}/(kg)</Text>
+            </View>
+            </View>
            <View style={{ backgroundColor:'#000000'}}>
            <Image 
              source={{ 
@@ -57,13 +53,10 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
           containerStyle={styles.product_img}
             />
            </View>
-            
           </View>
-          
-    </TouchableOpacity>
+          </TouchableOpacity>
   );
   
-
   const ProductDetails = ({ navigation, route  }) => {
   
   const [data,setData] = useState();
@@ -75,7 +68,7 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
     }).catch((error) => {
       console.log(error)
     });
-      }//call useeffect outside function****
+      }
   useEffect(() => {
     getAllProducts()
   },[])
@@ -110,14 +103,6 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjM
                       keyExtractor={item => item.id}
                       />
                      <TouchableOpacity style={styles.fab}>
-                     {/* <FAB title="+" style={styles.fabIcon}
-        //    containerStyle={{
-        //   // position:"absolute",
-        // // top:20,
-        //   bottom:0,
-        //   right:0,
-        //   zIndex:200,}}
-          /> */}
            <Text style={styles.fabIcon}>+</Text>
                      </TouchableOpacity>
                     
@@ -136,7 +121,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 20,
     bottom: 20,
-    backgroundColor: '#03A9F4',
+    backgroundColor: '#143F6B',
     borderRadius: 20,
     elevation: 28,
 
@@ -151,14 +136,17 @@ const styles = StyleSheet.create({
   content:{
     backgroundColor:'#ffff', 
     width:'65%', 
-textAlign:'center'
+textAlign:'center',
+color:'black',
+padding:5
   },
   title:{
     //must immediately change this -> not applicable
     marginLeft:50,
       // padding:5,
       // color:'black',
-      // textAlign:'center'
+      textAlign:'center',
+      color:'black'
   },
     product_details_head:{
         textAlign:'center',
@@ -170,7 +158,8 @@ textAlign:'center'
       padding:10,
       },
     product_details_btn: {
-      alignItems:'center'
+      alignItems:'center',
+      
     },
     textStyle: {
       marginTop: 10,
@@ -200,7 +189,7 @@ textAlign:'center'
       margin: 25,
       height:110,
       textAlign:'center',
-      backgroundColor:'silver',
+      backgroundColor:'#fff',
          
       elevation:30,
       shadowColor: 'gray',
@@ -213,7 +202,7 @@ textAlign:'center'
       marginLeft:220,
       // marginBottom:200,
       position:'absolute',
-      marginTop:-90
+      marginTop:-75
 
     },
 });

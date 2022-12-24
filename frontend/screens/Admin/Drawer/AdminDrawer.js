@@ -148,7 +148,7 @@ export default function AdminDrawer(props) {
       />
       <DrawerItem
         label="Suppliers"
-        onPress={() => props.navigation.navigate('Customers', {role: 1})}
+        onPress={() => props.navigation.navigate('Suppliers', {role: 1})}
         icon={() => (
           <AntDesign
             name="right"
