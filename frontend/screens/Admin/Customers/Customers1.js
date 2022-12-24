@@ -12,9 +12,8 @@ import {
   TextInput,
 } from 'react-native';
 import {API, TOKEN} from '../../backend';
-import CashImg from './cashImg.jpg';
-import modalImg from './modalImg.jpg';
-import { Button } from '@rneui/themed';
+
+import {Button} from '@rneui/themed';
 
 export default function Customers() {
   const [allUsers, setAllUser] = useState();
@@ -97,22 +96,29 @@ export default function Customers() {
                 ) : (
                   <View>
                     {/* <Text>Role: {item.role}</Text> */}
-              <View style={styles.cash_head}>
-              <Text style={styles.cash_head_2}>{item.username}</Text>
-              <Text style={styles.due_max_limit}>Due <Text style={styles._ui_username}>{item.due_amount}</Text></Text>
-                    {/* <Text>User id: {item._id}</Text> */}
-              <Text style={styles.due_max_limit}>Max Limit: {item.max_due ? item.max_due : `Not Assigned`}</Text></View>
-                      <Button
+                    <View style={styles.cash_head}>
+                      <Text style={styles.cash_head_2}>{item.username}</Text>
+                      <Text style={styles.due_max_limit}>
+                        Due{' '}
+                        <Text style={styles._ui_username}>
+                          {item.due_amount}
+                        </Text>
+                      </Text>
+                      {/* <Text>User id: {item._id}</Text> */}
+                      <Text style={styles.due_max_limit}>
+                        Max Limit:{' '}
+                        {item.max_due ? item.max_due : `Not Assigned`}
+                      </Text>
+                    </View>
+                    <Button
                       title="Update Due Amount"
                       color="#0F4C75"
-                      
                       containerStyle={{
                         width: 190,
                         marginHorizontal: 90,
-                        marginVertical: 10,  
-                        borderRadius:10
+                        marginVertical: 10,
+                        borderRadius: 10,
                       }}
-                     
                       onPress={() => {
                         setSelectedUser({
                           userId: `${item._id}`,
@@ -124,7 +130,6 @@ export default function Customers() {
                       }}
                       id={item._id}
                     />
-                   
                   </View>
                 )}
               </View>
@@ -141,8 +146,6 @@ export default function Customers() {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Image source={modalImg} style={{height: 100}} />
-
             <Text style={{paddingTop: 10}}>User id: {selectedUser.userId}</Text>
 
             <TextInput
@@ -165,7 +168,6 @@ export default function Customers() {
                   onPress={() => {
                     handlepost();
                   }}
-                  
                 />
               </View>
               <View style={{width: 100, height: 50}}>
@@ -194,22 +196,22 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     textAlign: 'center',
     paddingTop: 23,
-    height:170,
+    height: 170,
     paddingLeft: 10,
     paddingRight: 10,
-    elevation:10,
-    shadowColor:'black'
+    elevation: 10,
+    shadowColor: 'black',
   },
-  _ui_username:{
-      color:"green",
-      },
-  cash_head:{
-marginLeft:20
+  _ui_username: {
+    color: 'green',
   },
-  cash_head_2:{
-fontWeight:'bold',
-fontSize:19,
-color:'black',
+  cash_head: {
+    marginLeft: 20,
+  },
+  cash_head_2: {
+    fontWeight: 'bold',
+    fontSize: 19,
+    color: 'black',
   },
   postCancelView: {
     flex: 1,
@@ -219,10 +221,10 @@ color:'black',
     width: '95%',
     height: 100,
   },
-  due_max_limit:{
-    color:'black',
-    fontSize:14,
-    padding:2
+  due_max_limit: {
+    color: 'black',
+    fontSize: 14,
+    padding: 2,
   },
   cashImg: {
     width: 400,
@@ -252,7 +254,6 @@ color:'black',
   // update_due_btn:{
   //   borderRadius:20,
   //   color:'red'
-    
 
   // },
   centeredView: {
