@@ -18,30 +18,33 @@ export default function DeliveryDrawer(props) {
   const { signOutContext } = useContext(AuthContext)  
   const [data,setData] = React.useState({});
 
+  const [syncStorageState, setSyncStorageState] = useState({
+    token: '',
+    user: {
+      _id: '',
+      username: '',
+      phone_number: 3490579639,
+      location: '',
+      email: '',
+      role: 2,
+    },
+  });
 
-
-  const getUser =()=>{
-    
-    
-    axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
-    .then(res => {
-      console.log(res.data)
-      setData(res.data)
-    }).catch((error) => {
-      console.log(error)
-    });
-    
-    
-   
-    
-  }
-  //call useeffect outside function****
   useEffect(() => {
-    getUser()
-  },[])
-  
-  
-  
+    const userDetail = SyncStorage.get('userDetail');
+    setSyncStorageState(userDetail);
+    const url = `${API}/user/${syncStorageState.user._id}`;
+    axios
+      .get(url, {headers: {Authorization: `Bearer ${syncStorageState.token}`}})
+      .then(res => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
       <>
            <View
@@ -206,9 +209,9 @@ export default function DeliveryDrawer(props) {
           }}
         />
         )}
-        />
-        )}
-     
-      </>
-    )
-  }
+      />
+      )}
+
+    </>
+  );
+}

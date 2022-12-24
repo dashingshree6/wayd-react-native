@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/drawer';
 
 //Screens
+
 //Admin
 import Login from '../../Login/Login';
 import Signup from '../Signup/Signup';
@@ -39,8 +40,11 @@ import AddProducts from '../../Admin/ProductDetails/AddProducts';
 import AdminDrawer from './AdminDrawer';
 import VendorDrawer from './VendorDrawer';
 import DeliveryDrawer from './DeliveryDrawer';
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeliveryHomepage from '../../Delivery/DeliveryHomepage';
+import Delivery from '../../Delivery/Delivery';
+import {isAuthenticated, setAuthToken} from '../../Login/index';
+import SyncStorage from 'sync-storage';
 import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus';
 import Coupon from '../Coupon/Coupon';
 import Coupons from '../Coupon/Coupons';
@@ -426,7 +430,7 @@ const MyDrawer = ({navigation, state}) => {
 
       
     </Drawer.Navigator>
-  );
+  )
 };
 
 export default MyDrawer;

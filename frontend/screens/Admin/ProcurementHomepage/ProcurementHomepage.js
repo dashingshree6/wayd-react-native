@@ -21,7 +21,7 @@ import { getAllProcurements, getAllOrders } from '../../ApiCalls/ApiCalls';
 
   const API = 'https://852c-49-205-239-58.in.ngrok.io/api/order/procure'
 
-  const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzEwNDIwNzB9.RRMyiWc0DqOgxn3qehN0jeX3JAk_I-xcn-mIbFzhGa4"
+  const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE2NjYyNzB9.HbJEHNUgIbYxlw-wYM-xdhbj9lCUBvDM7GOOPEiWd-g"
 
   
   //
@@ -59,7 +59,7 @@ import { getAllProcurements, getAllOrders } from '../../ApiCalls/ApiCalls';
           keyExtractor={item => item._id}
           renderItem={({item}) => (
             <View 
-            // style={styles.item}
+            style={styles.item}
             >
               <Text style={styles.title}>Product Name: {item.name}</Text>
               <Text style={styles.title}>Grade: {item.grade}</Text>
@@ -141,16 +141,32 @@ const ProcurementHomepage = ({ navigation, route  }) => {
     getAllProcurementsData()
   },[])
  
+
+  // Primary Color: #26b50f green
+  // Secondary Color: #f10606 red
+  // Card Background: #ffffff
+  // Card Secondary BG: #f2f2f2  white
+  // Card & Product Shadow
+  // Color : #fccf9a pale orange
+  // Opacity: 50%
+  // Distance: 30 px
+  // Size: 60 px
+  // Angle: 90 degree
+
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.my_container}>
+          <ScrollView>
               <View style={styles.sales_cont}>
                   <View style={styles.sales_btn}>
                         <Button
                           title={'Log Procurement'}
                           containerStyle={{
-                            width: 200,
+                            width: 185,
+                            // borderBottomEndRadius:20,
+                            borderRadius:10,
                             marginHorizontal: 50,
                             marginVertical: 10,
+                            
                           }}
                           onPress={() => navigation.navigate("SelectSupplierForm")}
                         />
@@ -161,8 +177,14 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                       indicatorStyle={{
                         backgroundColor: 'white',
                         height: 3,
+                  
                       }}
-                      variant="primary"
+                      // variant="primary"
+                      containerStyle={{
+                         backgroundColor:"#f10606",
+                         borderRadius: 10
+                      }}
+                      
                     >
                         <Tab.Item
                           title="Live"
@@ -203,6 +225,7 @@ const ProcurementHomepage = ({ navigation, route  }) => {
               >
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
+                    <Text style={styles.proc_header}>Log Procurement</Text>
                   <Input
                     placeholder="Product Name"
                     // leftIcon={{ type: 'font-awesome', name: 'comment' }}
@@ -229,22 +252,51 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                     <Pressable
                       style={[styles.button, styles.buttonClose]}
                       onPress={() => createProcurement()}
+                      
                     >
                       <Text style={styles.textStyle}>Submit</Text>
                     </Pressable>
                   </View>
                 </View>
               </Modal>
+              </ScrollView>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    sales_cont: {
-      padding:10
+  textStyle:{
+    width: 100,
+    marginHorizontal: 150,
+    marginVertical: 10,
+    backgroundColor:'#26b50f',
+    textAlign:'center',
+    height:20,
+    borderRadius: 10
+  },
+  proc_header:{
+      fontSize: 25,
+      fontWeight: 'bold',
+      textAlign:'center'
+  
+  },
+   centeredView:{
+      backgroundColor:'#f2f2f2',
+      padding: 10
     },
+  
+    sales_cont: {
+      padding:10,
+      backgroundColor:"#fccf9a",
+        // Opacity: 50%
+  // Distance: 30 px
+  // Size: 60 px
+  // Angle: 90 degree
+  opacity:2
+      },
     sales_btn: {
-      alignItems:'center'
+      alignItems:'center',
+      backgroundColor:""
     },
     sales_orders_type: {
       display:'flex',
@@ -254,20 +306,25 @@ const styles = StyleSheet.create({
       alignItems:'flex-end'
     },
     item: {
-      backgroundColor: 'silver',
+      backgroundColor: '#f2f2f2',
       padding: 20,
       marginVertical: 8,
-      marginHorizontal: 16,
+      marginHorizontal: 8,
+      color:"#ffff"
     },
     sales_live_button: {
       // alignItems: "center",
+
       backgroundColor: "#DDDDDD",
       padding: 10,
-      margin: 2
+      margin: 5,
+      elevation:20,
+      shadowColor: 'gray',
+      borderRadius: 10
+
     },
-    procurement_modal : {
-      backgroundColor:'silver'
-    }
+  
+ 
 });
 
 export default ProcurementHomepage;
