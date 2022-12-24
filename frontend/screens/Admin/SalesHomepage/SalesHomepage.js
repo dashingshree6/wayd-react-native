@@ -19,17 +19,6 @@ import {SelectList} from 'react-native-dropdown-select-list';
 import SyncStorage from 'sync-storage';
 
 export default function SalesHomepage() {
-  const [allOrder, setAllOrder] = useState();
-  const [showLiveOrder, setShowLiveOrder] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(
-    allOrder?.filter((item, index) => item.status === 'Placed'),
-  );
-  const [filterOrder, setFilterOrder] = useState();
-  const [filterPastOrder, setFilterPastOrder] = useState();
-  const [fetchTrigger, setFetchTrigger] = useState();
-  const [allDelivery, setAllDelivery] = useState();
-  const [selectedDelivery, setSelectedDelivery] = React.useState();
   const [syncStorageState, setSyncStorageState] = useState({
     token: '',
     user: {
@@ -41,11 +30,23 @@ export default function SalesHomepage() {
       role: 2,
     },
   });
-
   React.useEffect(() => {
     const userDetail = SyncStorage.get('userDetail');
     setSyncStorageState(userDetail);
   }, []);
+
+  const [allOrder, setAllOrder] = useState();
+  const [showLiveOrder, setShowLiveOrder] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(
+    allOrder?.filter((item, index) => item.status === 'Placed'),
+  );
+  const [filterOrder, setFilterOrder] = useState();
+  const [filterPastOrder, setFilterPastOrder] = useState();
+  const [fetchTrigger, setFetchTrigger] = useState();
+  const [allDelivery, setAllDelivery] = useState();
+  const [selectedDelivery, setSelectedDelivery] = React.useState();
+
   React.useEffect(() => {
     let allOrderAPI = `${API}/order/all`;
 
