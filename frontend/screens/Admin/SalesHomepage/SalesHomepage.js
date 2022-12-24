@@ -49,10 +49,13 @@ export default function SalesHomepage() {
 
   React.useEffect(() => {
     let allOrderAPI = `${API}/order/all`;
-
+    console.log(
+      `-------token-----------------------------`,
+      syncStorageState?.token,
+    );
     axios
       .get(allOrderAPI, {
-        headers: {Authorization: `Bearer ${syncStorageState.token}`},
+        headers: {Authorization: `Bearer ${syncStorageState?.token}`},
       })
       .then(res => {
         setAllOrder(res.data);
@@ -65,7 +68,7 @@ export default function SalesHomepage() {
     let allUserAPI = `${API}/users`;
     axios
       .get(allUserAPI, {
-        headers: {Authorization: `Bearer ${syncStorageState.token}`},
+        headers: {Authorization: `Bearer ${syncStorageState?.token}`},
       })
       .then(res => {
         setAllDelivery(res.data.filter((item, index) => item.role == '2'));

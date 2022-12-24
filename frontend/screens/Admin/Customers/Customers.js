@@ -57,7 +57,7 @@ export default function Customers() {
       .catch(error => {
         console.log(`Error:`, error);
       });
-  }, [apiTrigger, syncStorageState.token]);
+  }, [apiTrigger, syncStorageState?.token]);
 
   let postForm = () => {
     let url = `${API}/update/user/${selectedDetail._id}`;
