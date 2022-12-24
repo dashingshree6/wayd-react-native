@@ -18,7 +18,7 @@ import foodImg from '../../../assets/images/food.jpg';
 import CallImg from '../../../assets/images/call.png';
 import messageImg from '../../../assets/images/message.png';
 import videoCallImg from '../../../assets/images/video.png';
-import pencilImg from '../../../assets/images/pencil.png';
+import pencilImg from '../../../assets/images/pencil.jpg';
 
 import {PhoneOutlined} from '@rneui/themed';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -42,11 +42,10 @@ export default function Customers() {
 
   const [allCustomer, setAllCustomer] = useState();
   const [apiTrigger, setApiTrigger] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
-
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState();
   const [showDetailEditModal, setShowDetailEditModal] = useState(false);
+
   React.useEffect(() => {
     let url = `${API}/users`;
 
@@ -54,25 +53,32 @@ export default function Customers() {
       .get(url, {headers: {Authorization: `Bearer ${syncStorageState?.token}`}})
       .then(res => {
         setAllCustomer(res.data.filter(item => item.role === 0));
-        console.log(`all Customer -----`, allCustomer);
       })
       .catch(error => {
         console.log(`Error:`, error);
       });
   }, [apiTrigger, syncStorageState.token]);
+
   let postForm = () => {
     let url = `${API}/update/user/${selectedDetail._id}`;
+
     axios
-      .post(url, selectedDetail, {
+      .put(url, selectedDetail, {
         headers: {Authorization: `Bearer ${syncStorageState?.token}`},
       })
+
       .then(res => {
-        setAllCustomer(res.data.filter(item => item.role === 0));
-        setSelectedDetail(
-          setAllCustomer.filter(item => item._id === selectedDetail._id),
+        console.log(
+          `sucess---------------------------------------------------------------------------`,
         );
+        console.log(res.data);
+        trigger();
       })
       .then(err => console.log(err));
+  };
+
+  let trigger = () => {
+    setApiTrigger(Math.floor(Math.random() * 10000));
   };
 
   return (
@@ -81,6 +87,7 @@ export default function Customers() {
         <ScrollView style={{backgroundColor: 'white'}}>
           {allCustomer?.map((item, index) => (
             <Pressable
+              key={index}
               onPress={() => {
                 setShowDetailModal(true);
                 setSelectedDetail(item);
@@ -183,7 +190,7 @@ export default function Customers() {
                 </Text>
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flex: 0.4,
                   flexDirection: 'row',
@@ -227,7 +234,7 @@ export default function Customers() {
                     }}
                   />
                 </Pressable>
-              </View>
+              </View> */}
             </View>
           </View>
 
@@ -314,7 +321,7 @@ export default function Customers() {
                 position: 'relative',
               }}
             />
-            <Text style={{paddingTop: 5, paddingLeft: 8}}>Edit </Text>
+            <Text style={{paddingLeft: 8}}>Edit </Text>
           </Pressable>
           <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
             <Button title="Go back" onPress={() => setShowDetailModal(false)} />
@@ -551,9 +558,9 @@ export default function Customers() {
                 title="Save Details"
                 color="green"
                 onPress={() => {
+                  postForm();
                   setShowDetailModal(true);
                   setShowDetailEditModal(false);
-                  postForm();
                 }}
               />
             </View>
