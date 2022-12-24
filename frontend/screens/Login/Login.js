@@ -58,6 +58,11 @@ const Login = ({ navigation  }) => {
                 SyncStorage.set("role",data.data.user.role)
                 SyncStorage.set("userToken",data.data.token)
                 SyncStorage.set("userId", data.data.user._id)
+                SyncStorage.set("userName",data.data.user.username)
+                SyncStorage.set("userPhone",data.data.user.phone_number)
+                SyncStorage.set("userEmsil",data.data.user.email)
+
+
                 let userRole = SyncStorage.get("role")
                 let userToken = SyncStorage.get("userToken")
                 console.log("Signin Role",SyncStorage.get("role"))

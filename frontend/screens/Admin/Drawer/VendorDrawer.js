@@ -62,7 +62,7 @@ export default function VendorDrawer(props) {
             fontWeight:'bold',
             color:'black'
           }}
-          >Sam Smith</Text>
+          >{ SyncStorage.get("userName") }</Text>
              <Text style={{
             fontSize:18,
             fontWeight:'600',
@@ -90,7 +90,7 @@ export default function VendorDrawer(props) {
                   justifyContent:'space-between',
                   marginLeft: 15,
                   }}>
-                  95060407097
+                  { SyncStorage.get("userPhone")}
                 </Text>
 
         </View>

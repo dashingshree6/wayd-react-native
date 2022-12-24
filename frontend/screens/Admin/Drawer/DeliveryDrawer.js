@@ -8,6 +8,7 @@ import axios from 'axios';
 import SyncStorage from 'sync-storage';
 import { signout, isAuhenticated } from '../../Login/index';
 import { AuthContext } from '../../../App';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const API="https://e56d-49-205-239-58.in.ngrok.io/api/user/6396be811f1893235c9b2661"
 
@@ -43,52 +44,133 @@ export default function DeliveryDrawer(props) {
   
   return (
       <>
-      <Text
-      style={{
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 5
-      }}
-      >User Details x</Text>
-            <View
-                style={{
-                    backgroundColor:'silver',
-                    padding: 20,
-                    margin: 10
-                }}
-                >
-                <Text style={{marginLeft: 15}}>Name :{data.username}</Text>
-                <Text style={{marginLeft: 15}}>Phone Number : {data.phone_number}</Text>
-                <Text style={{marginLeft: 15}}>Due Amount :{data.email}</Text>
-            </View>
+           <View
+        style={{
+            padding: 10,
+        }}
+        >
+          <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Hey</Text>
+          <Text 
+          style={{
+            fontSize: 25,
+            fontWeight:'bold',
+            color:'black'
+          }}
+          >{ SyncStorage.get("userName") }</Text>
+             <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Have a nice day !!</Text>
+        </View>
+
+  
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+              <Ionicons
+                  name='call'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  }}>
+                  { SyncStorage.get("userPhone") }
+                </Text>
+
+        </View>
+
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center'
+        }}
+        >
+              <Ionicons
+                  name='reader-outline'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15
+                  }}>
+                  Rs.456
+                </Text>
+
+        </View>
   
         <DrawerItem
           label="Home"
           onPress={() => props.navigation.navigate('DeliveryHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='home'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
 
         <DrawerItem
           label="My Orders"
           onPress={() => props.navigation.navigate('ProcurementHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='menu'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
   
@@ -101,15 +183,28 @@ export default function DeliveryDrawer(props) {
           signOutContext()
           signout()
         }}
+        labelStyle={{
+          fontSize: 15,
+          color:'black'
+        }}
         icon={()=> (
-          <AntDesign
-          name='right'
-          size={15}
+          // <AntDesign
+          // name='right'
+          // size={15}
+          // style={{
+          //   position: "absolute",
+          //   right: 10,
+          // }}
+          // />
+          <Ionicons
+          name='log-out'
+          color={'green'}
+          size={25}
           style={{
             position: "absolute",
-            right: 10,
+            left: 0,
           }}
-          />
+        />
         )}
         />
         )}

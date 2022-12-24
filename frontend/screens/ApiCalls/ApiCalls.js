@@ -31,7 +31,7 @@ axios.post(`${API}/add/${id}`,  data );
 export const createNewOrder = (data) =>
 axios.post(`${API}/order/create`,  data );
 
-export const updateCartDetails = (action, id) => axios.post(`${API}/update/${action}/${id}`)
+export const updateCartDetails = (action, id, data) => axios.post(`${API}/update/${action}/${id}`, data)
 
 // PUT
 
@@ -42,6 +42,8 @@ export const updatePincodes = (data, id) =>
  
 export const updateCashCollection = (data) =>
 axios.post(`${API}/cashcollection`,data)
+
+export const updateCartItems = (id, data) => axios.post(`${API}/cart/update/${id}`, data)
        
 
   

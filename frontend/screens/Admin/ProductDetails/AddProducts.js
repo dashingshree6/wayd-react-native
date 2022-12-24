@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     color: '#444',
     textAlign: 'left',
   },
-  ropdown1DropdownStyle: {backgroundColor: '#EFEFEF'},
+  dropdown1DropdownStyle: {backgroundColor: '#EFEFEF'},
   rowStyle: {
     backgroundColor: '#EFEFEF',
     width: '90%',

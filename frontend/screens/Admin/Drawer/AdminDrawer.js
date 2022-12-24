@@ -8,6 +8,7 @@ import axios from 'axios';
 import SyncStorage from 'sync-storage';
 import { signout, isAuhenticated } from '../../Login/index';
 import { AuthContext } from '../../../App';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 const API="https://e56d-49-205-239-58.in.ngrok.io/api/user/636a56f35c526e4144ad5773"
@@ -49,62 +50,157 @@ useEffect(() => {
 
 return (
   <>
-      <Text
-      style={{
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 5
-      }}
-      >User Details</Text>
-               <View
-                style={{
-                  backgroundColor:'silver',
-                  padding: 20,
-                  margin: 10
-                }}
-                >
+     <View
+        style={{
+            padding: 10,
+        }}
+        >
+          <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Hey</Text>
+          <Text 
+          style={{
+            fontSize: 25,
+            fontWeight:'bold',
+            color:'black'
+          }}
+          >{ SyncStorage.get("userName") }</Text>
+             <Text style={{
+            fontSize:18,
+            fontWeight:'600',
+            color:'grey'
+            }}>Have a nice day !!</Text>
+        </View>
 
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+              <Ionicons
+                  name='mail'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  }}>
+                  { SyncStorage.get("userEmsil") }
+                </Text>
 
-    
-                <Text style={{marginLeft: 15}}>Username : {data.username}</Text>
-                <Text style={{marginLeft: 15}}>Phone Number : {data.phone_number}</Text>
-                <Text style={{marginLeft: 15}}>Email : {data.email}</Text>
-                </View>
+        </View>
+
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+              <Ionicons
+                  name='call'
+                  color={'green'}
+                  size={25}
+                />
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  }}>
+                  { SyncStorage.get("userPhone") }
+                </Text>
+
+        </View>
               
               
                 <DrawerItem
                 label="Create User"
                 onPress={() => props.navigation.navigate('Signup')}
+                labelStyle={{
+                  fontSize: 15,
+                  color:'black'
+                }}
                 icon={()=> (
-                  <AntDesign
-                  name='right'
-                  size={15}
+                  // <AntDesign
+                  // name='right'
+                  // size={15}
+                  // style={{
+                  //   position: "absolute",
+                  //   right: 10,
+                  // }}
+                  // />
+                  <Ionicons
+                  name='person-add-sharp'
+                  color={'green'}
+                  size={25}
                   style={{
                     position: "absolute",
-                    right: 10,
+                    left: 0,
                   }}
-                  />
+                />
                 )}
               />
-      <Text
-      style={{
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 5
-      }}
-      >Order</Text>
+
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+            
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  textAlign:'center'
+                  }}>
+                  ORDER
+                </Text>
+
+        </View>
+
+
         <DrawerItem
           label="Sales Order"
           onPress={() => props.navigation.navigate('SalesHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='menu'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
           <DrawerItem
@@ -124,110 +220,217 @@ return (
         <DrawerItem
           label="Procurement Order"
           onPress={() => props.navigation.navigate('ProcurementHomepage')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='nuclear'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
   
-      <Text
-      style={{
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 5
-      }}
-      >Peoples</Text>
+        <View
+        style={{
+          backgroundColor:'#f2f2f2',
+          padding: 10,
+          flexDirection:'row',
+          alignItems:'center',
+          marginBottom: 2
+        }}
+        >
+            
+              <Text style={{
+                  fontWeight:'bold',
+                  color:'green',
+                  justifyContent:'space-between',
+                  marginLeft: 15,
+                  textAlign:'center'
+                  }}>
+                  PEOPLES
+                </Text>
+
+        </View>
+
         <DrawerItem
           label="Customers"
           onPress={() => props.navigation.navigate('Customers', { role: 0 })}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='person-circle-outline'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
         <DrawerItem
           label="Suppliers"
           onPress={() => props.navigation.navigate('Customers', { role: 1 })}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='person-circle-sharp'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
+
           )}
         />
         <DrawerItem
           label="Delivery"
           onPress={() => props.navigation.navigate('Customers', { role: 2 })}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='person-outline'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
 
         <DrawerItem
           label="Category"
           onPress={() => props.navigation.navigate('Category')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='grid'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
 
         <DrawerItem
           label="PriceAddition"
           onPress={() => props.navigation.navigate('PriceAddition')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='cash'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
 
         <DrawerItem
           label="Stock"
           onPress={() => props.navigation.navigate('Stock')}
+          labelStyle={{
+            fontSize: 15,
+            color:'black'
+          }}
           icon={()=> (
-            <AntDesign
-            name='right'
-            size={15}
+            // <AntDesign
+            // name='right'
+            // size={15}
+            // style={{
+            //   position: "absolute",
+            //   right: 10,
+            // }}
+            // />
+            <Ionicons
+            name='md-film'
+            color={'green'}
+            size={25}
             style={{
               position: "absolute",
-              right: 10,
+              left: 0,
             }}
-            />
+          />
           )}
         />
 
@@ -255,15 +458,28 @@ return (
           signOutContext()
           signout()
         }}
+        labelStyle={{
+          fontSize: 15,
+          color:'black'
+        }}
         icon={()=> (
-          <AntDesign
-          name='right'
-          size={15}
+          // <AntDesign
+          // name='right'
+          // size={15}
+          // style={{
+          //   position: "absolute",
+          //   right: 10,
+          // }}
+          // />
+          <Ionicons
+          name='log-out'
+          color={'green'}
+          size={25}
           style={{
             position: "absolute",
-            right: 10,
+            left: 0,
           }}
-          />
+        />
         )}
         />
         )}

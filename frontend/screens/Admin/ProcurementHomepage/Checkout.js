@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import { Button, Image, Input } from '@rneui/themed';
 import axios from 'axios';
 import SyncStorage from 'sync-storage';
-import { getCartDetails, createNewOrder, getCartDetailsByUserId, updateCartDetails } from '../../ApiCalls/ApiCalls';
+import { getCartDetails, createNewOrder, updateCartItems, getCartDetailsByUserId, updateCartDetails } from '../../ApiCalls/ApiCalls';
 import Toast from 'react-native-toast-message'
 
 
@@ -29,6 +29,11 @@ export default function Checkout({ navigation, goToFirstTab}) {
       userType: "Customer"
   })
   const [reload, setReload] = useState(false)
+  const [productQantity, setProductQuantity] = useState({
+    quantity: 1,
+  })
+  const [ loading, setLoading] = useState(false)
+
 
   // const getFinalPrice = () => {
   //   setCartItems(data)
@@ -132,8 +137,11 @@ export default function Checkout({ navigation, goToFirstTab}) {
   }
 
 const updateCart = (action, product_id) => {
+      let data = {
+        cartId: SyncStorage.get("cartId")
+      }
 
-      updateCartDetails(action, product_id)
+      updateCartDetails(action, product_id, data)
         .then(res => {
           Toast.show({
               type: 'success',
@@ -149,6 +157,36 @@ const updateCart = (action, product_id) => {
           })
         }
         );
+  }
+
+   const updateCartDet = ( product_id, newQuantity) => {
+    setLoading(true)
+    let data = {
+      quantity: newQuantity.quantity,
+      cartId: SyncStorage.get("cartId")
+    }
+
+    updateCartItems( product_id, data)
+      .then(res => {
+        Toast.show({
+            type: 'success',
+            text1: "Cart Updated Successfully"
+          });
+        console.log(res.data)
+        // setReload(!reload)
+        checkoutDetails()
+        setLoading(false)
+
+      })
+      .catch((err) => {
+        setLoading(false)
+
+        Toast.show({
+          type: 'error',
+          text1: err.type
+        })
+      }
+      );
   }
 
   
@@ -200,7 +238,7 @@ const updateCart = (action, product_id) => {
                     <Text style={styles.vendor_checkout_modalText}>Grade: {data.grade} </Text>
                     <Text style={styles.vendor_checkout_modalText}>Price {data.price}</Text>
                     <View style={styles.vendor_checkout_btns}>
-                            <Button
+                            {/* <Button
                             title={'-'}
                             containerStyle={{
                                 width: '25%',
@@ -215,8 +253,32 @@ const updateCart = (action, product_id) => {
                                 marginVertical: 10,
                             }}
                             onPress={() => updateCart('increase',data._id)}
-                            />
+                            /> */}
                     </View>
+                      <View style={{flexDirection:'row', alignItems:'center'}}>
+                        
+                                <Input
+                                placeholder="Quantity"
+                                // leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                                onChangeText={value =>setProductQuantity({quantity: value })}
+                                containerStyle={{width: '40%',marginTop: 10}}
+                                keyboardType='numeric'
+                                value={''}
+                                />
+                          
+                                <Button
+                                title={'Add'}
+                                containerStyle={{
+                                    width: "30%",
+                                }}
+                                onPress={() => {
+                                  if(productQantity.quantity >= 1) {
+                                    updateCartDet(data._id, productQantity)
+                                  }
+   
+                                }}
+                                />
+                        </View>
                     <Button
                     title={'Remove'}
                     containerStyle={{
