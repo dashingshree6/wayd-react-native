@@ -411,7 +411,12 @@ export default function CheckoutDetails({navigation}) {
                           }}
                           >
                           <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
-                                <Pressable>
+                                <Pressable
+                                  // onPress={() => {
+                                  //   if(item.Selectedquantity == 1) {
+                                  //     updateCart('remove',item._id)}}
+                                  //   }
+                                >
                                       <Ionicons
                                         name='close'
                                         size={20}
@@ -426,7 +431,14 @@ export default function CheckoutDetails({navigation}) {
                                     onChangeText={value =>setProductQuantity({quantity: value })}
                                     keyboardType='numeric'
                                   />
-                                  <Pressable>
+                                  <Pressable
+                                      onPress={() => {
+                                        if(productQantity.quantity >= 1) {
+                                          updateCartDet(item._id, productQantity)
+                                        }
+                       
+                                      }}
+                                  >
                                       <Ionicons
                                         name='checkmark-sharp'
                                         size={20}

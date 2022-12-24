@@ -49,9 +49,6 @@ import DeliverySingleOrderStatus from '../../Delivery/DeliverySingleOrderStatus'
 import Coupon from '../Coupon/Coupon';
 import Coupons from '../Coupon/Coupons';
 
-
-import { isAuthenticated, setAuthToken } from '../../Login/index';
-import SyncStorage from 'sync-storage';
 import { AuthContext } from '../../../App';
 
 import {Icon, ListItem} from '@rneui/themed';
