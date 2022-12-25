@@ -22,11 +22,8 @@ import { getAllProcurements } from '../../ApiCalls/ApiCalls';
   const API = 'https://852c-49-205-239-58.in.ngrok.io/api/order/procure'
 
   const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE2NjYyNzB9.HbJEHNUgIbYxlw-wYM-xdhbj9lCUBvDM7GOOPEiWd-g"
-
-  
-  //
-
-  const DATA = [
+//
+const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
       title: 'Potato',
@@ -236,7 +233,55 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                 }}
                 style={styles.procurement_modal}
               >
-                <View style={styles.centeredView}>
+
+{/* new modal */}
+<View style={styles.centerContent}>
+<View>
+        <Text style={styles.proc_header}>Log Procurement</Text>
+        <TextInput placeholder="Product Name" style={styles.inputStyle} />
+        <TextInput placeholder="Count" style={styles.inputStyle} />
+        <TextInput placeholder="Extra Stock" style={styles.inputStyle} />
+        <TextInput placeholder="Price Generated" style={styles.inputStyle} />
+ 
+        <Button 
+       title="SUBMIT"
+       color="primary"
+      containerStyle={{
+        borderRadius:5,
+        padding:20,
+        width:120,
+        marginHorizontal:20
+      
+    }}
+       onPress={() => {
+        alert('Prcurement Logged Succesfully!');
+        createProcurement()
+       }}
+      />
+        <Button 
+       title="CLOSE"
+       color="#1B1A17"
+      containerStyle={{
+      borderRadius:5,
+      padding:20,
+      position:"absolute",
+      marginHorizontal:165,
+      marginVertical:454,
+      width:120
+      
+    }}
+    onPress={() => createProcurement()}
+      />
+      </View>
+    </View>
+
+
+
+
+
+
+{/* old modal */}
+                {/* <View style={styles.centeredView}>
                   <View style={styles.modalView}>
                     <Text style={styles.proc_header}>Log Procurement</Text>
                   <Input
@@ -270,7 +315,10 @@ const ProcurementHomepage = ({ navigation, route  }) => {
                       <Text style={styles.textStyle}>Submit</Text>
                     </Pressable>
                   </View>
-                </View>
+                </View> */}
+
+
+
               </Modal>
               </ScrollView>
         </SafeAreaView>
@@ -278,6 +326,24 @@ const ProcurementHomepage = ({ navigation, route  }) => {
 }
 
 const styles = StyleSheet.create({
+  
+centerContent:{
+  justifyContent:"center",
+  alignItems:'center',
+  marginTop:100,
+},
+inputStyle: {   
+  marginTop: 25,
+  width: 310,
+  height: 80,
+  borderWidth:1.1,
+  paddingHorizontal: 35,
+  borderRadius: 5,
+  backgroundColor: '#fff',
+  shadowColor:'black',
+  color:'black',
+  paddingBottom:1,
+},
   textStyle:{
     width: 140,
     marginHorizontal: 150,
@@ -286,13 +352,11 @@ const styles = StyleSheet.create({
     textAlign:'center',
     height:20,
     borderRadius: 10,
-
   },
   proc_header:{
       fontSize: 25,
       fontWeight: 'bold',
       textAlign:'center'
-  
   },
    centeredView:{
       backgroundColor:'#f2f2f2',
@@ -302,11 +366,7 @@ const styles = StyleSheet.create({
     sales_cont: {
       padding:10,
       backgroundColor:"#fccf9a",
-        // Opacity: 50%
-  // Distance: 30 px
-  // Size: 60 px
-  // Angle: 90 degree
-  opacity:2
+      opacity:2
       },
     sales_btn: {
       alignItems:'center',
@@ -337,8 +397,7 @@ const styles = StyleSheet.create({
       borderRadius: 10
 
     },
-  
- 
+
 });
 
 export default ProcurementHomepage;

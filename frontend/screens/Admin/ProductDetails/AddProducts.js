@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 35,
     borderRadius: 5,
     backgroundColor: '#fff',
-    borderWidth:0.8,
+    borderWidth:1,
     shadowColor:'black',
     color:'black',
     paddingBottom:1,
