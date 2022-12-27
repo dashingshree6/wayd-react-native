@@ -37,3 +37,17 @@ export const updatePincodes = (data, id) =>
 
 export const updateCashCollection = data =>
   axios.post(`${API}/cashcollection`, data);
+
+export const createaProduct = async (product) => {
+    let options = {
+      method: 'post',
+      url: `${API}/product/add`,
+      headers : { 
+        "Accept" : "application/json",
+        "Content-Type" : "multipart/form-data",
+      },
+      data: product
+    }
+    await axios(options);
+  }
+ 

@@ -4,7 +4,7 @@ import {Input, Icon, Button} from '@rneui/themed';
 import axios from 'axios';
 import {getCategories} from '../../ApiCalls/ApiCalls';
 
-const API = 'https://27dc-49-205-239-58.in.ngrok.io/api';
+const API = 'https://0c1a-49-205-239-58.in.ngrok.io/api';
 
 const TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE4MTg2MDB9.QqYBuZs4YIbqsOOUsR1rD61mMNP0Bgxjo4-cc0P0H5U';

@@ -1,9 +1,10 @@
-import { View, Text, FlatList, Modal, StyleSheet, Pressable, ScrollView } from 'react-native'
+import { View, Text, FlatList, Modal, StyleSheet, Pressable, ScrollView, TextInput } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Button, ListItem, Icon, Avatar, Input, CheckBox   } from '@rneui/themed';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Dropdown } from 'react-native-element-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 const list2 = [
     {
@@ -44,6 +45,7 @@ export default function Stock() {
   return (
     <View>
            <Button
+            onPress={() => setModalVisible(true)}
               title={'Update Stock'}
               containerStyle={{
                 // width: 200,
@@ -110,9 +112,12 @@ export default function Stock() {
         }}
       >
         <ScrollView>
-            <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-                <Text style={styles.stock_header}>Stock In/out</Text>
+            <View style={styles.centerContent}>
+
+            
+            <View>
+          
+                <Text style={styles.stock_header} >Stock In/out</Text>
                 <Dropdown
                     style={styles.stock_dropdown}
                     placeholderStyle={styles.stock_placeholderStyle}
@@ -157,31 +162,34 @@ export default function Stock() {
                     // )}
                 />
 
-                <Input
+                <TextInput 
+                
+                style={styles.inputStyle}
+                
                 placeholder="Amount of Stock In/Out"
                 // leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={value => this.setState({ comment: value })}
                 />
 
-                <Input
+                <TextInput style={styles.inputStyle}
                 placeholder="Add Sampled Stock"
                 // leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={value => this.setState({ comment: value })}
                 />
 
-                <Input
+                <TextInput style={styles.inputStyle}
                 placeholder="Add Waste Stock"
                 // leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={value => this.setState({ comment: value })}
                 />
 
-                <Input
+                <TextInput style={styles.inputStyle}
                 placeholder="Add Extra Stock"
                 // leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={value => this.setState({ comment: value })}
                 />
 
-                <Input
+                <TextInput style={styles.inputStyle}
                 placeholder="Change Price"
                 // leftIcon={{ type: 'font-awesome', name: 'comment' }}
                 onChangeText={value => this.setState({ comment: value })}
@@ -202,15 +210,28 @@ export default function Stock() {
                 flexDirection:'row',
                 justifyContent:'center',
                 // margin: 15
+                marginRight:140
               }}
+              onPress={() => setModalVisible(!modalVisible)}
+            />
+            <Button
+              title={'Close'}
+              containerStyle={{
+            width:100,
+            marginLeft:210,
+            position:'absolute',
+            marginTop:600
+              }}
+              color='black'
+              onPress={() => setModalVisible(!modalVisible)}
             />
                         <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
                 >
-                <Text style={styles.textStyle}>Hide Modal</Text>
                 </Pressable>
             </View>
+
             </View>
             </ScrollView>
         </Modal>
@@ -218,7 +239,7 @@ export default function Stock() {
             style={[styles.button, styles.buttonOpen]}
             onPress={() => setModalVisible(true)}
         >
-            <Text style={styles.textStyle}>Show Modal</Text>
+            {/* <Text style={styles.textStyle}>Show Modal</Text> */}
         </Pressable>
 
         </View>
@@ -226,18 +247,46 @@ export default function Stock() {
 }
 
 const styles = StyleSheet.create({
-    stock_header:{
+  inputStyle: {   
+    marginTop: 25,
+    width: 310,
+    height: 50,
+    borderWidth:1.1,
+    paddingHorizontal: 35,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    shadowColor:'black',
+    color:'black',
+    paddingBottom:1,
+    marginHorizontal:50
+  },
+  centerContent:{
+    justifyContent:"center",
+    alignItems:'stretch',
+    marginTop:50,
+    width:"100%"
+  }  ,
+  stock_header:{
         fontSize: 25,
         fontWeight:'bold',
         textAlign:"center",
         borderBottomColor:'black',
-        borderBottomWidth:1
+        // borderBottomWidth:1,
+        width:310,
+        marginHorizontal:50
     },
     stock_dropdown: {
         margin: 10,
         height: 50,
         borderBottomColor: 'gray',
-        borderBottomWidth: 0.5,
+        borderBottomWidth: 0.6,
+        width:310,
+        marginHorizontal:50
+      },
+      ant_close:{
+        position:'absolute',
+        // justifyContent:'flex-start'
+        marginHorizontal:50
       },
       stock_icon: {
         marginRight: 5,

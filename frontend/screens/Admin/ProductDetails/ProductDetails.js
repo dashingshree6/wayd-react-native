@@ -9,14 +9,14 @@ import {
     View,
     FlatList,
     TouchableOpacity,
-    TextInput
+    TextInput,
   } from 'react-native';
   import { Icon, Input, Button, Tab, TabView, Image, Badge, FAB } from '@rneui/themed';
 import axios from 'axios';
+import { API } from '../../backend';
 
-
-const API ="https://b8a3-49-205-239-58.in.ngrok.io/api/products"
-const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwYjJlZTAxMzNhZmQiLCJpYXQiOjE2NzE5MTI3ODV9.chdwqefITwSPwybND146mVXVxC64YiDtqjMxPNKZ2hU"
+// const API ="https://6732-49-205-239-58.in.ngrok.io/api/products"
+const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwYjJlZTAxMzNhZmQiLCJpYXQiOjE2NzIwOTI0ODJ9.8bnlI-QesPf_i06qME_ziPJEo4TuSanrS13USBq4OR8"
 
 
   const ProductDetails = (props) => {
@@ -24,16 +24,10 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwY
   // const [query, setQuery] = useState("")
   const [data,setData] = useState();
   const [searchValue, setSearchValue]=useState()
-  
-  // const filterData=()=>{
-  //   let filtered = data.filter((item) => item.name === 'Plum')
-  //   console.log(filtered,`''''''''''''''''''''''''''''`)
-  //   console.log(filterData,`'''''''''''''''''''''''''''`)
-  //   return filtered;
-  // }
+
 
   const getAllProducts =()=>{
-   axios.get(API, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
+   axios.get(`${API}/products`, { headers : {"Authorization" : `Bearer ${TOKEN}`}})
     .then(res => {
       console.log(res.data)
       setData(res.data)
@@ -44,10 +38,10 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwY
   useEffect(() => {
     getAllProducts()
     },[])
-  
+
 
   const [index, setIndex] = useState(0);
-  const Item = ({ name,stock,grade, price }) => (
+  const Item = ({ name,stock,grade, price,photo }) => (
     <TouchableOpacity
     style={styles.product_details_button}
     // onPress={onPress}
@@ -76,13 +70,16 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwY
             </View>
             </View>
            <View style={{ backgroundColor:'#000000'}}>
-         
+           
+        { photo.split('/').length == 4 && 
            <Image 
              source={{ 
-              uri: "https://imgs.search.brave.com/PFNx-57BW20BmkUQx3msbeUT6MQonwZtNnI0klGB1AE/rs:fit:720:403:1/g:ce/aHR0cHM6Ly9kYWls/eWJhemFyLmNvbS5i/ZC93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MS8wMi9SYW1idXRh/bi01MDAtZ20tNzIw/eDQwMy5qcGc" 
+              uri: `${API}/s3Proxy/${photo.split('/')[3]}`
+              // uri: "https://imgs.search.brave.com/PFNx-57BW20BmkUQx3msbeUT6MQonwZtNnI0klGB1AE/rs:fit:720:403:1/g:ce/aHR0cHM6Ly9kYWls/eWJhemFyLmNvbS5i/ZC93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MS8wMi9SYW1idXRh/bi01MDAtZ20tNzIw/eDQwMy5qcGc" 
           }}
           containerStyle={styles.product_img}
             />
+          }
            </View>
           </View>
           </TouchableOpacity>
@@ -93,6 +90,7 @@ const TOKEN ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwY
     stock={item.stock}
     grade={item.grade}
     price={item.price}
+    photo={item.photo}
     />
   );
 
@@ -229,13 +227,13 @@ padding:5
       borderRadius:20
     },
     product_img:{
-      width:90,
+      width:80,
       aspectRatio:1,
       borderRadius: 10,
       marginLeft:220,
       // marginBottom:200,
       position:'absolute',
-      marginTop:-95
+      marginTop:-73
 
     },
 });

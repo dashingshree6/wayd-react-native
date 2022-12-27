@@ -19,7 +19,7 @@ import { getAllProcurements } from '../../ApiCalls/ApiCalls';
   //
   import axios from 'axios';
 
-  const API = 'https://852c-49-205-239-58.in.ngrok.io/api/order/procure'
+  const API = 'https://0c1a-49-205-239-58.in.ngrok.io/api/order/procure'
 
   const TOKEN= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDA3ZjRmM2VmOTRjMTAwMjQ4ODI1N2QiLCJpYXQiOjE2NzE2NjYyNzB9.HbJEHNUgIbYxlw-wYM-xdhbj9lCUBvDM7GOOPEiWd-g"
 //
@@ -238,11 +238,20 @@ const ProcurementHomepage = ({ navigation, route  }) => {
 <View style={styles.centerContent}>
 <View>
         <Text style={styles.proc_header}>Log Procurement</Text>
-        <TextInput placeholder="Product Name" style={styles.inputStyle} />
-        <TextInput placeholder="Count" style={styles.inputStyle} />
-        <TextInput placeholder="Extra Stock" style={styles.inputStyle} />
-        <TextInput placeholder="Price Generated" style={styles.inputStyle} />
- 
+        <TextInput placeholder="Product Name" style={styles.inputStyle} 
+        onChangeText={value => setproductForProcurement({ ...productForProcurement, name: value })}
+        />
+        <TextInput placeholder="Count" style={styles.inputStyle} 
+         onChangeText={value => setproductForProcurement({ ...productForProcurement, count: value })}
+         keyboardType='numeric'
+       />
+        <TextInput placeholder="Extra Stock" style={styles.inputStyle} 
+         onChangeText={value => setproductForProcurement({ ...productForProcurement, extra_stock: value })}
+         keyboardType='numeric'
+        />
+        <TextInput placeholder="Price Generated" style={styles.inputStyle} 
+        onChangeText={value => setproductForProcurement({ ...productForProcurement, price_generated: value })}
+        />
         <Button 
        title="SUBMIT"
        color="primary"

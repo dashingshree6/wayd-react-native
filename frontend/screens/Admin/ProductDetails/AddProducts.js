@@ -7,41 +7,206 @@ import {Button, Stack, ButtonGroup} from '@rneui/themed';
 import { Picker } from '@react-native-picker/picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Avatar } from 'react-native-paper';
+import { createaProduct } from '../../ApiCalls/ApiCalls';
+import { isAuthenticated } from '../../Login';
+import Toast from 'react-native-toast-message'
+import { API } from '../../backend';
+
 const countries = ['Egypt', 'Canada', 'Australia', 'Ireland'];
 // import axios from 'axios';
 const AddProducts = () => {
-  const API = 'https://b8a3-49-205-239-58.in.ngrok.io/api/product/create';
-  const TOKEN ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwYjJlZTAxMzNhZmQiLCJpYXQiOjE2NzE5MTI3ODV9.chdwqefITwSPwybND146mVXVxC64YiDtqjMxPNKZ2hU';
+  const {
+    user
+    // token
+  } = isAuthenticated();
+  // const API = 'https://6732-49-205-239-58.in.ngrok.io/api/product/create';
+  // const TOKEN ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc4N2U0OGUwNzQwYjJlZTAxMzNhZmQiLCJpYXQiOjE2NzIwOTI0ODJ9.8bnlI-QesPf_i06qME_ziPJEo4TuSanrS13USBq4OR8';
 
-  // const [productName, setProductsName] = React.useState('');
-  // const [productDescription, setProductDescription] = React.useState('');
 
-  // const [price, setPrice] = React.useState('');
-  // const [category, setCategory] = React.useState(['JUICE', 'FRUIT', 'VEGetable']);
-  // const [stock, setStock] = React.useState('');
-  // const [grade, setGrade] = React.useState(['A', 'B', 'C']);
-  // console.log(productDescription);
-  // console.log(productName);
-  // console.log(price);
-  // //   axios.post(
-  // //     'http://rallycoding.herokuapp.com/api/music_albums',
-  // //     {
-  // //       param1: 'value1',
-  // //       param2: 'value2',
-  // //       //other data key value pairs
-  // //     },
-  // //     {
-  // //       headers: {
-  // //         'api-token': TOKEN,
-  // //         //other header fields
-  // //       },
-  // //     },
-  // //   );
-  const [productValue, setproductValue] = useState('Category');
-  const [Pic, SetPic] = React.useState('');
+  const [productValue, setproductValue] = useState('A');
+  const [categoryValue, setCategoryValue] = useState('Juice');
+  const [pic, setPic] = React.useState('');
   const setToastMsg = msg =>{
     ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
   }
+  
+  const [values, setValues] = useState({
+    name: "",
+    description: "",
+    category: "Fruit",
+    grade: "A",
+    stock: 0,
+    price: 0,
+    photo: "",
+    // origanization: ""
+    origanization: "63a3879cd8cb401254c4961d"
+
+    // isPiece: "false",
+    // categories: [],
+    // loading: false,
+    // error: "",
+    // createdProduct: "",
+    // getaRedirect: false,
+    // formData: new FormData()
+  });
+
+  const {
+    name,
+    description,
+    price,
+    stock,
+    // categories,
+    grade,
+    photo,
+    category,
+    origanization
+    //loading,
+    // error,
+    // createdProduct,
+    //getaRedirect,
+    // formData
+  } = values;
+
+
+
+  const isValid = () => {
+    if (
+      !name.length > 0 &&
+      !description.length > 0 &&
+      // !category > 0 &&
+      photo === "" &&
+      !grade.length > 0 &&
+      // !stock.length > 0 &&
+      !price.length > 0
+    ) {
+      Toast.error("All Fields Are Mandatory", {
+        position: Toast.POSITION.TOP_RIGHT
+      });
+      console.log("all fields are mandatory");
+      return false;
+    } else if (photo === "") {
+      Toast.error("Image Required", { position: Toast.POSITION.TOP_RIGHT });
+      return false;
+    } else if (photo.size > 1000000) {
+      Toast.error("image size larger than 1mb", {
+        position: Toast.POSITION.TOP_RIGHT
+      });
+      return false;
+    } else if (!photo.name.match(/\.(jpg|png|jpeg)$/)) {
+      Toast.error("Invalid Image Format", {
+        position: Toast.POSITION.TOP_RIGHT
+      });
+      return false;
+    } else if (!name.length > 0) {
+      Toast.error("Name Required", { position: Toast.POSITION.TOP_RIGHT });
+      return false;
+    } else if (!description.length > 0) {
+      Toast.error("description required", {
+        position: Toast.POSITION.TOP_RIGHT
+      });
+      return false;
+    } else if (!price > 0) {
+      Toast.error("Price Required", { position: Toast.POSITION.TOP_RIGHT });
+      return false;
+    // } else if (!category > 0) {
+    //   Toast.error("Category Required", {
+    //     position: Toast.POSITION.TOP_RIGHT
+    //   });
+    //   return false;
+    // } else if (!stock > 0) {
+    //   Toast.error("stock required", { position: Toast.POSITION.TOP_RIGHT });
+    //   return false;
+    } else if (!grade > 0) {
+      Toast.error("Grade required", { position: Toast.POSITION.TOP_RIGHT });
+      return false;
+    }
+    return true;
+  };
+  const handleChange = name => event => {
+    const value = name === "photo" ? event.target.files[0] : event.target.value;
+    formData.set(name, value);
+    setValues({ ...values, [name]: value });
+  };
+
+  // const handleChange = name => event => {
+  //   setValues({...values, error: false, [name]: event.target.value});
+  // };
+
+  const handleChoosePhoto = () => {
+    launchImageLibrary({ noData: true }, (response) => {
+      // console.log(response);
+      if (response) {
+        console.log("photo response", response)
+        console.log("filename",response["assets"][0]["fileName"])
+        setPic(response);
+        setValues({
+          ...values,
+          photo: response,
+        });
+      }
+    });
+  };
+
+  
+  const onSubmit = () => {
+    // event.preventDefault();
+    // if (isValid()) {
+      // setValues({ ...values, error: "", loading: true });
+      let formData = new FormData();
+      formData.append("name", values.name)
+      formData.append("description", values.description)
+      formData.append("category", values.category)
+      formData.append("grade", values.grade)
+      formData.append("stock", values.stock)
+      formData.append("price", values.price)
+      // formData.append("photo", blob, values["photo"]["assets"][0]["fileName"])
+      formData.append('photo', {
+        // uri: "file:///...",
+        uri: values["photo"]["assets"][0]["uri"],
+        type: 'image/jpg',
+        // name: 'image.jpg',
+        name: values["photo"]["assets"][0]["fileName"]
+      });
+      formData.append("origanization", values.origanization)
+
+      // fetch(`https://6732-49-205-239-58.in.ngrok.io/api/product/add`, { 
+      //   headers : { 
+      //     "Accept" : "application/json",
+      //     "Content-Type" : "multipart/form-data",
+      //   },
+      //   method: "POST",
+      //   body : formData
+      // })
+        createaProduct( formData)
+        .then(data => {
+          console.log(formData);
+          if (data.error) {
+            setValues({ ...values, error: data.error });
+          } else {
+            props.onSuccessClose();
+            Toast.success("Product Created Successfully", {
+              position: Toast.POSITION.TOP_RIGHT
+            });
+            props.onReload();
+
+            setValues({
+              ...values,
+              name: "",
+              description: "",
+              price: "",
+              photo: "",
+              stock: "",
+              // organization: "",
+              grade: "",
+              loading: false,
+              createdProduct: data.data.name
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    // }
+  };
+
 
   const uploadImage=()=>{
     let options = {
@@ -64,13 +229,16 @@ const AddProducts = () => {
           [{text: "OK"}],
         );
       } else {
-        SetPic(response.assets[0].base64)
-      }
-    })
-  }
+        setPic(response.assets[0].base64)
+        /// new added
+        setValues({
+          ...values,
+          photo: response,
+        });
+       }})}
 
   const removeImage=()=>{
-    SetPic('')
+    setPic('')
     setToastMsg("Image removed.")
   }
 
@@ -85,10 +253,11 @@ const AddProducts = () => {
 {/* <Text style={styles.formLabel}> CREATE PRODUCT </Text> */}
 <TouchableHighlight
 onPress={() => uploadImage()}
+
 underlayColor="rgba(0,0,0,0)">
   <Avatar.Image
   size={92}
-  source={{uri:'data:image/png;base64,' + Pic}}
+  source={{uri:'data:image/png;base64,' + pic}}
   color='red'
   />
 </TouchableHighlight>
@@ -102,9 +271,25 @@ underlayColor="rgba(0,0,0,0)">
   containerStyle={{
     borderRadius:5
   }}
-  onPress={()=> uploadImage()} 
+  onPress={()=> {
+    uploadImage()
+    
+    }} 
   title="Upload Image"
+ />
+   <Button 
+  mode='contained' 
+  color="green"
+  containerStyle={{
+    borderRadius:5
+  }}
+  onPress={()=> {
+    handleChoosePhoto()
+    
+    }} 
+  title="Upload"
   />
+
   <Button 
     color="#1B1A17"
   mode='contained' 
@@ -119,28 +304,63 @@ underlayColor="rgba(0,0,0,0)">
 {/* Rest of the form other than upload img */}
       <View>
         
-        <TextInput placeholder="Product Name" style={styles.inputStyle} />
-        <TextInput multiline={true} maxLength={300} placeholder="Product Description" style={styles.inputStyle_description} />
-        <TextInput placeholder="Price" style={styles.inputStyle_price} />
+        <TextInput placeholder="Product Name"
+       
+        style={styles.inputStyle} 
+        onChangeText={value => setValues({...values, error:false, name: value})}
+        value={name}/>
+      
+        <TextInput 
+        multiline={true} 
+        maxLength={300} 
+        placeholder="Product Description" 
+        style={styles.inputStyle_description} 
+        onChangeText={value => setValues({...values, error:false, description: value})}
+        value={description}
+        />
+        <TextInput placeholder="Price" 
+        style={styles.inputStyle_price} 
+        onChangeText={value => setValues({...values, error:false, price: value})}
+        // description={price}
+        value={price}
+        />
         <Picker
         style={styles.input}
-          selectedValue={productValue}
-          onValueChange={currentproductValue => setproductValue(currentproductValue)}>
-          <Picker.Item label="Category" value="Category" />
-          <Picker.Item label="VEG" value="Vegetable" />
-          <Picker.Item label="FRUIT" value="Fruit" />
-          <Picker.Item label="JUICE" value="Juice" />
-          <Picker.Item label="STAPLE" value="Staple" />
+        selectedValue={productValue}
+        onValueChange={currentproductValue => setproductValue(currentproductValue)}
+        onChangeText={value => setValues({...values, error:false, grade: value})}
+        >
+           <Picker.Item label="A" 
+           value="A" 
+          //  value={"A"}
+           />
+          <Picker.Item label="B" 
+          // value="B" 
+          value={"B"}
+          />
+          <Picker.Item label="C" 
+          value="C" 
+          // value={"C"}
+          />
+          {/* <Picker.Item label="STAPLE" value="Staple" /> */}
         </Picker>
-        {/* <Text
-          style={{
-            fontSize: 20,
-            color: '#fff',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          Selected: {productValue}
-        </Text> */}
+        <TextInput placeholder="Stock" 
+        style={styles.inputStyle_stock} 
+        onChangeText={value => setValues({...values, error:false, stock: value})}
+        // description={price}
+        value={stock}
+        />
+        {/* <Picker
+        style={styles.category_input}
+        selectedValue={categoryValue}
+        onValueChange={currentcategoryValue => setCategoryValue(currentcategoryValue)}
+        onChangeText={value => setValues({...values, error:false, category: value})}
+        >
+          <Picker.Item label="Vegetable" value="Vegetable" />
+          <Picker.Item label="Fruit" value="Fruit" />
+          <Picker.Item label="Juice" value="Juice" />
+          <Picker.Item label="Staple" value="Staple" />
+        </Picker> */}
         <Button 
        title="CREATE"
        color="primary"
@@ -150,7 +370,8 @@ underlayColor="rgba(0,0,0,0)">
         marginTop:30,
 
       }}
-       onPress={() => alert('Product Created Succesfully!')}
+      //  onPress={() => alert('Product Created Succesfully!')}
+      onPress={() => onSubmit()}
       />
         
       </View>
@@ -283,17 +504,15 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign:"center",
     fontWeight:"bold",
-    // paddingBottom:1
   },
   inputStyle: {   
-    marginTop: 25,
+    marginTop: 55,
     width: 310,
-    height: 80,
+    height: 60,
     borderWidth:0.7,
     paddingHorizontal: 35,
     borderRadius: 5,
     backgroundColor: '#fff',
-    // elevation:14,
     shadowColor:'black',
     color:'black',
     paddingBottom:1,
@@ -306,7 +525,19 @@ const styles = StyleSheet.create({
   inputStyle_price: {   
     marginTop: 25,
     width: '50%',
-    height: 80,
+    height: 60,
+    paddingHorizontal: 35,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    borderWidth:1,
+    shadowColor:'black',
+    color:'black',
+    paddingBottom:1,
+  },
+  inputStyle_stock: {   
+    marginTop: 25,
+    width: '50%',
+    height: 60,
     paddingHorizontal: 35,
     borderRadius: 5,
     backgroundColor: '#fff',
@@ -318,7 +549,7 @@ const styles = StyleSheet.create({
   inputStyle_description: {   
     marginTop: 22,
     width: 310,
-    height: 140,
+    height: 110,
     paddingHorizontal: 35,
     borderRadius: 5,
     backgroundColor: '#fff',
@@ -339,52 +570,27 @@ const styles = StyleSheet.create({
   },
 input:{
   width:'50%', position:"absolute",
-  marginTop:309,
+  marginTop:278,
   marginHorizontal:160,
   color:"gray",
   elevation:10,
   shadowColor:"black"
 }
 ,
+category_input:{
+  width:'50%', position:"absolute",
+  marginTop:363,
+  marginHorizontal:160,
+  color:"gray",
+  elevation:10,
+  shadowColor:"black"
+},
 centerContent:{
   justifyContent:"center",
   alignItems:'center',
   marginTop:100,
   // borderRadius:20
 }
-
-//   input: {
-//     width: '95%',
-//     height: 50,
-//     margin: 12,
-//     borderWidth: 1,
-//     padding: 10,
-//     borderRadius: 8,
-   
-//     fontSize:15,
-//     // elevation:1,
-//     // shadowColor:''
-//   },
-//   form_container:{
-//   width:'80%',
-//   justifyContent:'center',
-//   marginLeft:40,
-// // padding:50
-// margin:10
-//   },
-
-//   ButtonText: {
-//     color: '#444',
-//     textAlign: 'left',
-//     fontSize:15
-//   },
-//   ropdown1DropdownStyle: {backgroundColor: '#EFEFEF'},
-//   rowStyle: {
-//     backgroundColor: '#EFEFEF',
-//     width: '90%',
-//     borderBottomColor: '#C5C5C5',
-//   },
-//   rowTextStyle: {color: '#444', textAlign: 'left'},
 });
 
 export default AddProducts;
